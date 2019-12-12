@@ -872,3 +872,10 @@ healthchecksdb
 MigrationBackup/
 
 # End of https://www.gitignore.io/api/cocos2dx,visualstudio
+cocos2d/
+proj.android/
+proj.ios_mac/
+proj.win32/
+NatureFight/proj.linux/
+NatureFight/.cocos-project.json
+NatureFight/CMakeLists.txt
