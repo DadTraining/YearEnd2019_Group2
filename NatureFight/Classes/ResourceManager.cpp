@@ -1,5 +1,5 @@
 #include "ResourceManager.h"
-int LevelPlayer = 1;
+int ResourceManager::LevelPlayer = 1;
 static ResourceManager* ss_instance;
 ResourceManager::ResourceManager()
 {
