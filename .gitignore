@@ -875,3 +875,7 @@ MigrationBackup/
 cocos2d/
 proj.ios_mac/
 NatureFight/proj.linux/
+NatureFight/.cocos-project.json
+NatureFight/CMakeLists.txt
+NatureFight/proj.android/
+NatureFight/proj.win32/
