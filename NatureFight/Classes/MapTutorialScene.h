@@ -7,7 +7,7 @@ class MapTutorialScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
-
+	void addMap();
     virtual bool init();
     
     CREATE_FUNC(MapTutorialScene);
