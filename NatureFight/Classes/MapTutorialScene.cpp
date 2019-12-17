@@ -1,6 +1,4 @@
 #include "MapTutorialScene.h"
-#include <ObjectParent.h>
-#include <proj.win32\AiLv1.h>
 
 USING_NS_CC;
 using namespace std;
@@ -20,7 +18,7 @@ bool MapTutorialScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	addMap();
-	AiLv1* aiLv1 = new AiLv1(this);
+	aiLv1 = new AiLv1(this);
 	aiLv1->Init();
 	aiLv1->m_sprite->runAction(aiLv1->Attack());	
     return true;
