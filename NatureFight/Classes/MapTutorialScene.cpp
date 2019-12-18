@@ -18,7 +18,7 @@ bool MapTutorialScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	addMap();
-	aiLv1 = new AiLv1(this);
+	aiLv1 = new Player(this);
 	aiLv1->Init();
 	aiLv1->m_sprite->runAction(aiLv1->Attack());	
     return true;
