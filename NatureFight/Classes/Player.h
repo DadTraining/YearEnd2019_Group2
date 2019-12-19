@@ -13,8 +13,9 @@ public:
 	void Init();
 	void Collision();
 	cocos2d::RepeatForever* MovingRight();
-	cocos2d::RepeatForever* AttackRight();
+	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
+	cocos2d::RepeatForever* AttackRightAngry();
 	~Player();
 private:
 	cocos2d::Scene* sceneGame;
