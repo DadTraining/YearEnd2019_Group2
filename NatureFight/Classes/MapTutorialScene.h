@@ -1,6 +1,5 @@
 #ifndef __MAPTUTORIAL_SCENE_H__
 #define __MAPTUTORIAL_SCENE_H__
-
 #include "cocos2d.h"
 #include<ObjectParent.h>
 #include <proj.win32\AiLv1.h>
@@ -10,11 +9,12 @@ class MapTutorialScene : public cocos2d::Scene
 {
 
 public:
-	AiLv1* aiLv1;
+	void autoMove(float dt);
     static cocos2d::Scene* createScene();
-	void addMap();
     virtual bool init();
     void update(FLOAT deltaTime);
     CREATE_FUNC(MapTutorialScene);
+	void addMap();
+	AiLv1* aiLv1;
 };
 #endif // __MAPTUTORIAL_SCENE_H__
