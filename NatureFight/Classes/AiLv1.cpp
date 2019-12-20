@@ -1,5 +1,4 @@
 #include "AiLv1.h"
-
 USING_NS_CC;
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
@@ -14,7 +13,6 @@ void AiLv1::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	spriteCache = cocos2d::SpriteFrameCache::sharedSpriteFrameCache();
 	//spriteCache ->addSpriteFramesWithFile("Sprites/Man1/Goblin/PNG/PNG Sequences/Slashing/spritesAttackGoblin.plist");
 	this->m_sprite= cocos2d::Sprite::create("Sprites/Man1/Goblin/PNG/PNG Sequences/Running/0_Goblin_Running_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
@@ -61,9 +59,7 @@ cocos2d::RepeatForever* AiLv1::Attack() {
 		else {
 			name = "0_Goblin_Slashing_0" + std::to_string(i) + ".png";
 		}
-
-		spriteFrame = spriteCacheAttack->getSpriteFrameByName(name);
-		exFrames.pushBack(spriteFrame);
+		exFrames.pushBack(spriteCacheAttack->getSpriteFrameByName(name));
 	}
 	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
 	auto animate = cocos2d::Animate::create(animation);

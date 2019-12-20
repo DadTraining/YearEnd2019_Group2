@@ -19,8 +19,5 @@ public:
 	~AiLv1();
 private:
 	cocos2d::Scene* sceneGame;
-	cocos2d::SpriteFrame* spriteFrame;
-	cocos2d::SpriteFrameCache* spriteCache;
-
 };
 #endif // __HERO_SCENE_H__
