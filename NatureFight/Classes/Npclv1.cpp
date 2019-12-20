@@ -55,7 +55,7 @@ void Npclv1::Init()
 	this->m_sprite->setScale(0.2);
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
-	this->sceneGame->addChild(this->m_sprite);
+	this->sceneGame->addChild(this->m_sprite,2);
 	auto Body = PhysicsBody::createBox(m_sprite->getContentSize());
 	this->m_sprite->setPhysicsBody(Body);
 	Body->setDynamic(false);

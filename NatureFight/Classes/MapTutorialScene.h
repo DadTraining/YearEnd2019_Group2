@@ -14,12 +14,13 @@ class MapTutorialScene : public cocos2d::Scene
 public:
 	AiLv1* aiLv1;
 	Npclv1* npcsolo;
-	Player* aiLv1;
+	Player* mainPlayer;
 	Sprite* JoyStick;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
     virtual bool init();
+	void autoMove(float dt);
     void update(FLOAT deltaTime);
     CREATE_FUNC(MapTutorialScene);
 	virtual bool onTouchBegan(Touch*, Event*);

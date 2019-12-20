@@ -1,5 +1,6 @@
 #include "MapTutorialScene.h"
-
+#define ATTACK 0
+#define RUN 1
 USING_NS_CC;
 using namespace std;
 float times = 0;
@@ -23,17 +24,20 @@ bool MapTutorialScene::init()
 	npcsolo = new Npclv1(this);
 	npcsolo->Init();
 	npcsolo->m_sprite->runAction(npcsolo->Communication());
+	// Goblin ai
 	aiLv1 = new AiLv1(this);
 	aiLv1->Init();
-	aiLv1->m_sprite->runAction(aiLv1->Attack());	
+	aiLv1->m_sprite->runAction(aiLv1->Moving());
+	aiLv1->physicsBody->setVelocity(Vec2(10, 0));
+	//set velociy and auto move
+	float delay = 4.0f;
+	this->schedule(schedule_selector(MapTutorialScene::autoMove), delay);
 	scheduleUpdate();
 	schedule(schedule_selector(MapTutorialScene::update));
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	addMap();
-	aiLv1 = new Player(this);
-	aiLv1->Init();
-	aiLv1->m_sprite->runAction(aiLv1->IdleRight());	
+	mainPlayer = new Player(this);
+	mainPlayer->Init();
+	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(MapTutorialScene::onTouchMoved, this);
@@ -61,7 +65,7 @@ bool MapTutorialScene::init()
 		case ui::Widget::TouchEventType::MOVED:
 			if (times > 2.0f) {
 				times = 0;
-				aiLv1->m_sprite->runAction(aiLv1->AttackRight());
+				mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
 			}
 
 			break;
@@ -77,11 +81,40 @@ bool MapTutorialScene::init()
 
     return true;
 }
+//goblin
+int reset = 1;
+bool auMove = false;
+void MapTutorialScene::autoMove(float dt) {
+	if (auMove) {
+		auto velo = Vec2(50 * reset, 0);
+		aiLv1->physicsBody->setVelocity(velo);
+		reset *= (-1);
+
+	}
+};
+int timeCount = 0;
 void MapTutorialScene::update(FLOAT deltaTime)
 {
 		npcsolo->Update(deltaTime);
 	npcsolo->Collision();
 	times += deltaTime;
+	// goblin
+	aiLv1->Update(deltaTime);
+	if (timeCount == 300) {
+		aiLv1->m_sprite->stopActionByTag(RUN);
+		aiLv1->m_sprite->runAction(aiLv1->Attack());
+	}
+	else if (timeCount == 600)
+	{
+		aiLv1->m_sprite->stopActionByTag(ATTACK);
+		aiLv1->m_sprite->runAction(aiLv1->Moving());
+		aiLv1->physicsBody->setVelocity(Vec2(10, 0));
+	}
+	else if (timeCount >= 1000)
+	{
+		auMove = true;
+	}
+	timeCount++;
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -93,9 +126,9 @@ bool MapTutorialScene::onTouchEnded(Touch* touch, Event* event)
 {
 	auto mt = MoveTo::create(0, Vec2(120,100));
 	JoyStick->runAction(mt);
-	aiLv1->m_sprite->stopAllActions();
-	aiLv1->m_sprite->runAction(aiLv1->IdleRight());
-	aiLv1->physicsBody->setVelocity(Vec2(0,0));
+	mainPlayer->m_sprite->stopAllActions();
+	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());
+	mainPlayer->physicsBody->setVelocity(Vec2(0,0));
 	return true;
 }
 bool MapTutorialScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
@@ -110,11 +143,11 @@ bool MapTutorialScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event
 	CCLOG("%f %f",JoyStickPositionX,JoyStickPositionY);
 	}*/
 	if (touch->getLocation().x < 120 && faceRight) {
-		aiLv1->m_sprite->setFlipX(true);
+		mainPlayer->m_sprite->setFlipX(true);
 		faceRight = !faceRight;
 	}
 	if (touch->getLocation().x > 120 && faceRight==false) {
-		aiLv1->m_sprite->setFlipX(false);
+		mainPlayer->m_sprite->setFlipX(false);
 		faceRight = !faceRight;
 	}
 	if (Distance(Vec2(120, 100), touch->getLocation()) > 100) {
@@ -122,9 +155,9 @@ bool MapTutorialScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event
 	}
 	auto mt = MoveTo::create(0, MoveJoyStick);
 	JoyStick->runAction(mt);
-	aiLv1->m_sprite->stopAllActions();
-	aiLv1->m_sprite->runAction(aiLv1->MovingRight());
-	aiLv1->physicsBody->setVelocity((MoveJoyStick - Vec2(120, 100))*2.5f);
+	mainPlayer->m_sprite->stopAllActions();
+	mainPlayer->m_sprite->runAction(mainPlayer->MovingRight());
+	mainPlayer->physicsBody->setVelocity((MoveJoyStick - Vec2(120, 100))*2.5f);
 	return false;
 
 }
@@ -132,7 +165,7 @@ void MapTutorialScene::addMap()
 {
 	auto map = TMXTiledMap::create("Map1/map1.tmx");
 	map->setAnchorPoint(Vec2(0, 0));
-	map->setScale(0.45);
+	//map->setScale(0.45);
 	map->setPosition(Vec2(0, 0));
 	addChild(map);
 }
@@ -143,6 +176,6 @@ void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event
 {
 	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
 		times = 0;
-		aiLv1->m_sprite->runAction(aiLv1->AttackRight());
+		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
 	}
 }
