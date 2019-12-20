@@ -1,6 +1,5 @@
 #include "AiLv1.h"
-#include <vector> 
-#include <cocos\2d\CCSpriteFrameCache.cpp>
+
 USING_NS_CC;
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {

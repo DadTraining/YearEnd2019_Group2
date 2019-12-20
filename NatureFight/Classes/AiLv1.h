@@ -3,6 +3,7 @@
 #define __HERO_SCENE_H__
 #include "ObjectParent.h"
 #include <list>
+#include "cocos2d.h"
 #include <vector> 
 class AiLv1 :
 	public ObjectParent

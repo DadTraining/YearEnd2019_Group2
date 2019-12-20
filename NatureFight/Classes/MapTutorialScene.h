@@ -3,7 +3,8 @@
 
 #include "cocos2d.h"
 #include<ObjectParent.h>
-#include <proj.win32\AiLv1.h>
+#include <AiLv1.h>
+#include<Npclv1.h>
 #include <iostream>
 USING_NS_CC;
 class MapTutorialScene : public cocos2d::Scene
@@ -11,6 +12,7 @@ class MapTutorialScene : public cocos2d::Scene
 
 public:
 	AiLv1* aiLv1;
+	Npclv1* npcsolo;
     static cocos2d::Scene* createScene();
 	void addMap();
     virtual bool init();
