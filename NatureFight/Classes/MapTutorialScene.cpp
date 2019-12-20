@@ -43,20 +43,20 @@ void MapTutorialScene::autoMove(float dt) {
 int timeCount = 0;
 void MapTutorialScene::update(FLOAT deltaTime)
 {
-	aiLv1->Update(deltaTime);
-	if (timeCount == 300) {
-		aiLv1->m_sprite->stopActionByTag(RUN);
-		aiLv1->m_sprite->runAction(aiLv1->Attack());
-	}else if (timeCount==600)
-	{
-		aiLv1->m_sprite->stopActionByTag(ATTACK);
-		aiLv1->m_sprite->runAction(aiLv1->Moving());
-		aiLv1->physicsBody->setVelocity(Vec2(10, 0));
-	}else if (timeCount>=1000)
-	{
-		auMove = true;
-	}
-		timeCount++;
+		aiLv1->Update(deltaTime);
+		if (timeCount == 300) {
+			aiLv1->m_sprite->stopActionByTag(RUN);
+			aiLv1->m_sprite->runAction(aiLv1->Attack());
+		}else if (timeCount==600)
+		{
+			aiLv1->m_sprite->stopActionByTag(ATTACK);
+			aiLv1->m_sprite->runAction(aiLv1->Moving());
+			aiLv1->physicsBody->setVelocity(Vec2(10, 0));
+		}else if (timeCount>=1000)
+		{
+			auMove = true;
+		}
+			timeCount++;
 }
 void MapTutorialScene::addMap()
 {
