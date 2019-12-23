@@ -1,6 +1,6 @@
 #include "Npclv1.h"
-#include <vector> 
 #include "SimpleAudioEngine.h"
+#define NpcSolotag 11
 USING_NS_CC;
 
 //using namespace CocosDenshion;
@@ -13,38 +13,7 @@ void Npclv1::Update(float deltaTime)
 {
 	count += deltaTime;
 
-	auto mess = Sprite::create("Sprites/Man1/NPC(Solo)/PNG/mess-removebg-preview.png");
-	mess->setPosition(this->m_sprite->getPosition());
-	mess->setScale(0.3);
-	mess->setAnchorPoint(Vec2(0, 0));
-	this->sceneGame->addChild(mess);
-	auto label1 = Label::createWithSystemFont("xin ", "Arial", 16);
-	label1->setPositionX(mess->getPositionX() + 25);
-	label1->setPositionY(mess->getPositionY() + 60);
-	label1->setTextColor(Color4B::BLACK);
-	this->sceneGame->addChild(label1);
-	if (count >= 1) {
-		auto label2 = Label::createWithSystemFont("chao ", "Arial", 16);
-		label2->setPositionX(mess->getPositionX() + 55);
-		label2->setPositionY(mess->getPositionY() + 60);
-		label2->setTextColor(Color4B::BLACK);
-		this->sceneGame->addChild(label2);
-	}
-	if (count >= 1.5) {
-		auto label3 = Label::createWithSystemFont("moi ", "Arial", 16);
-		label3->setPositionX(mess->getPositionX() + 25);
-		label3->setPositionY(mess->getPositionY() + 40);
-		label3->setTextColor(Color4B::BLACK);
-		this->sceneGame->addChild(label3);
-	}
-	if (count >= 2) {
-		auto label4 = Label::createWithSystemFont("nguoi !", "Arial", 16);
-		label4->setPositionX(mess->getPositionX() + 60);
-		label4->setPositionY(mess->getPositionY() + 40);
-		label4->setTextColor(Color4B::BLACK);
-		this->sceneGame->addChild(label4);
-	}
-
+	
 }
 
 void Npclv1::Init()
@@ -52,21 +21,52 @@ void Npclv1::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man1/NPC(Solo)/PNG/Front/PNG Sequences/Greeting/0_Citizen_Greeting_000.png");
-	this->m_sprite->setScale(0.2);
+	this->m_sprite->setScale(0.1);
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
-	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
+	this->m_sprite->setPosition(Point(visibleSize.width / 1.5 +150, visibleSize.height / 2));
 	this->sceneGame->addChild(this->m_sprite,2);
-	auto Body = PhysicsBody::createBox(m_sprite->getContentSize());
+	auto a = m_sprite->getContentSize().width;
+	auto b = m_sprite->getContentSize().height+1000;
+	auto Body = PhysicsBody::createBox(cocos2d::Size(a,b));
 	this->m_sprite->setPhysicsBody(Body);
 	Body->setDynamic(false);
 	Body->setGravityEnable(false);
+	Body->setRotationEnable(false);
+	m_sprite->getPhysicsBody()->setContactTestBitmask(1);
+	m_sprite->setTag(NpcSolotag);
 	
 }
 
 void Npclv1::Collision(/*Sprite main*/)
 {
+	auto mess = Sprite::create("Sprites/Man1/NPC(Solo)/PNG/mess-removebg-preview.png");
+	mess->setPosition(this->m_sprite->getPosition());
+	mess->setScale(0.3);
+	mess->setAnchorPoint(Vec2(0, 0));
+	this->sceneGame->addChild(mess);
+	auto label1 = Label::createWithSystemFont("xin chao ", "Arial", 16);
+	label1->setAnchorPoint(Vec2(0, 0));
+	label1->setPositionX(mess->getPositionX() + 25);
+	label1->setPositionY(mess->getPositionY() + 60);
+	label1->setTextColor(Color4B::BLACK);
+	this->sceneGame->addChild(label1);
+	auto label3 = Label::createWithSystemFont("Toi la NPC ", "Arial", 16);
+	label3->setAnchorPoint(Vec2(0, 0));
+	label3->setPositionX(mess->getPositionX() + 25);
+	label3->setPositionY(mess->getPositionY() + 40);
+	label3->setTextColor(Color4B::BLACK);
+	this->sceneGame->addChild(label3);
+	auto fadeOut = FadeOut::create(3.0f);
+	//label1->runAction(fadeOut);
+	//label3->runAction(fadeOut);
+	mess->runAction(fadeOut);
 
-
+	auto jumpy = JumpBy::create(1.5, Vec2(-50, -30), 100, 1);
+	auto fadehue = FadeOut::create(2.5f);
+	auto jumpfade = Spawn::create(jumpy, fadehue, nullptr);
+	auto remove = RemoveSelf::create(); // clean up memory
+	auto doubletrouble = Sequence::create( remove, nullptr);
+	label1->runAction(doubletrouble);
 
 }
 

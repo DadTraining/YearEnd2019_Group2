@@ -1,5 +1,6 @@
 #include <Player.h>
 #include "SimpleAudioEngine.h"
+#define playertag 1000
 using namespace CocosDenshion;
 Player::Player(cocos2d::Scene* scene)
 {
@@ -16,12 +17,14 @@ void Player::Init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Idle Blinking/0_Warrior_Idle Blinking_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
-	this->m_sprite->setScale(0.2);
+	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
 
 	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize());
 	physicsBody->setDynamic(false);
 	this->m_sprite->setPhysicsBody(physicsBody);
+	m_sprite->getPhysicsBody()->setContactTestBitmask(1);
+	m_sprite->setTag(playertag);
 	physicsBody->setGravityEnable(false);
 }
 

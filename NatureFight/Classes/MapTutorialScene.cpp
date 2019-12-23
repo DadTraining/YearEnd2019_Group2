@@ -1,6 +1,8 @@
 #include "MapTutorialScene.h"
 #define ATTACK 0
 #define RUN 1
+#define playertag 1000
+#define NpcSolotag 11
 USING_NS_CC;
 using namespace std;
 float times = 0;
@@ -23,6 +25,7 @@ bool MapTutorialScene::init()
 	addMap();
 	npcsolo = new Npclv1(this);
 	npcsolo->Init();
+	//npcsolo->m_sprite->setTag(1);
 	npcsolo->m_sprite->runAction(npcsolo->Communication());
 	// Goblin ai
 	aiLv1 = new AiLv1(this);
@@ -37,6 +40,7 @@ bool MapTutorialScene::init()
 	addMap();
 	mainPlayer = new Player(this);
 	mainPlayer->Init();
+	//mainPlayer->m_sprite->setTag(2);
 	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
@@ -64,13 +68,8 @@ bool MapTutorialScene::init()
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
 			if (times > 2.0f) {
-				times = 0; 
-				if (Distance(aiLv1->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()) < 100.0f)
-				{
-					mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
-
-				}
-				CCLOG("%f", Distance(aiLv1->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()));
+				times = 0;
+				mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
 			}
 
 			break;
@@ -83,6 +82,9 @@ bool MapTutorialScene::init()
 
 	addChild(ButtonAttack);
 
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(MapTutorialScene::onContactBegin, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     return true;
 }
@@ -100,8 +102,8 @@ void MapTutorialScene::autoMove(float dt) {
 int timeCount = 0;
 void MapTutorialScene::update(FLOAT deltaTime)
 {
-		npcsolo->Update(deltaTime);
-	npcsolo->Collision();
+	//	npcsolo->Update(deltaTime);
+	//npcsolo->Collision();
 	times += deltaTime;
 	// goblin
 	aiLv1->Update(deltaTime);
@@ -177,16 +179,25 @@ void MapTutorialScene::addMap()
 float MapTutorialScene::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
 }
+bool MapTutorialScene::onContactBegin(const PhysicsContact & contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA && nodeB)
+	{
+		if (nodeA->getTag() == playertag&nodeB->getTag()== NpcSolotag)
+		{
+			npcsolo->Collision();
+		}	
+	}
+	
+	return true;
+
+}
 void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
 		times = 0;
 		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
 	}
-	if (Distance(aiLv1->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()) < 3.0f)
-	{
-		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
-
-	}
-	CCLOG("%f", Distance(aiLv1->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()));
 }

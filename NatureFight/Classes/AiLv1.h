@@ -2,7 +2,6 @@
 #ifndef __HERO_SCENE_H__
 #define __HERO_SCENE_H__
 #include "ObjectParent.h"
-#include <list>
 #include <vector>
 #include "cocos2d.h"
 USING_NS_CC;
