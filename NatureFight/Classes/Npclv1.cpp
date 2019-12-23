@@ -23,7 +23,7 @@ void Npclv1::Init()
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man1/NPC(Solo)/PNG/Front/PNG Sequences/Greeting/0_Citizen_Greeting_000.png");
 	this->m_sprite->setScale(0.1);
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
-	this->m_sprite->setPosition(Point(visibleSize.width / 1.5 +150, visibleSize.height / 2));
+	this->m_sprite->setPosition(Point(visibleSize.width / 2 +50, visibleSize.height / 2 - 50));
 	this->sceneGame->addChild(this->m_sprite,2);
 	auto a = m_sprite->getContentSize().width;
 	auto b = m_sprite->getContentSize().height+1000;
@@ -56,18 +56,15 @@ void Npclv1::Collision(/*Sprite main*/)
 	label3->setPositionY(mess->getPositionY() + 40);
 	label3->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label3);
+	// action hiden mess
 	auto fadeOut = FadeOut::create(3.0f);
-	//label1->runAction(fadeOut);
-	//label3->runAction(fadeOut);
 	mess->runAction(fadeOut);
-
-	auto jumpy = JumpBy::create(1.5, Vec2(-50, -30), 100, 1);
-	auto fadehue = FadeOut::create(2.5f);
-	auto jumpfade = Spawn::create(jumpy, fadehue, nullptr);
+	auto fadehue = FadeOut::create(3.0f);
 	auto remove = RemoveSelf::create(); // clean up memory
-	auto doubletrouble = Sequence::create( remove, nullptr);
-	label1->runAction(doubletrouble);
-
+	auto doubletrouble1 = Sequence::create(fadehue, remove, nullptr);
+	auto doubletrouble = Sequence::create(fadehue, remove, nullptr);
+	label1->runAction(doubletrouble1);
+	label3->runAction(doubletrouble);
 }
 
 cocos2d::RepeatForever * Npclv1::Hello()

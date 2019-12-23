@@ -35,7 +35,7 @@ void AiLv1::Init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//spriteCache ->addSpriteFramesWithFile("Sprites/Man1/Goblin/PNG/PNG Sequences/Slashing/spritesAttackGoblin.plist");
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man1/Goblin/PNG/PNG Sequences/Running/0_Goblin_Running_000.png");
-	this->m_sprite->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 1.5 +10));
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite,2);
 	//create physic

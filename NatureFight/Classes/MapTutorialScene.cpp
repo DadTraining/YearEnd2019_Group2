@@ -172,7 +172,7 @@ void MapTutorialScene::addMap()
 {
 	auto map = TMXTiledMap::create("Map1/map1.tmx");
 	map->setAnchorPoint(Vec2(0, 0));
-	//map->setScale(0.45);
+	map->setScale(0.7);
 	map->setPosition(Vec2(0, 0));
 	addChild(map);
 }
