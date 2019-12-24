@@ -1,6 +1,8 @@
 #include <Player.h>
 #include "SimpleAudioEngine.h"
-using namespace CocosDenshion;
+using namespace CocosDenshion; 
+int Player::Level;
+int Player::Exp;
 Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -83,4 +85,10 @@ cocos2d::RepeatForever* Player::AttackRightAngry()
 	auto animate = cocos2d::Animate::create(animation);
 	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
 	return repeat;
+}
+
+void Player::updateLevel()
+{
+	health = Level * 100;
+	dame = Level * 10;
 }

@@ -7,12 +7,17 @@
 #include <iostream>
 #include <Player.h>
 #include <ui/CocosGUI.h>
+#include <ResourceManager.h>
+#include <SneakyJoystickSkinnedBase.h>
 USING_NS_CC;
 class MapTutorialScene : public cocos2d::Scene
 {
 public:
-	Player* aiLv1;
-	Sprite* JoyStick;
+	Player* mainPlayer;
+	AiLv1* ailv1;
+	ui::Button* ButtonAttack;
+	SneakyJoystick* leftJoystick;
+	SneakyJoystickSkinnedBase* joystickBase;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
@@ -24,5 +29,6 @@ public:
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
+	void MovePlayer();
 };
 #endif // __MAPTUTORIAL_SCENE_H__

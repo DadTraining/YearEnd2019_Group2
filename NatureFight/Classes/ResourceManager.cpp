@@ -1,9 +1,8 @@
 #include "ResourceManager.h"
 int ResourceManager::LevelPlayer = 1;
-static ResourceManager* ss_instance;
+ResourceManager* ResourceManager::s_instance;
 ResourceManager::ResourceManager()
 {
-	s_instance = ss_instance;
 	//s_instance = new ResourceManager[10];
 	/*m_sprites = new std::map<char, Sprite*>[10];
 	m_buttons = new std::map<char, ui::Button*>;
@@ -16,10 +15,10 @@ ResourceManager::~ResourceManager()
 
 ResourceManager* ResourceManager::GetInstance()
 {
-	if (ss_instance==nullptr) {
-		ss_instance = new ResourceManager();
+	if (s_instance==nullptr) {
+		s_instance = new ResourceManager();
 	}
-	return ss_instance;
+	return s_instance;
 }
 
 
@@ -61,6 +60,12 @@ void ResourceManager::Load(std::string fileName)
 			auto label = Label::createWithTTF("temp", text, 20);
 			label->retain();
 			m_labels.insert({ num,label });
+		}	
+		if (count == 4) {
+			auto spriteCache = SpriteFrameCache::getInstance();
+			spriteCache->addSpriteFramesWithFile(text);
+			spriteCache->retain();
+			m_framecache.insert({ num,spriteCache });
 		}
 	}
 }
@@ -81,6 +86,11 @@ Label* ResourceManager::GetLabelById(int id)
 {
 	auto label = m_labels.find(id)->second;
 	return label;
+}
+SpriteFrameCache* ResourceManager::GetFrameById(int id)
+{
+	auto frame = m_framecache.find(id)->second;
+	return frame;
 }
 void ResourceManager::SetLevelPlayer(int level)
 {

@@ -8,7 +8,8 @@
 class AiLv1 :
 	public ObjectParent
 {
-
+public: 
+	int health = 100;
 public:
 	AiLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);

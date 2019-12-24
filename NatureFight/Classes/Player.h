@@ -7,6 +7,8 @@ class Player :
 {
 public: 
 	PhysicsBody* physicsBody;
+	static int Level;
+	static int Exp;
 public:
 	Player(cocos2d::Scene* scene);
 	void Update(FLOAT deltaTime);
@@ -16,8 +18,10 @@ public:
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::RepeatForever* AttackRightAngry();
+	void updateLevel();
 	~Player();
 private:
 	cocos2d::Scene* sceneGame;
-
+	int health = 100;
+	int dame = 10;
 };

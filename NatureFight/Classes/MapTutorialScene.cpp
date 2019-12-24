@@ -19,28 +19,51 @@ bool MapTutorialScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	addMap();
-	aiLv1 = new Player(this);
-	aiLv1->Init();
-	aiLv1->m_sprite->runAction(aiLv1->IdleRight());	
+	mainPlayer = new Player(this);
+	mainPlayer->Init();
+	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());	
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(MapTutorialScene::onTouchMoved, this);
 	listener->onTouchEnded = CC_CALLBACK_2(MapTutorialScene::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+	Rect joystickBaseDimensions;
+	joystickBaseDimensions = Rect(0, 0, 160.0f, 160.0f);
+
+	Point joystickBasePosition;
+	joystickBasePosition = Vec2(visibleSize.width * 0.2f, visibleSize.height * 0.2f);
+
+	joystickBase = new SneakyJoystickSkinnedBase();
+	joystickBase->init();
+	joystickBase->setPosition(joystickBasePosition);
+	joystickBase->setBackgroundSprite(Sprite::create("res/joystick_bg.png"));
+	joystickBase->setThumbSprite(Sprite::create("res/joystick_center.png"));
+
+	SneakyJoystick* aJoystick = new SneakyJoystick();
+	aJoystick->initWithRect(joystickBaseDimensions);
+
+	aJoystick->autorelease();
+	joystickBase->setJoystick(aJoystick);
+	joystickBase->setPosition(joystickBasePosition);
+
+	leftJoystick = joystickBase->getJoystick();
+	leftJoystick->retain();
+	this->addChild(joystickBase,10);
+
 	auto listenerKey = EventListenerKeyboard::create();
 	listenerKey->onKeyPressed = CC_CALLBACK_2(MapTutorialScene::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
-	JoyStick = Sprite::create("circle-icon-3.jpg");
-	JoyStick->setScale(0.4);
-	JoyStick->setPosition(120, 100);
-	addChild(JoyStick);
 
-	/*auto followTheSprite = Follow::create(aiLv1->m_sprite, Rect::ZERO);
-	this->runAction(followTheSprite);*/
+	ailv1 = new AiLv1(this);
+	ailv1->Init();
+	ailv1->m_sprite->runAction(ailv1->Moving());
+	
+	auto followTheSprite = Follow::create(mainPlayer->m_sprite, Rect::ZERO);
+	this->runAction(followTheSprite);
 
-	auto ButtonAttack = ui::Button::create("Button_Attack_Normal.png", "Button_Attack_Selected.png");
-	ButtonAttack->setPosition(Vec2(800, 100));
+	ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
+	ButtonAttack->setPosition(Vec2(mainPlayer->m_sprite->getPosition())+Vec2(350,-150));
 	ButtonAttack->setScale(0.3f);
 	ButtonAttack->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
@@ -49,7 +72,9 @@ bool MapTutorialScene::init()
 		case ui::Widget::TouchEventType::MOVED:
 			if (times > 2.0f) {
 				times = 0;
-				aiLv1->m_sprite->runAction(aiLv1->AttackRight());
+				mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
+				ailv1->health -= 10;
+				CCLOG("%d", ailv1->health);
 			}
 
 			break;
@@ -60,56 +85,30 @@ bool MapTutorialScene::init()
 		}
 	});
 
-	addChild(ButtonAttack);
-
-    return true;
+	addChild(ButtonAttack,1);
+	return true;
 }
 void MapTutorialScene::update(FLOAT deltaTime)
 {
+	mainPlayer->physicsBody->setVelocity(Vect(leftJoystick->getVelocity())*200);
+	joystickBase->setPosition(Vec2(mainPlayer->m_sprite->getPosition()) + Vec2(-370, -130));
+	ButtonAttack->setPosition(Vec2(mainPlayer->m_sprite->getPosition()) + Vec2(350, -150));
 	times += deltaTime;
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
-	auto mt = MoveTo::create(0, Vec2(touch->getLocation()));
-	JoyStick->runAction(mt);
 	return true;
 }
 bool MapTutorialScene::onTouchEnded(Touch* touch, Event* event)
 {
-	auto mt = MoveTo::create(0, Vec2(120,100));
-	JoyStick->runAction(mt);
-	aiLv1->m_sprite->stopAllActions();
-	aiLv1->m_sprite->runAction(aiLv1->IdleRight());
-	aiLv1->physicsBody->setVelocity(Vec2(0,0));
+	mainPlayer->m_sprite->stopAllActions();
+	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());
+	mainPlayer->physicsBody->setVelocity(Vec2(0,0));
 	return true;
 }
 bool MapTutorialScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 {
-	Vec2 MoveJoyStick = touch->getLocation();
-	/*if (Distance(Vec2(120, 100), touch->getLocation()) > 100) {
-		CCLOG("%f %f", MoveJoyStick.x, MoveJoyStick.y);
-		float JoyStickPositionY = 100 + 80 / (std::sqrt(1 + (touch->getLocation().x - 120) * (touch->getLocation().x - 120)
-			/ (touch->getLocation().y - 100) * (touch->getLocation().y - 100)));
-		float JoyStickPositionX = 120 + ((touch->getLocation().x - 120) / (touch->getLocation().y - 100)) * JoyStickPositionY;
-	MoveJoyStick = Vec2(JoyStickPositionX, JoyStickPositionY);
-	CCLOG("%f %f",JoyStickPositionX,JoyStickPositionY);
-	}*/
-	if (touch->getLocation().x < 120 && faceRight) {
-		aiLv1->m_sprite->setFlipX(true);
-		faceRight = !faceRight;
-	}
-	if (touch->getLocation().x > 120 && faceRight==false) {
-		aiLv1->m_sprite->setFlipX(false);
-		faceRight = !faceRight;
-	}
-	if (Distance(Vec2(120, 100), touch->getLocation()) > 100) {
-		MoveJoyStick = Vec2(120, 100);
-	}
-	auto mt = MoveTo::create(0, MoveJoyStick);
-	JoyStick->runAction(mt);
-	aiLv1->m_sprite->stopAllActions();
-	aiLv1->m_sprite->runAction(aiLv1->MovingRight());
-	aiLv1->physicsBody->setVelocity((MoveJoyStick - Vec2(120, 100))*2.5f);
+	
 	return false;
 }
 void MapTutorialScene::addMap()
@@ -127,6 +126,11 @@ void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event
 {
 	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
 		times = 0;
-		aiLv1->m_sprite->runAction(aiLv1->AttackRight());
+		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
 	}
+	if (Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()) < 100.0f)
+	{
+		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
+	}
+	CCLOG("%f", Distance(mainPlayer->m_sprite->getPosition(), ailv1->m_sprite->getPosition()));
 }
