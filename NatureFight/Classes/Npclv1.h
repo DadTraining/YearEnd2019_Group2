@@ -11,8 +11,10 @@ public:
 	void Update(float deltaTime);
 	void Init();
 	void Collision(/*Sprite main*/);
+	void Collision1(/*Sprite main*/);
 	cocos2d::RepeatForever* Hello();
 	cocos2d::RepeatForever* Communication();
+	cocos2d::RepeatForever* CommunicationNPCYolo();
 	~Npclv1();
 private:
 	float count=0;

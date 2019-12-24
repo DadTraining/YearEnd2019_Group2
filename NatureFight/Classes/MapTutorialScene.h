@@ -16,6 +16,7 @@ public:
 	Npclv1* npcsolo;
 	Player* mainPlayer;
 	Sprite* JoyStick;
+	Npclv1* npcYolo;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();

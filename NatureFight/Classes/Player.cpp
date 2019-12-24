@@ -20,7 +20,9 @@ void Player::Init()
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
 
-	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize());
+	auto a = m_sprite->getContentSize().width/2;
+	auto b = m_sprite->getContentSize().height/2;
+	physicsBody = PhysicsBody::createBox(Size(a, b));
 	physicsBody->setDynamic(false);
 	this->m_sprite->setPhysicsBody(physicsBody);
 	m_sprite->getPhysicsBody()->setContactTestBitmask(1);
@@ -33,10 +35,11 @@ void Player::Collision()
 }
 cocos2d::RepeatForever* Player::MovingRight() {
 	auto spriteCache= SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Run/runlist.plist");
+	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_1/Run/Main.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	for (int i = 0; i <= 14; i++) {
-		std::string name = "0_Warrior_Run_00" + std::to_string(i) + ".png";
+		std::string name;
+		if (i < 10) name = "0_Warrior_Run_00" + std::to_string(i) + ".png";
 		if (i >= 10) name = "0_Warrior_Run_0" + std::to_string(i) + ".png";
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
 	}
@@ -47,10 +50,12 @@ cocos2d::RepeatForever* Player::MovingRight() {
 }
 cocos2d::Animate* Player::AttackRight() {
 	auto spriteCacheAttack = SpriteFrameCache::getInstance();
-	spriteCacheAttack->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Attack_1/sprites.plist");
+	spriteCacheAttack->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_1/Attack_1/Main.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	for (int i = 1; i <= 15; i++) {
-		std::string name = "0_Warrior_Attack_ (" + std::to_string(i) + ").png";
+	for (int i = 1; i <= 14; i++) {
+		std::string name;
+		if (i < 10) name = "0_Warrior_Attack_1_00" + std::to_string(i) + ".png";
+		if (i >= 10) name = "0_Warrior_Attack_1_0" + std::to_string(i) + ".png";
 		exFrames.pushBack(spriteCacheAttack->getSpriteFrameByName(name));
 	}
 	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
@@ -61,10 +66,14 @@ cocos2d::Animate* Player::AttackRight() {
 cocos2d::RepeatForever* Player::IdleRight()
 {
 	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Idle Blinking/PlayerSprites.plist");
+	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_1/Idle Blinking/Main.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	for (int i = 1; i <= 30; i++) {
-		std::string name = "0_Warrior_Idle Blinking_ (" + std::to_string(i) + ").png";
+	std::string name;
+	for (int i = 1; i < 30; i++) {
+		
+		if (i < 10) name = "0_Warrior_Idle Blinking_00" + std::to_string(i) + ".png";
+		if (i >= 10) name = "0_Warrior_Idle Blinking_0" + std::to_string(i) + ".png";
+
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
 	}
 	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
@@ -76,10 +85,13 @@ cocos2d::RepeatForever* Player::IdleRight()
 cocos2d::RepeatForever* Player::AttackRightAngry()
 {
 	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Idle Blinking/PlayerSprites.plist");
+	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_1/Idle Blinking/Main.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	for (int i = 1; i <= 30; i++) {
-		std::string name = "0_Warrior_Idle Blinking_ (" + std::to_string(i) + ").png";
+		std::string name;
+		if (i < 10) name = "0_Warrior_Idle Blinking_00" + std::to_string(i) + ".png";
+		if (i >= 10) name = "0_Warrior_Idle Blinking_0" + std::to_string(i) + ".png";
+
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
 	}
 	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);

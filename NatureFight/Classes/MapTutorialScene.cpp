@@ -3,6 +3,7 @@
 #define RUN 1
 #define playertag 1000
 #define NpcSolotag 11
+#define NpcYolotag 12
 USING_NS_CC;
 using namespace std;
 float times = 0;
@@ -25,8 +26,14 @@ bool MapTutorialScene::init()
 	addMap();
 	npcsolo = new Npclv1(this);
 	npcsolo->Init();
-	//npcsolo->m_sprite->setTag(1);
+	npcsolo->m_sprite->setTag(NpcSolotag);
 	npcsolo->m_sprite->runAction(npcsolo->Communication());
+	//
+	npcYolo = new Npclv1(this);
+	npcYolo->Init();
+	npcYolo->m_sprite->setPosition(Point(visibleSize.width / 2 + 350, visibleSize.height / 2 - 50));
+	npcYolo->m_sprite->setTag(NpcYolotag);
+	npcYolo->m_sprite->runAction(npcYolo->CommunicationNPCYolo());
 	// Goblin ai
 	aiLv1 = new AiLv1(this);
 	aiLv1->Init();
@@ -185,10 +192,14 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact & contact)
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 	if (nodeA && nodeB)
 	{
-		if (nodeA->getTag() == playertag&nodeB->getTag()== NpcSolotag)
+		if (nodeA->getTag() == playertag&nodeB->getTag()== NpcSolotag|| nodeB->getTag() == playertag&nodeA->getTag() == NpcSolotag)
 		{
 			npcsolo->Collision();
 		}	
+		if (nodeA->getTag() == playertag&nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag&nodeA->getTag() == NpcYolotag)
+		{
+			npcYolo->Collision1();
+		}
 	}
 	
 	return true;
