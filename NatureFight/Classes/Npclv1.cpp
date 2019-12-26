@@ -25,9 +25,9 @@ void Npclv1::Init()
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
 	this->m_sprite->setPosition(Point(visibleSize.width / 2 +50, visibleSize.height / 2 - 50));
 	this->sceneGame->addChild(this->m_sprite,2);
-	auto a = m_sprite->getContentSize().width;
+	auto a = m_sprite->getContentSize().width-500;
 	auto b = m_sprite->getContentSize().height+1000;
-	auto Body = PhysicsBody::createBox(cocos2d::Size(a,b));
+	auto Body = PhysicsBody::createBox(cocos2d::Size(1,b));
 	this->m_sprite->setPhysicsBody(Body);
 	Body->setDynamic(false);
 	Body->setGravityEnable(false);
@@ -45,21 +45,31 @@ void Npclv1::Collision(/*Sprite main*/)
 	mess->setAnchorPoint(Vec2(0, 0));
 	this->sceneGame->addChild(mess);
 	//
-	auto label1 = Label::createWithSystemFont("xin chao \n toi la Solo \n Ban co the hoc ", "Arial", 16);
+	auto label1 = Label::createWithSystemFont("xin chao \n toi la Solo \n ", "Arial", 16);
 	label1->setAnchorPoint(Vec2(0, 0));
 	label1->setPositionX(mess->getPositionX() + 10);
 	label1->setPositionY(mess->getPositionY() +10);
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n 6 con Goblin \n de nhan Skill  ", "Arial", 16);
+	label2->setAnchorPoint(Vec2(0, 0));
+	label2->setPositionX(mess->getPositionX() + 10);
+	label2->setPositionY(mess->getPositionY() + 10);
+	label2->setTextColor(Color4B::BLACK);
+	this->sceneGame->addChild(label2);
 
 	// action hiden mess
+	auto fadeIn = FadeIn::create(5.0f);
 	auto fadeOut = FadeOut::create(3.0f);
-	mess->runAction(fadeOut);
+	mess->runAction(FadeOut::create(15.0f));
 	auto fadehue = FadeOut::create(3.0f);
 	auto remove = RemoveSelf::create(); // clean up memory
 	auto doubletrouble1 = Sequence::create(fadehue, remove, nullptr);
+	auto doubletrouble = Sequence::create(fadehue, fadeIn, fadehue, remove, nullptr);
 	label1->runAction(doubletrouble1);
+	label2->setOpacity(0);
+	label2->runAction(doubletrouble);
 
 }
 
@@ -78,7 +88,7 @@ void Npclv1::Collision1()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban nen danh \n 3 con quai \n de nhan kiem  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n 3 con Goblin \n de nhan kiem  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -88,7 +98,7 @@ void Npclv1::Collision1()
 	// action hiden mess
 	auto fadeIn = FadeIn::create(5.0f);
 	auto fadeOut = FadeOut::create(3.0f);
-	mess->runAction(FadeOut::create(12.0f));
+	mess->runAction(FadeOut::create(14.0f));
 	auto fadehue = FadeOut::create(3.0f);
 	auto remove = RemoveSelf::create(); // clean up memory
 	auto doubletrouble1 = Sequence::create(fadehue,remove, nullptr);

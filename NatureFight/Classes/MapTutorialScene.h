@@ -17,6 +17,7 @@ public:
 	Player* mainPlayer;
 	Sprite* JoyStick;
 	Npclv1* npcYolo;
+
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
@@ -29,6 +30,8 @@ public:
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
+	void Quest();
+
 
 	bool onContactBegin(const PhysicsContact& contact);
 };

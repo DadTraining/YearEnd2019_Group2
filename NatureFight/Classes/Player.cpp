@@ -15,10 +15,10 @@ void Player::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Idle Blinking/0_Warrior_Idle Blinking_000.png");
+	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle Blinking/0_Warrior_Idle Blinking_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
 	this->m_sprite->setScale(0.1);
-	this->sceneGame->addChild(this->m_sprite);
+	this->sceneGame->addChild(this->m_sprite,12);
 
 	auto a = m_sprite->getContentSize().width/2;
 	auto b = m_sprite->getContentSize().height/2;
