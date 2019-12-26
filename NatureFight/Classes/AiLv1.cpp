@@ -24,44 +24,9 @@ void AiLv1::Init()
 void AiLv1::Collision()
 {
 }
-cocos2d::RepeatForever* AiLv1::Moving() {
-	int numFrame = 12;
-	auto spriteCache = ResourceManager::GetInstance()->GetFrameById(1);
-	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	std::string name;
-	for (int i = 0; i < numFrame; i++) {
-		if (i<10)
-		{
-			name = "0_Goblin_Running_00" + std::to_string(i) + ".png";
-		}
-		else {
-			name= "0_Goblin_Running_0" + std::to_string(i) + ".png";
-		}
-	
-		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
-	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames,0.05f);
-	auto animate = cocos2d::Animate::create(animation);
-	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
-	return repeat;
-}
-cocos2d::RepeatForever* AiLv1::Attack() {
-	int numFrame = 12;
-	auto spriteCacheAttack = ResourceManager::GetInstance()->GetFrameById(1);
-	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	std::string name;
-	for (int i = 0; i < numFrame; i++) {
-		if (i < 10)
-		{
-			name = "0_Goblin_Slashing_00" + std::to_string(i) + ".png";
-		}
-		else {
-			name = "0_Goblin_Slashing_0" + std::to_string(i) + ".png";
-		}
-		exFrames.pushBack(spriteCacheAttack->getSpriteFrameByName(name));
-	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
-	auto animate = cocos2d::Animate::create(animation);
-	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
-	return repeat;
-}
+cocos2d::RepeatForever* AiLv1::MovingRight() { return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run"); }
+cocos2d::Animate* AiLv1::AttackRight() { return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2"); }
+cocos2d::RepeatForever* AiLv1::IdleRight() { return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle"); }
+cocos2d::RepeatForever* AiLv1::AttackRightAngry() { return ObjectParent::AnimationObjectRepeat(5, "Warrior_Attack_2"); }
+cocos2d::RepeatForever* AiLv1::DieRight() { return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died"); }
+cocos2d::Animate* AiLv1::HurtRight() { return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt"); }

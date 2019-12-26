@@ -10,6 +10,7 @@ Player::Player(cocos2d::Scene* scene)
 
 void Player::Update(FLOAT deltaTime)
 {
+
 }
 
 void Player::Init()
@@ -30,62 +31,12 @@ void Player::Init()
 void Player::Collision()
 {
 }
-cocos2d::RepeatForever* Player::MovingRight() {
-	auto spriteCache= SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Run/runlist.plist");
-	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	for (int i = 0; i <= 14; i++) {
-		std::string name = "0_Warrior_Run_00" + std::to_string(i) + ".png";
-		if (i >= 10) name = "0_Warrior_Run_0" + std::to_string(i) + ".png";
-		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
-	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames,0.05f);
-	auto animate = cocos2d::Animate::create(animation);
-	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
-	return repeat;
-}
-cocos2d::Animate* Player::AttackRight() {
-	auto spriteCacheAttack = SpriteFrameCache::getInstance();
-	spriteCacheAttack->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Attack_1/sprites.plist");
-	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	for (int i = 1; i <= 15; i++) {
-		std::string name = "0_Warrior_Attack_ (" + std::to_string(i) + ").png";
-		exFrames.pushBack(spriteCacheAttack->getSpriteFrameByName(name));
-	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
-	auto animate = cocos2d::Animate::create(animation);
-	return animate;
-}
-
-cocos2d::RepeatForever* Player::IdleRight()
-{
-	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Idle Blinking/PlayerSprites.plist");
-	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	for (int i = 1; i <= 30; i++) {
-		std::string name = "0_Warrior_Idle Blinking_ (" + std::to_string(i) + ").png";
-		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
-	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
-	auto animate = cocos2d::Animate::create(animation);
-	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
-	return repeat;
-}
-
-cocos2d::RepeatForever* Player::AttackRightAngry()
-{
-	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Main/Warrior_animations/Right_Side/PNG Sequences/Warrior_clothes_empty/Idle Blinking/PlayerSprites.plist");
-	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
-	for (int i = 1; i <= 30; i++) {
-		std::string name = "0_Warrior_Idle Blinking_ (" + std::to_string(i) + ").png";
-		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
-	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
-	auto animate = cocos2d::Animate::create(animation);
-	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
-	return repeat;
-}
+cocos2d::RepeatForever* Player::MovingRight() {	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run");}
+cocos2d::Animate* Player::AttackRight() { return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");}
+cocos2d::RepeatForever* Player::IdleRight(){ return ObjectParent::AnimationObjectRepeat(1,"Warrior_Idle");}
+cocos2d::RepeatForever* Player::AttackRightAngry(){	return ObjectParent::AnimationObjectRepeat(5, "Warrior_Attack_2");}
+cocos2d::RepeatForever* Player::DieRight(){	return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died");}
+cocos2d::Animate* Player::HurtRight(){	return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt");}
 
 void Player::updateLevel()
 {

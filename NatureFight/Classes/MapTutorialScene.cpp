@@ -21,7 +21,7 @@ bool MapTutorialScene::init()
 	addMap();
 	mainPlayer = new Player(this);
 	mainPlayer->Init();
-	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());	
+	mainPlayer->m_sprite->runAction(mainPlayer->DieRight());	
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(MapTutorialScene::onTouchMoved, this);
@@ -57,7 +57,7 @@ bool MapTutorialScene::init()
 
 	ailv1 = new AiLv1(this);
 	ailv1->Init();
-	ailv1->m_sprite->runAction(ailv1->Moving());
+	ailv1->m_sprite->runAction(ailv1->MovingRight());
 	
 	auto followTheSprite = Follow::create(mainPlayer->m_sprite, Rect::ZERO);
 	this->runAction(followTheSprite);
@@ -103,7 +103,7 @@ bool MapTutorialScene::onTouchEnded(Touch* touch, Event* event)
 {
 	mainPlayer->m_sprite->stopAllActions();
 	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());
-	mainPlayer->physicsBody->setVelocity(Vec2(0,0));
+	//mainPlayer->physicsBody->setVelocity(Vec2(0,0));
 	return true;
 }
 bool MapTutorialScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)

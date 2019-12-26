@@ -15,8 +15,12 @@ public:
 	void Update(float deltaTime);
 	void Init();
 	void Collision();
-	cocos2d::RepeatForever* Moving();
-	cocos2d::RepeatForever* Attack();
+	cocos2d::RepeatForever* MovingRight();
+	cocos2d::Animate* AttackRight();
+	cocos2d::RepeatForever* IdleRight();
+	cocos2d::RepeatForever* AttackRightAngry();
+	cocos2d::Animate* HurtRight();
+	cocos2d::RepeatForever* DieRight();
 	~AiLv1();
 private:
 	cocos2d::Scene* sceneGame;

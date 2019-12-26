@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>0_Warrior_Attack_ (1).png</key>
+            <key>0_Warrior_Attack_2_000.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -19,97 +19,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (10).png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{1100,1100}</string>
-                <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
-                <key>textureRect</key>
-                <string>{{1100,2200},{1100,1100}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>0_Warrior_Attack_ (11).png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{1100,1100}</string>
-                <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
-                <key>textureRect</key>
-                <string>{{2200,2200},{1100,1100}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>0_Warrior_Attack_ (12).png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{1100,1100}</string>
-                <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
-                <key>textureRect</key>
-                <string>{{3300,2200},{1100,1100}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>0_Warrior_Attack_ (13).png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{1100,1100}</string>
-                <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
-                <key>textureRect</key>
-                <string>{{0,3300},{1100,1100}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>0_Warrior_Attack_ (14).png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{1100,1100}</string>
-                <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
-                <key>textureRect</key>
-                <string>{{1100,3300},{1100,1100}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>0_Warrior_Attack_ (15).png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{1100,1100}</string>
-                <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
-                <key>textureRect</key>
-                <string>{{2200,3300},{1100,1100}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>0_Warrior_Attack_ (2).png</key>
+            <key>0_Warrior_Attack_2_001.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -124,7 +34,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (3).png</key>
+            <key>0_Warrior_Attack_2_002.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -139,7 +49,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (4).png</key>
+            <key>0_Warrior_Attack_2_003.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -154,7 +64,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (5).png</key>
+            <key>0_Warrior_Attack_2_004.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -169,7 +79,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (6).png</key>
+            <key>0_Warrior_Attack_2_005.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -184,7 +94,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (7).png</key>
+            <key>0_Warrior_Attack_2_006.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -199,7 +109,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (8).png</key>
+            <key>0_Warrior_Attack_2_007.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -214,7 +124,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_ (9).png</key>
+            <key>0_Warrior_Attack_2_008.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -229,6 +139,96 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
+            <key>0_Warrior_Attack_2_009.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{1100,1100}</string>
+                <key>spriteSourceSize</key>
+                <string>{1100,1100}</string>
+                <key>textureRect</key>
+                <string>{{1100,2200},{1100,1100}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>0_Warrior_Attack_2_010.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{1100,1100}</string>
+                <key>spriteSourceSize</key>
+                <string>{1100,1100}</string>
+                <key>textureRect</key>
+                <string>{{2200,2200},{1100,1100}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>0_Warrior_Attack_2_011.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{1100,1100}</string>
+                <key>spriteSourceSize</key>
+                <string>{1100,1100}</string>
+                <key>textureRect</key>
+                <string>{{3300,2200},{1100,1100}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>0_Warrior_Attack_2_012.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{1100,1100}</string>
+                <key>spriteSourceSize</key>
+                <string>{1100,1100}</string>
+                <key>textureRect</key>
+                <string>{{0,3300},{1100,1100}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>0_Warrior_Attack_2_013.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{1100,1100}</string>
+                <key>spriteSourceSize</key>
+                <string>{1100,1100}</string>
+                <key>textureRect</key>
+                <string>{{1100,3300},{1100,1100}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>0_Warrior_Attack_2_014.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{1100,1100}</string>
+                <key>spriteSourceSize</key>
+                <string>{1100,1100}</string>
+                <key>textureRect</key>
+                <string>{{2200,3300},{1100,1100}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
         </dict>
         <key>metadata</key>
         <dict>
@@ -239,13 +239,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>sprites.png</string>
+            <string>PlayerAttackRight.png</string>
             <key>size</key>
             <string>{4400,4400}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:eea19f01549a1ae9268cf723abb38c08:d42afe4b754a3f0f4a856fc461aa703c:db71e206b3c010bfb176561963c50b15$</string>
+            <string>$TexturePacker:SmartUpdate:97d82e2b97fb1c74960928dc2cf59bd4:9bbeabedfe465b6b8516c974357379f3:c7ee21fd520e3c488430240434161672$</string>
             <key>textureFileName</key>
-            <string>sprites.png</string>
+            <string>PlayerAttackRight.png</string>
         </dict>
     </dict>
 </plist>

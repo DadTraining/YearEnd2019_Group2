@@ -18,6 +18,8 @@ public:
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::RepeatForever* AttackRightAngry();
+	cocos2d::Animate* HurtRight();
+	cocos2d::RepeatForever* DieRight();
 	void updateLevel();
 	~Player();
 private:

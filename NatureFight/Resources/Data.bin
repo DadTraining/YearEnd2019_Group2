@@ -1,7 +1,7 @@
-#SPRITE 7
+#SPRITE 2
 1 Sprites/Man1/Goblin/PNG/PNG_Sequences/Running/0_Goblin_Running_000.png
 2 circle-icon-3.jpg
-#BUTTON 3
+#BUTTON 5
 1 Button/play_normal.png Button/play_pressed.png
 2 Button/resume_normal.png Button/resume_pressed.png
 3 Button/home_normal.png Button/home_pressed.png
@@ -10,6 +10,10 @@
 #FONTS 2
 1 Fonts/MarkerFelt.ttf
 2 Fonts/arial.ttf
-#FrameCache 3
-1 Sprites/Man1/Goblin/PNG/PNG_Sequences/Running/spritesGobin.plist
-2 Sprites/Man1/Goblin/PNG/PNG Sequences/Slashing/sprites.plist
+#FrameCache 6
+1 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/PlayerIdleRight.plist
+2 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunRight.plist
+3 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Hurt/PlayerHurtRight.plist
+4 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDiedRight.plist
+5 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_2/PlayerAttackRight.plist
+6 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_1/PlayerAttackRight.plist
