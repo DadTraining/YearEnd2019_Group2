@@ -17,6 +17,10 @@ public:
 	Player* mainPlayer;
 	Sprite* JoyStick;
 	Npclv1* npcYolo;
+	cocos2d::TMXLayer* mPhysicsLayer;
+	cocos2d::TMXLayer* mPhysicsLayer1;
+	cocos2d::TMXLayer* mPhysicsLayer2;
+	TMXTiledMap* map;
 
 public:
     static cocos2d::Scene* createScene();
@@ -31,7 +35,7 @@ public:
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
 	void Quest();
-
+	void createPhysicMap();
 
 	bool onContactBegin(const PhysicsContact& contact);
 };

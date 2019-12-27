@@ -25,15 +25,14 @@ void Npclv1::Init()
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
 	this->m_sprite->setPosition(Point(visibleSize.width / 2 +50, visibleSize.height / 2 - 50));
 	this->sceneGame->addChild(this->m_sprite,2);
-	auto a = m_sprite->getContentSize().width-500;
-	auto b = m_sprite->getContentSize().height+1000;
-	auto Body = PhysicsBody::createBox(cocos2d::Size(1,b));
+	auto a = m_sprite->getContentSize().width;// -500;
+	auto b = m_sprite->getContentSize().height;// +1000;
+	auto Body = PhysicsBody::createBox(cocos2d::Size(a/2,b/2));
 	this->m_sprite->setPhysicsBody(Body);
 	Body->setDynamic(false);
 	Body->setGravityEnable(false);
 	Body->setRotationEnable(false);
-	m_sprite->getPhysicsBody()->setContactTestBitmask(1);
-	//m_sprite->setTag(NpcSolotag);
+	m_sprite->getPhysicsBody()->setContactTestBitmask(2);
 	
 }
 
@@ -62,7 +61,7 @@ void Npclv1::Collision(/*Sprite main*/)
 	// action hiden mess
 	auto fadeIn = FadeIn::create(5.0f);
 	auto fadeOut = FadeOut::create(3.0f);
-	mess->runAction(FadeOut::create(15.0f));
+	mess->runAction(FadeOut::create(14.0f));
 	auto fadehue = FadeOut::create(3.0f);
 	auto remove = RemoveSelf::create(); // clean up memory
 	auto doubletrouble1 = Sequence::create(fadehue, remove, nullptr);

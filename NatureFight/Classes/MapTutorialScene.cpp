@@ -10,7 +10,18 @@ float times = 0;
 bool faceRight = true;
 Scene* MapTutorialScene::createScene()
 {
-    return MapTutorialScene::create();
+	auto scene = Scene::createWithPhysics();
+
+	
+	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+
+	// 'layer' is an autorelease object
+	auto layer = MapTutorialScene::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+    return scene;
 }
 
 bool MapTutorialScene::init()
@@ -20,7 +31,7 @@ bool MapTutorialScene::init()
         return false;
     }
 
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	addMap();
@@ -93,7 +104,7 @@ bool MapTutorialScene::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	Quest(); // Button display quest
-	
+	createPhysicMap();
 
     return true;
 }
@@ -156,15 +167,58 @@ bool MapTutorialScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event
 }
 void MapTutorialScene::addMap()
 {
-	auto map = TMXTiledMap::create("Map1/map1.tmx");
+	map = TMXTiledMap::create("Map1/map1.tmx");
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setScale(0.7);
 	map->setPosition(Vec2(0, 0));
+	//physic map
+	mPhysicsLayer = map->getLayer("item_3");
+	mPhysicsLayer->setVisible(true);
+	mPhysicsLayer2 = map->getLayer("land_2");
+	mPhysicsLayer2->setVisible(true);
+	mPhysicsLayer1 = map->getLayer("item_1");
+	mPhysicsLayer1->setVisible(true);
 	addChild(map);
+
+
 }
 float MapTutorialScene::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
 }
+void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
+		times = 0;
+		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
+	}
+}
+int timeCount = 0;
+void MapTutorialScene::update(FLOAT deltaTime)
+{
+	//	npcsolo->Update(deltaTime);
+	//npcsolo->Collision();
+	times += deltaTime;
+	// goblin
+	aiLv1->Update(deltaTime);
+	if (timeCount == 300) {
+		aiLv1->m_sprite->stopActionByTag(RUN);
+		aiLv1->m_sprite->runAction(aiLv1->Attack());
+	}
+	else if (timeCount == 600)
+	{
+		aiLv1->m_sprite->stopActionByTag(ATTACK);
+		aiLv1->m_sprite->runAction(aiLv1->Moving());
+		aiLv1->physicsBody->setVelocity(Vec2(10, 0));
+	}
+	else if (timeCount >= 1000)
+	{
+		auMove = true;
+	}
+	timeCount++;
+
+}
+
+
 int questYolo = 0,questSolo;
 int c = -1, d = -1;
 bool MapTutorialScene::onContactBegin(const PhysicsContact & contact)
@@ -191,20 +245,14 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact & contact)
 	return true;
 
 }
-void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
-{
-	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
-		times = 0;
-		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
-	}
-}
+
 Sprite* quest;
 Label* label1,*label2;
 int count1 = 0;
 vector<Label*> vlabel, vlabel1;
 void MapTutorialScene::Quest()
 {
-	quest = Sprite::create("frames/paused2.png");
+	quest = Sprite::create("frames/paused3.png");
 	quest->setPosition(600, 400);
 	quest->setScale(0.2);
 	quest->setAnchorPoint(Point(0.0f, 1.0f));
@@ -312,28 +360,74 @@ void MapTutorialScene::Quest()
 	addChild(button);
 	
 }
-int timeCount = 0;
-void MapTutorialScene::update(FLOAT deltaTime)
+void MapTutorialScene::createPhysicMap()
 {
-	//	npcsolo->Update(deltaTime);
-	//npcsolo->Collision();
-	times += deltaTime;
-	// goblin
-	aiLv1->Update(deltaTime);
-	if (timeCount == 300) {
-		aiLv1->m_sprite->stopActionByTag(RUN);
-		aiLv1->m_sprite->runAction(aiLv1->Attack());
-	}
-	else if (timeCount == 600)
-	{
-		aiLv1->m_sprite->stopActionByTag(ATTACK);
-		aiLv1->m_sprite->runAction(aiLv1->Moving());
-		aiLv1->physicsBody->setVelocity(Vec2(10, 0));
-	}
-	else if (timeCount >= 1000)
-	{
-		auMove = true;
-	}
-	timeCount++;
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
+	edgeBody->setCollisionBitmask(1);
+	edgeBody->setContactTestBitmask(1);
 
+	auto edgeNode = Node::create();
+	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2 );
+	edgeNode->setPhysicsBody(edgeBody);
+	addChild(edgeNode);
+
+
+	Size layerSize = mPhysicsLayer->getLayerSize();
+	for (int i = 0; i < layerSize.width; i++)
+	{
+		for (int j = 0; j < layerSize.height; j++)
+		{
+			auto tileSet = mPhysicsLayer->getTileAt(Vec2(i, j));
+			if (tileSet != NULL)
+			{
+				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
+				physics->setCollisionBitmask(4);
+				physics->setContactTestBitmask(true);
+				physics->setDynamic(false);
+				//physics->setMass(100);
+				tileSet->setPhysicsBody(physics);
+				
+			}
+		}
+	}
+	/*Size layerSize1 = mPhysicsLayer1->getLayerSize();
+	for (int i = 0; i < layerSize1.width; i++)
+	{
+		for (int j = 0; j < layerSize1.height; j++)
+		{
+			auto tileSet = mPhysicsLayer1->getTileAt(Vec2(i, j));
+			if (tileSet != NULL)
+			{
+				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
+				physics->setCollisionBitmask(5);
+				physics->setContactTestBitmask(true);
+				physics->setDynamic(false);
+				physics->setMass(101);
+				tileSet->setPhysicsBody(physics);
+
+			}
+		}
+	}*/
+
+	Size layerSize2 = mPhysicsLayer2->getLayerSize();
+	for (int i = 0; i < layerSize2.width; i++)
+	{
+		for (int j = 0; j < layerSize2.height; j++)
+		{
+			auto tileSet = mPhysicsLayer2->getTileAt(Vec2(i, j));
+			if (tileSet != NULL)
+			{
+				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
+				physics->setCollisionBitmask(6);
+				physics->setContactTestBitmask(true);
+				physics->setDynamic(false);
+				physics->setMass(102);
+				tileSet->setPhysicsBody(physics);
+
+			}
+		}
+	}
 }
+
