@@ -1,31 +1,29 @@
-#ifndef  _RESOURCE_MANAGER_H_
-#define  _RESOURCE_MANAGER_H_
-#include "cocos2d.h"
-#include<string>
-#include<map>
-#include <ui\CocosGUI.h>
+#pragma once
+#include <string>
+#include <cocos2d.h>
+#include <cocos\ui\UIButton.h>
+using namespace std;
 USING_NS_CC;
-
 class ResourceManager
 {
-public:
-	ResourceManager* s_instance;
-	std::string m_dataFolderPath;
-	std::map<int, Sprite*> m_sprites;
-	std::map<int, ui::Button*> m_buttons;
-	std::map<int, Label*> m_labels;
-	static int LevelPlayer;
-public:
-	void SetLevelPlayer(int);
-	Sprite* DuplicateSprite(Sprite* sprite);
+private:
 	ResourceManager();
+	static ResourceManager* s_instance;
+	 string m_dataFolderPath;
+	 map<char, cocos2d::Sprite*> m_sprites;
+	 map<char, ui::Button*> m_buttons;
+	 map<char, Label*> m_labels;
+	 
+public:
+	
 	~ResourceManager();
 	static ResourceManager* GetInstance();
-	void Init(const std::string path);
-	void Load(std::string fileName);
-	Sprite* GetSpriteById(int id);
-	ui::Button* GetButtonById(int id);
-	Label* GetLabelById(int id);
+	 void Init(const string path);
+	 void Load(string fileName);
+	 Sprite* GetSpriteById(char id);
+	 ui::Button* GetButtonById(char id);
+	 Label* GetLabelById(char id);
+
+
 };
-#endif
 

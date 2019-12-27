@@ -1,13 +1,7 @@
 #include "ResourceManager.h"
-int ResourceManager::LevelPlayer = 1;
-static ResourceManager* ss_instance;
+ResourceManager* ResourceManager::s_instance;
 ResourceManager::ResourceManager()
 {
-	s_instance = ss_instance;
-	//s_instance = new ResourceManager[10];
-	/*m_sprites = new std::map<char, Sprite*>[10];
-	m_buttons = new std::map<char, ui::Button*>;
-	m_labels = new std::map<char, Label*>;*/
 }
 
 ResourceManager::~ResourceManager()
@@ -16,93 +10,85 @@ ResourceManager::~ResourceManager()
 
 ResourceManager* ResourceManager::GetInstance()
 {
-	if (ss_instance==nullptr) {
-		ss_instance = new ResourceManager();
+	if (!s_instance)
+	{
+		s_instance = new ResourceManager();
 	}
-	return ss_instance;
+	return s_instance;
 }
 
-
-
-void ResourceManager::Init(const std::string path)
+void ResourceManager::Init(const string path)
 {
-	m_dataFolderPath = FileUtils::getInstance()->getStringFromFile(path);
-	Load(m_dataFolderPath);
+	Load(path);
+
 }
 
-void ResourceManager::Load(std::string fileName)
+void ResourceManager::Load(string fileName)
 {
 	int count = 0;
-	while (!m_dataFolderPath.empty()) {
-		std::string line = m_dataFolderPath.substr(0, m_dataFolderPath.find("\n"));
+
+	std::string path = FileUtils::getInstance()->getStringFromFile(fileName);
+
+	while (!path.empty()) {
+		std::string line = path.substr(0, path.find("\n"));
 		std::istringstream is(line);
 		int num;
 		std::string text, text2;
 		is >> num >> text >> text2;
-		m_dataFolderPath.erase(0, m_dataFolderPath.find("\n") + 1);
+		path.erase(0, path.find("\n") + 1);
+
 		if (num == 0) {
+
 			count++;
+
 			continue;
+
 		}
+
+
 
 		if (count == 1) {
+
 			auto sprite = Sprite::create(text);
 			sprite->retain();
-			m_sprites.insert({ num,sprite });
+			m_sprites.insert({ (char)num,sprite });
+
 			continue;
+
 		}
+
 		if (count == 2) {
+
 			auto button = ui::Button::create(text, text2);
 			button->retain();
-			m_buttons.insert({ num,button });
+			m_buttons.insert({ (char)num,button });
 			continue;
+
 		}
+
 		if (count == 3) {
-			auto label = Label::createWithTTF("temp", text, 20);
+
+			auto label = Label::createWithTTF("Hello", text, 20);
 			label->retain();
-			m_labels.insert({ num,label });
+			m_labels.insert({ (char)num,label });
 		}
+
 	}
 }
 
-Sprite* ResourceManager::GetSpriteById(int id)
+Sprite* ResourceManager::GetSpriteById(char id)
 {
-	auto sprite = m_sprites.find(id)->second;
-	return sprite;
+	return m_sprites.find(id)->second;
 }
 
-ui::Button* ResourceManager::GetButtonById(int id)
+ui::Button* ResourceManager::GetButtonById(char id)
 {
-	auto button = m_buttons.find(id)->second;
-	return button;
+	return  m_buttons.find(id)->second;
 }
 
-Label* ResourceManager::GetLabelById(int id)
+Label* ResourceManager::GetLabelById(char id)
 {
-	auto label = m_labels.find(id)->second;
-	return label;
-}
-void ResourceManager::SetLevelPlayer(int level)
-{
-	LevelPlayer = level;
-}
-Sprite* ResourceManager::DuplicateSprite(Sprite* sprite)
-{
-	Sprite* pRet = Sprite::createWithTexture(sprite->getTexture());
-	if (sprite->getChildrenCount() > 0)
-	{
-		for (int child = 0; child < sprite->getChildrenCount(); child++)
-		{
-			Sprite* spriteChild = (Sprite*)sprite->getChildren().at(child);
-			Sprite* clone = DuplicateSprite((Sprite*)spriteChild);
-			clone->boundingBox() = spriteChild->boundingBox();
-			clone->setContentSize(spriteChild->getContentSize());
-			clone->setPosition(spriteChild->getPosition());
-			clone->setAnchorPoint(spriteChild->getAnchorPoint());
-			pRet->addChild(clone, spriteChild->getZOrder(), spriteChild->getTag());
-		}
-	}
-	return pRet;
+	return m_labels.find(id)->second;
 }
 
 
