@@ -66,6 +66,7 @@ void ResourceManager::Load(std::string fileName)
 			spriteCache->addSpriteFramesWithFile(text);
 			spriteCache->retain();
 			m_framecache.insert({ num,spriteCache });
+			spriteCache->destroyInstance();
 		}
 	}
 }

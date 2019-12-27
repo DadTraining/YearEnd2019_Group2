@@ -16,12 +16,26 @@ public:
 	cocos2d::RepeatForever* AnimationObjectRepeat(int id, std::string name);
 	cocos2d::Animate* AnimationObjectOnce(int id, std::string name);
 
-	virtual cocos2d::RepeatForever* MovingRight()=0;
-	virtual cocos2d::Animate* AttackRight()=0;
-	virtual cocos2d::RepeatForever* IdleRight()=0;
-	virtual cocos2d::RepeatForever* AttackRightAngry()=0;
-	virtual cocos2d::Animate* HurtRight()=0;
-	virtual cocos2d::RepeatForever* DieRight()=0;
+	virtual cocos2d::RepeatForever* MovingRight() = 0;
+	virtual cocos2d::Animate* AttackRight() = 0;
+	virtual cocos2d::RepeatForever* IdleRight() = 0;
+	virtual cocos2d::Animate* AttackRightAngry() = 0;
+	virtual cocos2d::Animate* HurtRight() = 0;
+	virtual cocos2d::RepeatForever* DieRight() = 0;
+
+	virtual cocos2d::RepeatForever* MovingUp() = 0;
+	virtual cocos2d::Animate* AttackUp() = 0;
+	virtual cocos2d::RepeatForever* IdleUp() = 0;
+	virtual cocos2d::Animate* AttackUpAngry() = 0;
+	virtual cocos2d::Animate* HurtUp() = 0;
+	virtual cocos2d::RepeatForever* DieUp() = 0;
+
+	virtual cocos2d::RepeatForever* MovingDown() = 0;
+	virtual cocos2d::Animate* AttackDown() = 0;
+	virtual cocos2d::RepeatForever* IdleDown() = 0;
+	virtual cocos2d::Animate* AttackDownAngry() = 0;
+	virtual cocos2d::Animate* HurtDown() = 0;
+	virtual cocos2d::RepeatForever* DieDown() = 0;
 };
 #endif // _OBJECT_H_
 

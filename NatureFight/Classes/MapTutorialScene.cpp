@@ -3,7 +3,6 @@
 USING_NS_CC;
 using namespace std;
 float times = 0;
-bool faceRight = true;
 Scene* MapTutorialScene::createScene()
 {
     return MapTutorialScene::create();
@@ -21,7 +20,12 @@ bool MapTutorialScene::init()
 	addMap();
 	mainPlayer = new Player(this);
 	mainPlayer->Init();
-	mainPlayer->m_sprite->runAction(mainPlayer->DieRight());	
+	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());	
+	
+	auto mainPlayer1 = new Player(this);
+	mainPlayer1->Init();
+	mainPlayer1->m_sprite->runAction(mainPlayer1->MovingDown());
+
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(MapTutorialScene::onTouchMoved, this);
@@ -55,10 +59,10 @@ bool MapTutorialScene::init()
 	listenerKey->onKeyPressed = CC_CALLBACK_2(MapTutorialScene::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
-	ailv1 = new AiLv1(this);
+	/*ailv1 = new AiLv1(this);
 	ailv1->Init();
-	ailv1->m_sprite->runAction(ailv1->MovingRight());
-	
+	ailv1->m_sprite->runAction(ailv1->MovingRight());*/
+	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	auto followTheSprite = Follow::create(mainPlayer->m_sprite, Rect::ZERO);
 	this->runAction(followTheSprite);
 
@@ -73,8 +77,8 @@ bool MapTutorialScene::init()
 			if (times > 2.0f) {
 				times = 0;
 				mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
-				ailv1->health -= 10;
-				CCLOG("%d", ailv1->health);
+			//	ailv1->health -= 10;
+				//CCLOG("%d", ailv1->health);
 			}
 
 			break;
@@ -86,10 +90,18 @@ bool MapTutorialScene::init()
 	});
 
 	addChild(ButtonAttack,1);
+
+	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize);
+	auto edgeNode = Node::create();
+	edgeNode->setPosition(visibleSize/2);
+	addChild(edgeNode);
+	edgeNode->setPhysicsBody(edgeBody);
+
 	return true;
 }
 void MapTutorialScene::update(FLOAT deltaTime)
 {
+	mainPlayer->Update(deltaTime);
 	mainPlayer->physicsBody->setVelocity(Vect(leftJoystick->getVelocity())*200);
 	joystickBase->setPosition(Vec2(mainPlayer->m_sprite->getPosition()) + Vec2(-370, -130));
 	ButtonAttack->setPosition(Vec2(mainPlayer->m_sprite->getPosition()) + Vec2(350, -150));
@@ -101,14 +113,10 @@ bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 }
 bool MapTutorialScene::onTouchEnded(Touch* touch, Event* event)
 {
-	mainPlayer->m_sprite->stopAllActions();
-	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());
-	//mainPlayer->physicsBody->setVelocity(Vec2(0,0));
 	return true;
 }
 bool MapTutorialScene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 {
-	
 	return false;
 }
 void MapTutorialScene::addMap()
@@ -132,5 +140,5 @@ void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event
 	{
 		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
 	}
-	CCLOG("%f", Distance(mainPlayer->m_sprite->getPosition(), ailv1->m_sprite->getPosition()));
+	//CCLOG("%f", Distance(mainPlayer->m_sprite->getPosition(), ailv1->m_sprite->getPosition()));
 }
