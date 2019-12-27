@@ -43,6 +43,10 @@ public:
 	void SetFace();
 	void SetAlive();
 	void SetState(int);
+	void SetIdle(int);
+	void SetAttack(int state);
+	void SetHurt(int state);
+	void SetMove(int state);
 	int SetAction();
 	~Player();
 

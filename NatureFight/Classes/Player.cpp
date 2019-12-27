@@ -10,7 +10,6 @@ Player::Player(cocos2d::Scene* scene)
 void Player::Update(FLOAT deltaTime)
 {
 	SetFace();
-	CCLOG("%d", m_CurrentFace);
 }
 
 void Player::Init()
@@ -41,7 +40,104 @@ void Player::updateLevel()
 	m_health = Level * 100;
 	m_dame = Level * 10;
 }
+void Player::SetIdle(int state) {
+	switch (m_CurrentFace) {
+	case FACE_RIGHT:
+	case FACE_LEFT:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(IdleRight());
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(IdleRight());
+		}
+		break;
+	case FACE_UP:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(IdleUp());
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(IdleUp());
+		}
+		break;
+	case FACE_DOWN:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(IdleDown());
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(IdleDown());
+		}
+		break;
+	}
 
+}
+void Player::SetAttack(int state) {
+	switch (m_CurrentFace)
+	{
+	case FACE_LEFT:
+	case FACE_RIGHT:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackDown());
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(MovingUp());
+		}
+		break;
+	case FACE_UP:
+
+		break;
+	case FACE_DOWN:
+
+		break;
+	}
+}
+void Player::SetHurt(int state) {
+	switch (m_CurrentFace) {
+	case FACE_LEFT:
+	case FACE_RIGHT:
+		if (state != m_CurrentState) //one time
+		{
+			m_sprite->stopAllActions();
+			m_sprite->runAction(HurtRight());
+			m_health -= 10;
+			if (m_health <= 0)
+			{
+				m_sprite->stopAllActions();
+				m_sprite->runAction(DieRight());
+			}
+		}
+		break;
+	case FACE_UP:
+		if (state != m_CurrentState) //one time
+		{
+			m_sprite->stopAllActions();
+			m_sprite->runAction(HurtUp());
+			m_health -= 10;
+			if (m_health <= 0)
+			{
+				m_sprite->stopAllActions();
+				m_sprite->runAction(DieUp());
+			}
+		}
+		break;
+	case FACE_DOWN:
+		if (state != m_CurrentState) //one time
+		{
+			m_sprite->stopAllActions();
+			m_sprite->runAction(HurtDown());
+			m_health -= 10;
+			if (m_health <= 0)
+			{
+				m_sprite->stopAllActions();
+				m_sprite->runAction(DieDown());
+			}
+		}
+		break;
+	}
+}
 void Player::SetState(int state)
 {
 	if (!((m_CurrentState == ACTION_ATTACK || m_CurrentState == ACTION_ATTACKDOWN || m_CurrentState == ACTION_ATTACKUP)
@@ -49,40 +145,15 @@ void Player::SetState(int state)
 	{
 		switch (state) {
 		case ACTION_IDLE:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(IdleRight());
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(IdleRight());
-			}
+			SetIdle(state);
 			break;
-		case ACTION_IDLEUP:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(IdleUp());
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(IdleUp());
-			}
-			break;
-		case ACTION_IDLEDOWN:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(IdleDown());
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(IdleDown());
-			}
-			break;
-
 		case ACTION_MOVE:
 			if (state != m_CurrentState) {
 				m_sprite->stopAllActions();
-				MovingRight();
+				m_sprite->runAction(MovingRight());
 			}
 			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				MovingRight();
+				m_sprite->runAction(MovingRight());
 			}
 			break;
 		case ACTION_MOVEDOWN:
@@ -105,53 +176,10 @@ void Player::SetState(int state)
 			break;
 
 		case ACTION_ATTACK:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(AttackDown());
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(MovingUp());
-			}
+			SetAttack(state);
 			break;
 		case ACTION_HURT:
-			if (state != m_CurrentState) //one time
-			{
-				m_sprite->stopAllActions();
-				m_sprite->runAction(HurtRight());
-				m_health -= 10;
-				if (m_health <= 0)
-				{
-					m_sprite->stopAllActions();
-					m_sprite->runAction(DieRight());
-				}
-			}
-			break;
-		case ACTION_HURTUP:
-			if (state != m_CurrentState) //one time
-			{
-				m_sprite->stopAllActions();
-				m_sprite->runAction(HurtUp());
-				m_health -= 10;
-				if (m_health <= 0)
-				{
-					m_sprite->stopAllActions();
-					m_sprite->runAction(DieUp());
-				}
-			}
-			break;
-		case ACTION_HURTDOWN:
-			if (state != m_CurrentState) //one time
-			{
-				m_sprite->stopAllActions();
-				m_sprite->runAction(HurtDown());
-				m_health -= 10;
-				if (m_health <= 0)
-				{
-					m_sprite->stopAllActions();
-					m_sprite->runAction(DieDown());
-				}
-			}
-			break;
+			SetHurt(state);
 		}
 		m_CurrentState = state;
 	}
@@ -164,35 +192,34 @@ int Player::SetAction()
 
 void Player::SetFace()
 {
-	if (physicsBody->getVelocity().x <= 10 && physicsBody->getVelocity().x >= -10 && physicsBody->getVelocity().y < 0) {
+	if (physicsBody->getVelocity().x <= 100 && physicsBody->getVelocity().x >= -100 && physicsBody->getVelocity().y < 0) {
 		if (m_CurrentFace != FACE_DOWN) {
 			m_CurrentFace = FACE_DOWN;
-			if (physicsBody->getVelocity().y != 0) SetState(Player::ACTION_MOVEDOWN);
-			else SetState(Player::ACTION_IDLEDOWN);
+			SetState(Player::ACTION_MOVEDOWN);
 		}
 	}
-	else if (physicsBody->getVelocity().x <= 10 && physicsBody->getVelocity().x >= -10 && physicsBody->getVelocity().y > 0) {
+	else if (physicsBody->getVelocity().x <= 100 && physicsBody->getVelocity().x >= -100 && physicsBody->getVelocity().y > 0) {
 		if (m_CurrentFace != FACE_UP) {
 			m_CurrentFace = FACE_UP;
-			if (physicsBody->getVelocity().y != 0) SetState(Player::ACTION_MOVEUP);
-			else SetState(Player::ACTION_IDLEUP);
+			SetState(Player::ACTION_MOVEUP);
 		}
 	}
-	else if (physicsBody->getVelocity().x <= 0) {
+	else if (physicsBody->getVelocity().x < 0) {
 		if (m_CurrentFace != FACE_LEFT) {
 			m_sprite->setFlipX(true);
 			m_CurrentFace = FACE_LEFT;
-			if (physicsBody->getVelocity().x != 0 || physicsBody->getVelocity().y != 0) SetState(Player::ACTION_MOVE);
-			else SetState(Player::ACTION_IDLE);
+			SetState(Player::ACTION_MOVE);
 		}
 	}
-	else if (physicsBody->getVelocity().x >= 0) {
+	else if (physicsBody->getVelocity().x > 0) {
 		if (m_CurrentFace != FACE_RIGHT) {
 			m_sprite->setFlipX(false);
 			m_CurrentFace = FACE_RIGHT;
-			if (physicsBody->getVelocity().x != 0 || physicsBody->getVelocity().y != 0) SetState(Player::ACTION_MOVE);
-			else SetState(Player::ACTION_IDLE);
+			SetState(Player::ACTION_MOVE);
 		}
+	}
+	else if (physicsBody->getVelocity().x == 0 && physicsBody->getVelocity().x == 0) {
+		SetState(Player::ACTION_IDLE);
 	}
 }
 cocos2d::RepeatForever* Player::MovingRight() { return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run"); }

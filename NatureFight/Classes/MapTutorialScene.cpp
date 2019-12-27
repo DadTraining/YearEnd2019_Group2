@@ -74,11 +74,11 @@ bool MapTutorialScene::init()
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
-			if (times > 2.0f) {
+			if (times > 1.0f) {
 				times = 0;
-				mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 			//	ailv1->health -= 10;
-				//CCLOG("%d", ailv1->health);
+				CCLOG("123");
 			}
 
 			break;
@@ -134,11 +134,10 @@ void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event
 {
 	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
 		times = 0;
-		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
+		mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 	}
 	if (Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()) < 100.0f)
 	{
-		mainPlayer->m_sprite->runAction(mainPlayer->AttackRight());
+		mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 	}
-	//CCLOG("%f", Distance(mainPlayer->m_sprite->getPosition(), ailv1->m_sprite->getPosition()));
 }
