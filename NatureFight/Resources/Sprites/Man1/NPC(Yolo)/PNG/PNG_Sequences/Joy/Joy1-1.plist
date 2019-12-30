@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>frames</key>
+        <dict>
+            <key>Joy.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{7000,2100}</string>
+                <key>spriteSourceSize</key>
+                <string>{7000,2100}</string>
+                <key>textureRect</key>
+                <string>{{0,0},{7000,2100}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+        </dict>
+        <key>metadata</key>
+        <dict>
+            <key>format</key>
+            <integer>3</integer>
+            <key>pixelFormat</key>
+            <string>RGBA8888</string>
+            <key>premultiplyAlpha</key>
+            <false/>
+            <key>realTextureFileName</key>
+            <string>Joy1-1.png</string>
+            <key>size</key>
+            <string>{7000,2100}</string>
+            <key>smartupdate</key>
+            <string>$TexturePacker:SmartUpdate:c578e9584fa28dc1cbba012562cf0672:bfbb660bc6bd2d5d22fa1192604c0408:65d1d852e5bfc1d2e0805ebe8ea7ecbc$</string>
+            <key>textureFileName</key>
+            <string>Joy1-1.png</string>
+        </dict>
+    </dict>
+</plist>

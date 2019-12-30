@@ -9,18 +9,35 @@ class AiLv1 :
 	public ObjectParent
 {
 public: 
+	PhysicsBody* physicsBody1;
 	int health = 100;
 public:
 	AiLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
 	void Init();
 	void Collision();
+	bool StartAttack(int);
+
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
 	cocos2d::RepeatForever* DieRight();
+
+	cocos2d::RepeatForever* MovingUp();
+	cocos2d::Animate* AttackUp();
+	cocos2d::RepeatForever* IdleUp();
+	cocos2d::Animate* AttackUpAngry();
+	cocos2d::Animate* HurtUp();
+	cocos2d::RepeatForever* DieUp();
+
+	cocos2d::RepeatForever* MovingDown();
+	cocos2d::Animate* AttackDown();
+	cocos2d::RepeatForever* IdleDown();
+	cocos2d::Animate* AttackDownAngry();
+	cocos2d::Animate* HurtDown();
+	cocos2d::RepeatForever* DieDown();
 	~AiLv1();
 private:
 	cocos2d::Scene* sceneGame;

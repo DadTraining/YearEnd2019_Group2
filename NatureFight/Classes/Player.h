@@ -36,7 +36,7 @@ private:
 	int m_dame = 10;
 public:
 	Player(cocos2d::Scene* scene);
-	void Update(FLOAT deltaTime);
+	void Update(float deltaTime);
 	void updateLevel();
 	void Init();
 	void Collision();
@@ -49,6 +49,8 @@ public:
 	void SetMove(int state);
 	int SetAction();
 	~Player();
+
+	bool StartAttack(int);
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
