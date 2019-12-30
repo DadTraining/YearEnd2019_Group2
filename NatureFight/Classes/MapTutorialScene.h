@@ -6,11 +6,9 @@
 #include <AiLv1.h>
 #include <iostream>
 #include <Player.h>
-#include <Npclv1.h>
 #include <ui/CocosGUI.h>
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
-#include <MenuLayer.h>
 USING_NS_CC;
 class MapTutorialScene : public cocos2d::Scene
 {
@@ -19,12 +17,7 @@ public:
 	AiLv1* ailv1;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
-//	SneakyJoystickSkinnedBase* joystickBase;
-	Npclv1* npcsolo, *npcYolo;
-	TMXTiledMap* map;
-	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
-	MenuLayer* menuLayer;
-	
+	SneakyJoystickSkinnedBase* joystickBase;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
@@ -37,8 +30,5 @@ public:
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
 	void MovePlayer();
-	void Quest(); // Button display quest
-	//void createPhysicMap();
-	bool onContactBegin(const PhysicsContact& contact);
 };
 #endif // __MAPTUTORIAL_SCENE_H__

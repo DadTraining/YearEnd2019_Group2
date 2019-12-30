@@ -14,7 +14,7 @@ void AiLv1::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	//spriteCache ->addSpriteFramesWithFile("Sprites/Man1/Goblin/PNG/PNG_Sequences/Slashing/spritesAttackGoblin.plist");
+	//spriteCache ->addSpriteFramesWithFile("Sprites/Man1/Goblin/PNG/PNG Sequences/Slashing/spritesAttackGoblin.plist");
 	this->m_sprite = ResourceManager::GetInstance()->GetSpriteById(1);
 	this->m_sprite->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
 	this->m_sprite->setScale(0.2);

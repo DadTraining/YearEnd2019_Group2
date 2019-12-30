@@ -50,8 +50,6 @@ public:
 	int SetAction();
 	~Player();
 
-	bool StartAttack(int);
-
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
