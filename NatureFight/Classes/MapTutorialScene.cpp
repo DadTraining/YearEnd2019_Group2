@@ -111,11 +111,11 @@ bool MapTutorialScene::init()
 
 	addChild(ButtonAttack,1);
 
-	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize);
+	/*auto edgeBody = PhysicsBody::createEdgeBox(visibleSize);
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(visibleSize/2);
 	addChild(edgeNode);
-	edgeNode->setPhysicsBody(edgeBody);
+	edgeNode->setPhysicsBody(edgeBody);*/
 	// va cham npc
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(MapTutorialScene::onContactBegin, this);
@@ -157,7 +157,7 @@ void MapTutorialScene::addMap()
 	mPhysicsLayer->setVisible(true);
 	mPhysicsLayer2 = map->getLayer("land_2");
 	mPhysicsLayer2->setVisible(true);
-	mPhysicsLayer1 = map->getLayer("item_1");
+	mPhysicsLayer1 = map->getLayer("item_2");
 	mPhysicsLayer1->setVisible(true);
 	addChild(map);
 }
@@ -317,9 +317,10 @@ void MapTutorialScene::Quest()
 	addChild(button);
 
 }
+void createPhysicsLayer(TMXLayer* mPhysic);
 void MapTutorialScene::createPhysicMap()
 {
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+	/*auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
 	edgeBody->setCollisionBitmask(1);
@@ -328,62 +329,66 @@ void MapTutorialScene::createPhysicMap()
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(visibleSize.width / 2, visibleSize.height / 2);
 	edgeNode->setPhysicsBody(edgeBody);
-	addChild(edgeNode);
+	addChild(edgeNode);*/
 
-
-	Size layerSize = mPhysicsLayer->getLayerSize();
+	createPhysicsLayer(mPhysicsLayer);
+	createPhysicsLayer(mPhysicsLayer1);
+	createPhysicsLayer(mPhysicsLayer2);
+	
+}
+void createPhysicsLayer(TMXLayer* mPhysic)
+{
+	Size layerSize = mPhysic->getLayerSize();
 	for (int i = 0; i < layerSize.width; i++)
 	{
-		for (int j = 0; j < layerSize.height; j++)
+		for (int j = 1; j < layerSize.height - 1; j++)
 		{
-			auto tileSet = mPhysicsLayer->getTileAt(Vec2(i, j));
-			if (tileSet != NULL)
+			auto tileSet1 = mPhysic->getTileAt(Vec2(i, j));
+			auto tileSet = mPhysic->getTileAt(Vec2(i, j + 1));
+			if (tileSet != NULL && tileSet1 == NULL)
 			{
 				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
 				physics->setCollisionBitmask(4);
 				physics->setContactTestBitmask(true);
 				physics->setDynamic(false);
-				//physics->setMass(100);
 				tileSet->setPhysicsBody(physics);
-
 			}
+			auto tileSet2 = mPhysic->getTileAt(Vec2(i, j - 1));
+			if (tileSet1 == NULL && tileSet2 != NULL)
+			{
+				auto physics = PhysicsBody::createBox(tileSet2->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
+				physics->setCollisionBitmask(4);
+				physics->setContactTestBitmask(true);
+				physics->setDynamic(false);
+				tileSet2->setPhysicsBody(physics);
+			}
+
 		}
 	}
-	/*Size layerSize1 = mPhysicsLayer1->getLayerSize();
-	for (int i = 0; i < layerSize1.width; i++)
+	for (int j = 0; j < layerSize.height; j++)
 	{
-		for (int j = 0; j < layerSize1.height; j++)
+		for (int i = 1; i < layerSize.width - 1; i++)
 		{
-			auto tileSet = mPhysicsLayer1->getTileAt(Vec2(i, j));
-			if (tileSet != NULL)
+			auto tileSet1 = mPhysic->getTileAt(Vec2(i, j));
+			auto tileSet = mPhysic->getTileAt(Vec2(i + 1, j));
+			if (tileSet != NULL && tileSet1 == NULL && tileSet->getPhysicsBody() == NULL)
 			{
 				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-				physics->setCollisionBitmask(5);
+				physics->setCollisionBitmask(4);
 				physics->setContactTestBitmask(true);
 				physics->setDynamic(false);
-				physics->setMass(101);
 				tileSet->setPhysicsBody(physics);
-
 			}
-		}
-	}*/
-
-	Size layerSize2 = mPhysicsLayer2->getLayerSize();
-	for (int i = 0; i < layerSize2.width; i++)
-	{
-		for (int j = 0; j < layerSize2.height; j++)
-		{
-			auto tileSet = mPhysicsLayer2->getTileAt(Vec2(i, j));
-			if (tileSet != NULL)
+			auto tileSet2 = mPhysic->getTileAt(Vec2(i - 1, j));
+			if (tileSet1 == NULL && tileSet2 != NULL && tileSet2->getPhysicsBody() == NULL)
 			{
-				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-				physics->setCollisionBitmask(6);
+				auto physics = PhysicsBody::createBox(tileSet2->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
+				physics->setCollisionBitmask(4);
 				physics->setContactTestBitmask(true);
 				physics->setDynamic(false);
-				physics->setMass(102);
-				tileSet->setPhysicsBody(physics);
-
+				tileSet2->setPhysicsBody(physics);
 			}
+
 		}
 	}
 }

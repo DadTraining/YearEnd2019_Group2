@@ -27,7 +27,7 @@ void Player::Init()
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize());
-	physicsBody->setDynamic(false);
+	//physicsBody->setDynamic(false);
 	physicsBody->setRotationEnable(false);
 	physicsBody->setCollisionBitmask(101);
 	physicsBody->setContactTestBitmask(1);

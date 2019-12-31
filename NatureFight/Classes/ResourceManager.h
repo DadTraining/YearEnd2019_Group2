@@ -29,5 +29,5 @@ public:
 	Label* GetLabelById(int id);
 	SpriteFrameCache* GetFrameById(int id);
 };
-#endif
+#endif _RESOURCE_MANAGER_H_
 
