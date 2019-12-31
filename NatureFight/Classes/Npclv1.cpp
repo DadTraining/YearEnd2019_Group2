@@ -20,7 +20,7 @@ void Npclv1::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	this->m_sprite = cocos2d::Sprite::create("Sprites/Man1/NPC(Solo)/PNG/Front/PNG Sequences/Greeting/0_Citizen_Greeting_000.png");
+	this->m_sprite = cocos2d::Sprite::create("Sprites/Man1/NPC(Solo)/PNG/Front/PNG_Sequences/Greeting/0_Citizen_Greeting_000.png");
 	this->m_sprite->setScale(0.1);
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
 	this->m_sprite->setPosition(Point(visibleSize.width / 2 +50, visibleSize.height / 2 - 50));
@@ -111,7 +111,7 @@ void Npclv1::Collision1()
 cocos2d::RepeatForever * Npclv1::Hello()
 {
 	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Solo)/PNG/Front/PNG Sequences/Greeting/Greeting.plist");
+	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Solo)/PNG/Front/PNG_Sequences/Greeting/Greeting.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	std::string name;
 	for (int i = 0; i < 30; i++) {
@@ -134,7 +134,7 @@ cocos2d::RepeatForever * Npclv1::Hello()
 cocos2d::RepeatForever * Npclv1::Communication()
 {
 	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Solo)/PNG/Front/PNG Sequences/Communication/communication.plist");
+	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Solo)/PNG/Front/PNG_Sequences/Communication/communication.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	std::string name;
 	for (int i = 0; i < 30; i++) {
@@ -159,7 +159,7 @@ cocos2d::RepeatForever * Npclv1::Communication()
 cocos2d::RepeatForever * Npclv1::CommunicationNPCYolo()
 {
 	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Yolo)/PNG/PNG Sequences/Communication/Communication.plist");
+	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Yolo)/PNG/PNG_Sequences/Communication/Communication.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	std::string name;
 	for (int i = 0; i < 30; i++) {

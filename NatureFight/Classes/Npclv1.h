@@ -2,11 +2,10 @@
 #include "cocos2d.h"
 #include "ObjectParent.h"
 #include <vector> 
-class Npclv1 :
-	public ObjectParent
+class Npclv1
 {
-
 public:
+	cocos2d::Sprite* m_sprite;
 	Npclv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
 	void Init();
