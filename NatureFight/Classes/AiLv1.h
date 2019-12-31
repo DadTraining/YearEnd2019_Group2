@@ -5,6 +5,7 @@
 #include <list>
 #include <vector> 
 #include "cocos2d.h"
+USING_NS_CC;
 class AiLv1 :
 	public ObjectParent
 {
@@ -17,6 +18,8 @@ public:
 	void Init();
 	void Collision();
 	bool StartAttack(int);
+	float Distance(Vec2 A, Vec2 C);
+	void AiLv1::SetFace();
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();

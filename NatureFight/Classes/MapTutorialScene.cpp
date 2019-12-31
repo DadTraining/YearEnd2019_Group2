@@ -6,6 +6,7 @@ USING_NS_CC;
 #define playertag 1000
 #define NpcSolotag 11
 #define NpcYolotag 12
+#define AILV1 13
 using namespace std;
 float times = 0;
 Sprite* quest;
@@ -48,6 +49,7 @@ bool MapTutorialScene::init()
 	ailv1 = new AiLv1(this);
 	ailv1->Init();
 	ailv1->m_sprite->runAction(ailv1->MovingRight());
+	ailv1->m_sprite->setTag(AILV1);
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
@@ -76,6 +78,8 @@ bool MapTutorialScene::init()
 	// va cham npc
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(MapTutorialScene::onContactBegin, this);
+	contactListener->onContactPreSolve = CC_CALLBACK_1(MapTutorialScene::onContactPreSolve, this);
+	contactListener->onContactSeparate = CC_CALLBACK_1(MapTutorialScene::onContactSeparate, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	Quest(); // Button display quest
@@ -87,12 +91,12 @@ bool MapTutorialScene::init()
 }
 void MapTutorialScene::update(float deltaTime)
 {
+	ailv1->Collision();
 	mainPlayer->Update(deltaTime);
 	menuLayer->update();
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
 
-	ailv1->physicsBody1->setVelocity(mainPlayer->physicsBody->getVelocity());
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -161,6 +165,38 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 
 	return true;
 
+}
+
+bool MapTutorialScene::onContactPreSolve(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA && nodeB)
+	{
+		//ailv1 colider
+		if (nodeA->getTag() == playertag & nodeB->getTag() == AILV1 || nodeB->getTag() == playertag & nodeA->getTag() == AILV1)
+		{
+			ailv1->physicsBody1->setVelocity(mainPlayer->m_sprite->getPosition() - ailv1->m_sprite->getPosition());
+		}
+	}
+
+	return true;
+}
+
+bool MapTutorialScene::onContactSeparate(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA && nodeB)
+	{
+		//ailv1 colider
+		if (nodeA->getTag() == playertag & nodeB->getTag() == AILV1 || nodeB->getTag() == playertag & nodeA->getTag() == AILV1)
+		{
+			ailv1->physicsBody1->setVelocity(Vec2(0, 0));
+		}
+	}
+
+	return true;
 }
 
 void MapTutorialScene::Quest()
