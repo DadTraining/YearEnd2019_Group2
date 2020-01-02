@@ -15,6 +15,7 @@ USING_NS_CC;
 class MapTutorialScene : public cocos2d::Scene
 {
 public:
+
 	Player* mainPlayer;
 	AiLv1* ailv1;
 	Item* item;
@@ -29,7 +30,7 @@ public:
     static cocos2d::Scene* createScene();
 	void addMap();
     virtual bool init();
-    void update(FLOAT deltaTime);
+    void update(float deltaTime);
     CREATE_FUNC(MapTutorialScene);
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);
@@ -40,5 +41,7 @@ public:
 	void Quest(); // Button display quest
 	void createPhysicMap();
 	bool onContactBegin(const PhysicsContact& contact);
+
+
 };
 #endif // __MAPTUTORIAL_SCENE_H__

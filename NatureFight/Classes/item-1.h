@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "ui/CocosGUI.h"
 //#include "ObjectParent.h"
 class Item 
 {
@@ -14,12 +15,13 @@ public:
 	void showItemKiem();
 	void showItemLua();
 	void showItemBang();
+	void showItemMau(cocos2d::Sprite* sprite);
+	void getpercent(int x);
 	~Item();
 
 private:
-	//cocos2d::Sprite* item_kiem;
-	//cocos2d::Sprite* item_lua;
-	//cocos2d::Sprite* item_bang;
+	cocos2d::ui::LoadingBar* load;
+	cocos2d::Sprite* item_mau;
 	cocos2d::Sprite* icon_kiem;
 	cocos2d::Sprite* icon_lua;
 	cocos2d::Sprite* icon_bang;

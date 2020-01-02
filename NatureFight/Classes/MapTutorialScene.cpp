@@ -23,12 +23,7 @@ bool MapTutorialScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	addMap();
-	//item
-	item = new Item(this);
-	item->Init();
-	//item->showKiem();
-	//item->showLua();
-	//item->showBang();
+
 
 	//npc zolo
 	npcsolo = new Npclv1(this);
@@ -51,6 +46,17 @@ bool MapTutorialScene::init()
 	auto mainPlayer1 = new Player(this);
 	mainPlayer1->Init();
 	mainPlayer1->m_sprite->runAction(mainPlayer1->MovingDown());
+
+
+	//item
+	item = new Item(this);
+	item->Init();
+
+	item->showItemMau(mainPlayer->m_sprite);
+	//item->showLua();
+	//item->showBang();
+
+
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
@@ -133,8 +139,9 @@ bool MapTutorialScene::init()
 	//end va cham npc
 	return true;
 }
-void MapTutorialScene::update(FLOAT deltaTime)
+void MapTutorialScene::update(float deltaTime)
 {
+
 	mainPlayer->Update(deltaTime);
 	mainPlayer->physicsBody->setVelocity(Vect(leftJoystick->getVelocity())*200);
 	joystickBase->setPosition(Vec2(mainPlayer->m_sprite->getPosition()) + Vec2(-370, -130));
@@ -195,7 +202,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		{
 			questSolo = 2;
 			npcsolo->Collision();
-
+			item->getpercent(-3);
 			item->showItemKiem();
 			c += 1;
 
@@ -211,6 +218,8 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 	return true;
 
 }
+
+
 
 Sprite* quest;
 Label* label1, * label2;
