@@ -58,12 +58,6 @@ bool MapTutorialScene::init()
 	listener->onTouchEnded = CC_CALLBACK_2(MapTutorialScene::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	
-
-	auto listenerKey = EventListenerKeyboard::create();
-	listenerKey->onKeyPressed = CC_CALLBACK_2(MapTutorialScene::onKeyPressed, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
-
 	/*ailv1 = new AiLv1(this);
 	ailv1->Init();
 	ailv1->m_sprite->runAction(ailv1->MovingRight());*/
@@ -129,17 +123,7 @@ void MapTutorialScene::addMap()
 float MapTutorialScene::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
 }
-void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
-{
-	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
-		times = 0;
-		mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-	}
-	if (Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()) < 100.0f)
-	{
-		mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-	}
-}
+
 //nhan
 int questYolo = 0, questSolo;
 int c = -1, d = -1;
@@ -167,6 +151,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			CCLOG("KILL");
 			ailv1->m_sprite->stopAllActions();
 			ailv1->m_sprite->runAction(ailv1->HurtRight());
+			mainPlayer->SetHurt(Player::ACTION_HURT);
 		}
 	}
 	return true;

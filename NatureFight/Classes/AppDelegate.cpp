@@ -119,9 +119,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    ResourceManager::GetInstance()->Init("Data.bin");
     // create a scene. it's an autorelease object
-    auto scene = MapTutorialScene::createScene();
+    auto scene = HelloWorld::createScene();
     
     // run
     director->runWithScene(scene);

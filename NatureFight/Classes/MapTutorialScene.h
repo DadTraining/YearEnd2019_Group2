@@ -34,7 +34,6 @@ public:
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
 	void MovePlayer();
 	void Quest(); // Button display quest

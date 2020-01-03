@@ -6,23 +6,20 @@ class Player :
 	public ObjectParent
 {
 public:
-	static const int FACE_UP = 0;
+	static const int FACE_DEFAULT = 0;
 	static const int FACE_DOWN = 1;
 	static const int FACE_LEFT = 2;
 	static const int FACE_RIGHT = 3;
+	static const int FACE_UP = 4;
 
+	static const int ACTION_DEFAULT = -1;
 	static const int ACTION_MOVE = 0;
 	static const int ACTION_MOVEDOWN = 1;
 	static const int ACTION_MOVEUP = 2;
 	static const int ACTION_ATTACK = 3;
-	static const int ACTION_ATTACKDOWN = 4;
-	static const int ACTION_ATTACKUP = 5;
 	static const int ACTION_IDLE = 6;
-	static const int ACTION_IDLEDOWN = 7;
-	static const int ACTION_IDLEUP = 8;
 	static const int ACTION_HURT = 9;
-	static const int ACTION_HURTUP = 10;
-	static const int ACTION_HURTDOWN = 11;
+	static const int ACTION_DIE = 10;
 
 public: 
 	PhysicsBody* physicsBody;
@@ -45,6 +42,7 @@ public:
 	void SetAlive();
 	void SetState(int);
 	void SetIdle(int);
+	void SetDie(int);
 	void SetAttack(int state);
 	void SetHurt(int state);
 	void SetMove(int state);

@@ -13,14 +13,33 @@ Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
 }
-float timeAttack = 0;
+float timeAttack = 0, timeDie = 0;
 void Player::Update(float deltaTime)
 {
-	SetFace();
-	timeAttack += deltaTime;
-	if (timeAttack > 1.0f && m_CurrentState == ACTION_ATTACK) {
-		m_CurrentState = ACTION_IDLE;
-		timeAttack = 0;
+	if (m_health <= 0) {
+		timeDie += deltaTime;
+		SetState(ACTION_DIE);
+		if (timeDie >= 5) {
+			timeDie = 0;
+			m_sprite->setPosition(10, 10);
+			m_health = 100;
+			m_CurrentState = ACTION_DEFAULT;
+			m_CurrentFace = FACE_DEFAULT;
+			edgeNode->setPosition(Vec2(1000, 1000));
+		}
+	}
+	else {
+		SetFace();
+		if (m_CurrentState == ACTION_ATTACK) {
+			timeAttack += deltaTime;
+			if (timeAttack > 1.0f) {
+				m_CurrentState = ACTION_IDLE;
+				timeAttack = 0;
+			}
+			if (timeAttack > 0.3f) {
+				edgeNode->setPosition(Vec2(1000, 1000));
+			}
+		}
 	}
 }
 
@@ -30,7 +49,7 @@ void Player::Init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
-	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
+	this->m_sprite->setPosition(10,10);
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize()/2);
@@ -42,7 +61,7 @@ void Player::Init()
 	this->m_sprite->setTag(playertag);
 	physicsBody->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
-	m_CurrentFace = FACE_RIGHT;
+	m_CurrentFace = FACE_DEFAULT;
 
 	auto edgeBody = PhysicsBody::createEdgeBox(Size(20,20));
 	edgeBody->setContactTestBitmask(1);
@@ -90,6 +109,40 @@ void Player::SetIdle(int state) {
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(IdleDown());
+		}
+		break;
+	}
+
+}
+void Player::SetDie(int state)
+{
+	switch (m_CurrentFace) {
+	case FACE_RIGHT:
+	case FACE_LEFT:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(DieRight());
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(DieRight());
+		}
+		break;
+	case FACE_UP:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(DieUp());
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(DieUp());
+		}
+		break;
+	case FACE_DOWN:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(DieDown());
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(DieDown());
 		}
 		break;
 	}
@@ -149,45 +202,21 @@ void Player::SetHurt(int state) {
 	switch (m_CurrentFace) {
 	case FACE_LEFT:
 	case FACE_RIGHT:
-		if (state != m_CurrentState) //one time
-		{
 			m_sprite->stopAllActions();
 			m_sprite->runAction(HurtRight());
 			m_health -= 10;
-			if (m_health <= 0)
-			{
-				m_sprite->stopAllActions();
-				m_sprite->runAction(DieRight());
-			}
-		}
 		break;
 	case FACE_UP:
-		if (state != m_CurrentState) //one time
-		{
 			m_sprite->stopAllActions();
 			m_sprite->runAction(HurtUp());
 			m_health -= 10;
-			if (m_health <= 0)
-			{
-				m_sprite->stopAllActions();
-				m_sprite->runAction(DieUp());
-			}
-		}
 		break;
 	case FACE_DOWN:
-		if (state != m_CurrentState) //one time
-		{
 			m_sprite->stopAllActions();
 			m_sprite->runAction(HurtDown());
 			m_health -= 10;
-			if (m_health <= 0)
-			{
-				m_sprite->stopAllActions();
-				m_sprite->runAction(DieDown());
-			}
-		}
-		break;
 	}
+	CCLOG("%d", m_health);
 }
 void Player::SetState(int state)
 {
@@ -230,6 +259,9 @@ void Player::SetState(int state)
 			break;
 		case ACTION_HURT:
 			SetHurt(state);
+			break;
+		case ACTION_DIE:
+			SetDie(state);
 		}
 		m_CurrentState = state;
 	}
