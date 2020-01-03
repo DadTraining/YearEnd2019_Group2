@@ -34,7 +34,6 @@ void MenuLayer::createButtonLayer()
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-			CCLOG("attack");
 			break;
 		case ui::Widget::TouchEventType::ENDED:
 			break;

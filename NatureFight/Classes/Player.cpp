@@ -3,6 +3,7 @@
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
+#define ATTACKTAG 8
 #define NpcSolotag 11
 #define NpcYolotag 12
 using namespace CocosDenshion; 
@@ -19,7 +20,7 @@ void Player::Update(float deltaTime)
 	timeAttack += deltaTime;
 	if (timeAttack > 1.0f && m_CurrentState == ACTION_ATTACK) {
 		m_CurrentState = ACTION_IDLE;
-		timeAttack == 0;
+		timeAttack = 0;
 	}
 }
 
@@ -32,7 +33,7 @@ void Player::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
-	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize());
+	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize()/2);
 	physicsBody->setDynamic(false);
 	physicsBody->setRotationEnable(false);
 	physicsBody->setCollisionBitmask(101);
@@ -40,9 +41,16 @@ void Player::Init()
 	this->m_sprite->setPhysicsBody(physicsBody);
 	this->m_sprite->setTag(playertag);
 	physicsBody->setGravityEnable(false);
-
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_RIGHT;
+
+	auto edgeBody = PhysicsBody::createEdgeBox(Size(20,20));
+	edgeBody->setContactTestBitmask(1);
+	edgeNode = Node::create();
+	edgeNode->setPosition(m_sprite->getPosition());
+	sceneGame->addChild(edgeNode);
+	edgeNode->setPhysicsBody(edgeBody);
+	edgeNode->setTag(ATTACKTAG);
 }
 
 void Player::Collision()
@@ -94,45 +102,45 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
-			if (StartAttack(FACE_DOWN)) CCLOG("LEFT");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
-			if (StartAttack(FACE_DOWN)) CCLOG("LEFT");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		break;
 	case FACE_RIGHT:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
-			if (StartAttack(FACE_DOWN)) CCLOG("RIGHT");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
-			if (StartAttack(FACE_DOWN)) CCLOG("RIGHT");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 		}
 		break;
 	case FACE_UP:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackUp());
-			if (StartAttack(FACE_DOWN)) CCLOG("UP");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackUp());
-			if (StartAttack(FACE_DOWN)) CCLOG("UP");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		break;
 	case FACE_DOWN:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackDown());
-			if (StartAttack(FACE_DOWN)) CCLOG("DOWN");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackDown());
-			if(StartAttack(FACE_DOWN)) CCLOG("DOWN");
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		break;
 	}
@@ -234,62 +242,40 @@ int Player::SetAction()
 
 void Player::SetFace()
 {
-	if (physicsBody->getVelocity().x <= 100 && physicsBody->getVelocity().x >= -100 && physicsBody->getVelocity().y < 0) {
-		if (m_CurrentFace != FACE_DOWN) {
-			m_CurrentFace = FACE_DOWN;
-			SetState(Player::ACTION_MOVEDOWN);
-		}
+	float radian = std::atan2f(physicsBody->getVelocity().y, physicsBody->getVelocity().x);
+	if (physicsBody->getVelocity().x == 0 && physicsBody->getVelocity().y == 0) {
+		SetState(Player::ACTION_IDLE);
 	}
-	else if (physicsBody->getVelocity().x <= 100 && physicsBody->getVelocity().x >= -100 && physicsBody->getVelocity().y > 0) {
-		if (m_CurrentFace != FACE_UP) {
-			m_CurrentFace = FACE_UP;
-			SetState(Player::ACTION_MOVEUP);
-		}
-	}
-	else if (physicsBody->getVelocity().x < 0) {
-		if (m_CurrentFace != FACE_LEFT) {
-			m_sprite->setFlipX(true);
-			m_CurrentFace = FACE_LEFT;
-			SetState(Player::ACTION_MOVE);
-		}
-	}
-	else if (physicsBody->getVelocity().x > 0) {
+	else if (radian >= -M_PI / 4 && radian <= M_PI / 4) {
 		if (m_CurrentFace != FACE_RIGHT) {
 			m_sprite->setFlipX(false);
 			m_CurrentFace = FACE_RIGHT;
 			SetState(Player::ACTION_MOVE);
 		}
 	}
-	else if (physicsBody->getVelocity().x == 0 && physicsBody->getVelocity().x == 0) {
-		SetState(Player::ACTION_IDLE);
+	else if (radian >= M_PI / 4 && radian <= 3 * M_PI / 4) {
+		if (m_CurrentFace != FACE_UP) {
+			m_CurrentFace = FACE_UP;
+			SetState(Player::ACTION_MOVEUP);
+		}
+	}
+	else if ((radian >= 3 * M_PI / 4 && radian <= M_PI) || (radian <= -3 * M_PI / 4 && radian >= -M_PI)) {
+		if (m_CurrentFace != FACE_LEFT) {
+			m_sprite->setFlipX(true);
+			m_CurrentFace = FACE_LEFT;
+			SetState(Player::ACTION_MOVE);
+		}
+	}
+	else if (radian >= -3 * M_PI / 4 && radian <= -M_PI / 4) {
+		if (m_CurrentFace != FACE_DOWN) {
+				m_CurrentFace = FACE_DOWN;
+				SetState(Player::ACTION_MOVEDOWN);
+		}
 	}
 }
 bool Player::StartAttack(int face)
 {
-	float radian = std::atan2f(physicsBody->getVelocity().y , physicsBody->getVelocity().x);
-	switch (m_CurrentFace)
-	{
-	case FACE_RIGHT:
-		if (radian >= -M_PI / 4 && radian <= M_PI / 4) {
-			return true;
-		}
-		break;
-	case FACE_LEFT:
-		if (radian >= M_PI / 4 && radian <= 3*M_PI / 4) {
-			return true;
-		}
-		break;
-	case FACE_UP:
-		if ((radian >= 3 * M_PI / 4 && radian <= M_PI) || (radian >= -3 * M_PI / 4 && radian <= M_PI)) {
-			return true;
-		}
-		break;
-	case FACE_DOWN:
-		if (radian >= -3 * M_PI / 4 && radian <= -M_PI / 4) {
-			return true;
-		}
-		break;
-	}
+	
 	return false;
 }
 cocos2d::RepeatForever* Player::MovingRight() { return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run"); }

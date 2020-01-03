@@ -7,6 +7,7 @@ USING_NS_CC;
 #define NpcSolotag 11
 #define NpcYolotag 12
 #define AILV1 13
+#define ATTACKTAG 8
 using namespace std;
 float times = 0;
 Sprite* quest;
@@ -161,8 +162,13 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			questYolo = 1;
 			d += 1;
 		}
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+		{
+			CCLOG("KILL");
+			ailv1->m_sprite->stopAllActions();
+			ailv1->m_sprite->runAction(ailv1->HurtRight());
+		}
 	}
-
 	return true;
 
 }

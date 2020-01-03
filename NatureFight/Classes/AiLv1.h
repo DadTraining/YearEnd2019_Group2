@@ -19,7 +19,6 @@ public:
 	void Collision();
 	bool StartAttack(int);
 	float Distance(Vec2 A, Vec2 C);
-	void AiLv1::SetFace();
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();

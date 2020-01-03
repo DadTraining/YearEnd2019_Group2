@@ -26,6 +26,7 @@ public:
 
 public: 
 	PhysicsBody* physicsBody;
+	Node* edgeNode;
 	static int Level;
 	static int Exp;
 private:

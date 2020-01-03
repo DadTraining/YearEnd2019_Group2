@@ -19,7 +19,7 @@ void AiLv1::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
-	physicsBody1 = PhysicsBody::createBox(this->m_sprite->getContentSize()*2, PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	physicsBody1 = PhysicsBody::createBox(this->m_sprite->getContentSize()/2, PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	physicsBody1->setDynamic(false);
 	physicsBody1->setRotationEnable(false);
 	physicsBody1->setCollisionBitmask(101);
@@ -30,7 +30,7 @@ void AiLv1::Init()
 
 void AiLv1::Collision()
 {
-	CCLOG("%f", (Distance(physicsBody1->getVelocity(), Vec2(0, 0))));
+//	CCLOG("%f", (Distance(physicsBody1->getVelocity(), Vec2(0, 0))));
 	if (Distance(physicsBody1->getVelocity(),Vec2(0,0))<50) {
 		m_sprite->stopAllActions();
 		m_sprite->runAction(AttackRight());
