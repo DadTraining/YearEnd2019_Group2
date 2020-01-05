@@ -27,7 +27,7 @@ public:
     static cocos2d::Scene* createScene();
 	void addMap();
     virtual bool init();
-    void update(FLOAT deltaTime);
+    void update(float deltaTime);
     CREATE_FUNC(MapTutorialScene);
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);

@@ -36,7 +36,7 @@ private:
 	int m_dame = 10;
 public:
 	Player(cocos2d::Scene* scene);
-	void Update(FLOAT deltaTime);
+	void Update(float deltaTime);
 	void updateLevel();
 	void Init();
 	void Collision();

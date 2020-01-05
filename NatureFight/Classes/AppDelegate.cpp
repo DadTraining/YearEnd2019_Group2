@@ -39,7 +39,7 @@ using namespace cocos2d::experimental;
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;
 #endif
-#include <HelloWorldScene.h>
+//#include <HelloWorldScene.h>
 #include <MapTutorialScene.h>
 
 USING_NS_CC;
@@ -121,7 +121,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     ResourceManager::GetInstance()->Init("Data.bin");
     // create a scene. it's an autorelease object
-    auto scene = MapTutorialScene::createScene();
+    //auto scene = MapTutorialScene::createScene();
+	auto scene = MapTutorialScene::createScene();
     
     // run
     director->runWithScene(scene);

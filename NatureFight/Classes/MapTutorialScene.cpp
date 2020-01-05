@@ -1,5 +1,5 @@
 #include "MapTutorialScene.h"
-
+#include "Model.h"
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -17,11 +17,13 @@ bool MapTutorialScene::init()
 {
     if ( !Scene::initWithPhysics() )
     {
+
         return false;
     }
 	schedule(schedule_selector(MapTutorialScene::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	
 	addMap();
 	//npc zolo
 	npcsolo = new Npclv1(this);
@@ -82,6 +84,7 @@ bool MapTutorialScene::init()
 	ailv1->Init();
 	ailv1->m_sprite->runAction(ailv1->MovingRight());*/
 	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	this->getPhysicsWorld()->setSubsteps(5);
 	auto followTheSprite = Follow::create(mainPlayer->m_sprite, Rect::ZERO);
 	this->runAction(followTheSprite);
 
@@ -97,7 +100,7 @@ bool MapTutorialScene::init()
 				times = 0;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 			//	ailv1->health -= 10;
-				CCLOG("123");
+				//CCLOG("123");
 			}
 
 			break;
@@ -126,7 +129,7 @@ bool MapTutorialScene::init()
 	//end va cham npc
 	return true;
 }
-void MapTutorialScene::update(FLOAT deltaTime)
+void MapTutorialScene::update(float deltaTime)
 {
 	mainPlayer->Update(deltaTime);
 	mainPlayer->physicsBody->setVelocity(Vect(leftJoystick->getVelocity())*200);
@@ -295,7 +298,6 @@ void MapTutorialScene::Quest()
 			else {
 
 				quest->runAction(fadeOut);
-				//label1->setVisible(false);
 				for (int i = 0; i <= 6; i++)
 				{
 
@@ -337,18 +339,24 @@ void createPhysicsLayer(TMXLayer* mPhysic)
 			if (tileSet != NULL && tileSet1 == NULL)
 			{
 				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-				physics->setCollisionBitmask(4);
-				physics->setContactTestBitmask(true);
+				
 				physics->setDynamic(false);
+				physics->setCollisionBitmask(Model::BITMASK_GROUND);
+				physics->setContactTestBitmask(true);
+				
+				
 				tileSet->setPhysicsBody(physics);
 			}
 			auto tileSet2 = mPhysic->getTileAt(Vec2(i, j - 1));
 			if (tileSet1 == NULL && tileSet2 != NULL)
 			{
 				auto physics = PhysicsBody::createBox(tileSet2->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-				physics->setCollisionBitmask(4);
-				physics->setContactTestBitmask(true);
+				
 				physics->setDynamic(false);
+				physics->setCollisionBitmask(Model::BITMASK_GROUND);
+				physics->setContactTestBitmask(true);
+				
+				
 				tileSet2->setPhysicsBody(physics);
 			}
 
@@ -363,18 +371,23 @@ void createPhysicsLayer(TMXLayer* mPhysic)
 			if (tileSet != NULL && tileSet1 == NULL && tileSet->getPhysicsBody() == NULL)
 			{
 				auto physics = PhysicsBody::createBox(tileSet->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-				physics->setCollisionBitmask(4);
-				physics->setContactTestBitmask(true);
+				
 				physics->setDynamic(false);
+				physics->setCollisionBitmask(Model::BITMASK_GROUND);
+				physics->setContactTestBitmask(true);
+				
+				
 				tileSet->setPhysicsBody(physics);
 			}
 			auto tileSet2 = mPhysic->getTileAt(Vec2(i - 1, j));
 			if (tileSet1 == NULL && tileSet2 != NULL && tileSet2->getPhysicsBody() == NULL)
 			{
 				auto physics = PhysicsBody::createBox(tileSet2->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-				physics->setCollisionBitmask(4);
-				physics->setContactTestBitmask(true);
 				physics->setDynamic(false);
+				physics->setCollisionBitmask(Model::BITMASK_GROUND);
+				physics->setContactTestBitmask(true);
+				
+				
 				tileSet2->setPhysicsBody(physics);
 			}
 

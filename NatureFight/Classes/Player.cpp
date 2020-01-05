@@ -12,7 +12,7 @@ Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
 }
-void Player::Update(FLOAT deltaTime)
+void Player::Update(float deltaTime)
 {
 	SetFace();
 }
@@ -26,14 +26,15 @@ void Player::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
-	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize());
-	//physicsBody->setDynamic(false);
+
+	//create Physics
+	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize()/2);
+	physicsBody->setGravityEnable(false);
 	physicsBody->setRotationEnable(false);
-	physicsBody->setCollisionBitmask(101);
-	physicsBody->setContactTestBitmask(1);
+	physicsBody->setCollisionBitmask(Model::BITMASK_PLAYER);
+	physicsBody->setContactTestBitmask(true);
 	this->m_sprite->setPhysicsBody(physicsBody);
 	this->m_sprite->setTag(playertag);
-	physicsBody->setGravityEnable(false);
 
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_RIGHT;

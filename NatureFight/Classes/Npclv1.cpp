@@ -25,14 +25,17 @@ void Npclv1::Init()
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
 	this->m_sprite->setPosition(Point(visibleSize.width / 2 +50, visibleSize.height / 2 - 50));
 	this->sceneGame->addChild(this->m_sprite,2);
+
+	// create Physics 
 	auto a = m_sprite->getContentSize().width;// -500;
 	auto b = m_sprite->getContentSize().height;// +1000;
 	auto Body = PhysicsBody::createBox(cocos2d::Size(a/2,b/2));
 	this->m_sprite->setPhysicsBody(Body);
-	Body->setDynamic(false);
 	Body->setGravityEnable(false);
+	Body->setDynamic(false);
 	Body->setRotationEnable(false);
-	m_sprite->getPhysicsBody()->setContactTestBitmask(2);
+	m_sprite->getPhysicsBody()->setCollisionBitmask(Model::BITMASK_PLAYER);
+	m_sprite->getPhysicsBody()->setContactTestBitmask(true);
 	
 }
 
