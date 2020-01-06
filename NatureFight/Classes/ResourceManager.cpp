@@ -31,6 +31,7 @@ void ResourceManager::Init(const std::string path)
 
 void ResourceManager::Load(std::string fileName)
 {
+	m_framecache.clear();
 	int count = 0;
 	while (!m_dataFolderPath.empty()) {
 		std::string line = m_dataFolderPath.substr(0, m_dataFolderPath.find("\n"));

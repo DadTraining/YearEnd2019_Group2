@@ -159,6 +159,7 @@ void HelloWorld::menuCloseCallback2(Ref* pSender) {
 void HelloWorld::threadd() {
     Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {
         ResourceManager::GetInstance()->Init("Data.bin");
+        ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
     });
 }
 void HelloWorld::threadd2() {

@@ -30,11 +30,11 @@ void AiLv1::Init()
 
 void AiLv1::Collision()
 {
-//	CCLOG("%f", (Distance(physicsBody1->getVelocity(), Vec2(0, 0))));
-	if (Distance(physicsBody1->getVelocity(),Vec2(0,0))<50) {
-		m_sprite->stopAllActions();
-		m_sprite->runAction(AttackRight());
-	}
+	CCLOG("%f", (Distance(physicsBody1->getVelocity(), Vec2(0, 0))));
+	//if (Distance(physicsBody1->getVelocity(),Vec2(0,0))<50) {
+	//	m_sprite->stopAllActions();
+	//	m_sprite->runAction(AttackRight());
+	//}
 }
 
 bool AiLv1::StartAttack(int)
