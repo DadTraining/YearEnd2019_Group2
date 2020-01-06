@@ -12,9 +12,15 @@ Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
 }
-void Player::Update(FLOAT deltaTime)
+float timeAttack = 0;
+void Player::Update(float deltaTime)
 {
 	SetFace();
+	timeAttack += deltaTime;
+	if (timeAttack > 1.0f && m_CurrentState == ACTION_ATTACK) {
+		m_CurrentState = ACTION_IDLE;
+		timeAttack == 0;
+	}
 }
 
 void Player::Init()
@@ -26,8 +32,8 @@ void Player::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.5, visibleSize.height / 2));
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
-	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize());
-	physicsBody->setDynamic(false);
+	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize()/3);
+	physicsBody->setDynamic(true);
 	physicsBody->setRotationEnable(false);
 	physicsBody->setCollisionBitmask(101);
 	physicsBody->setContactTestBitmask(1);
@@ -85,20 +91,49 @@ void Player::SetAttack(int state) {
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackRight());
+			if (StartAttack(FACE_DOWN)) CCLOG("LEFT");
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(AttackRight());
+			if (StartAttack(FACE_DOWN)) CCLOG("LEFT");
+		}
+		break;
 	case FACE_RIGHT:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackDown());
+			m_sprite->runAction(AttackRight());
+			if (StartAttack(FACE_DOWN)) CCLOG("RIGHT");
+
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(MovingUp());
+			m_sprite->runAction(AttackRight());
+			if (StartAttack(FACE_DOWN)) CCLOG("RIGHT");
 		}
 		break;
 	case FACE_UP:
-
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackUp());
+			if (StartAttack(FACE_DOWN)) CCLOG("UP");
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(AttackUp());
+			if (StartAttack(FACE_DOWN)) CCLOG("UP");
+		}
 		break;
 	case FACE_DOWN:
-
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackDown());
+			if (StartAttack(FACE_DOWN)) CCLOG("DOWN");
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(AttackDown());
+			if(StartAttack(FACE_DOWN)) CCLOG("DOWN");
+		}
 		break;
 	}
 }
@@ -148,8 +183,7 @@ void Player::SetHurt(int state) {
 }
 void Player::SetState(int state)
 {
-	if (!((m_CurrentState == ACTION_ATTACK || m_CurrentState == ACTION_ATTACKDOWN || m_CurrentState == ACTION_ATTACKUP)
-		&& m_sprite->getNumberOfRunningActions() > 0))
+	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0))
 	{
 		switch (state) {
 		case ACTION_IDLE:
@@ -229,6 +263,34 @@ void Player::SetFace()
 	else if (physicsBody->getVelocity().x == 0 && physicsBody->getVelocity().x == 0) {
 		SetState(Player::ACTION_IDLE);
 	}
+}
+bool Player::StartAttack(int face)
+{
+	float radian = std::atan2f(physicsBody->getVelocity().y , physicsBody->getVelocity().x);
+	switch (m_CurrentFace)
+	{
+	case FACE_RIGHT:
+		if (radian >= -M_PI / 4 && radian <= M_PI / 4) {
+			return true;
+		}
+		break;
+	case FACE_LEFT:
+		if (radian >= M_PI / 4 && radian <= 3*M_PI / 4) {
+			return true;
+		}
+		break;
+	case FACE_UP:
+		if ((radian >= 3 * M_PI / 4 && radian <= M_PI) || (radian >= -3 * M_PI / 4 && radian <= M_PI)) {
+			return true;
+		}
+		break;
+	case FACE_DOWN:
+		if (radian >= -3 * M_PI / 4 && radian <= -M_PI / 4) {
+			return true;
+		}
+		break;
+	}
+	return false;
 }
 cocos2d::RepeatForever* Player::MovingRight() { return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run"); }
 cocos2d::Animate* Player::AttackRight() { return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2"); }
