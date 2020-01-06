@@ -55,7 +55,7 @@ bool MainMenuScene::init()
 
 	return true;
 }
-void MainMenuScene::update(FLOAT deltaTime)
+void MainMenuScene::update(float deltaTime)
 {
 }
 

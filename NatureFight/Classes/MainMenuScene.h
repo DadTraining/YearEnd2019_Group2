@@ -10,7 +10,7 @@ public:
 	float countT = 0;
 	static cocos2d::Scene* createScene();
 	virtual bool init();
-	void update(FLOAT deltaTime);
+	void update(float deltaTime);
 	CREATE_FUNC(MainMenuScene);
 	void ClickItemSetting(Ref* pSender);
 	void ClickItemPlay(Ref* pSender);
