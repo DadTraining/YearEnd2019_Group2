@@ -38,7 +38,7 @@ bool LoadingScene::init()
 	scheduleUpdate();
 	return true;
 }
-void LoadingScene::update(float deltaTime)
+void LoadingScene::update(FLOAT deltaTime)
 {
 	countT += deltaTime;
 	if (countT >= 4) {

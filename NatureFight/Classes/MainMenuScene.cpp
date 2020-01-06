@@ -30,7 +30,7 @@ bool MainMenuScene::init()
 	bgimg->setAnchorPoint(Vec2(0.5,0.5));
 	bgimg->setPosition(450, 220);
 	addChild(bgimg);
-	auto play = ui::Button::create("play.png");
+	 play = ui::Button::create("play.png");
 	play->setPosition(Vec2(450, 150));
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
@@ -55,7 +55,7 @@ bool MainMenuScene::init()
 
 	return true;
 }
-void MainMenuScene::update(float deltaTime)
+void MainMenuScene::update(FLOAT deltaTime)
 {
 }
 

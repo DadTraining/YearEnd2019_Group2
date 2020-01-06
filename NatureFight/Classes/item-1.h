@@ -17,6 +17,7 @@ public:
 	void showItemBang();
 	void showItemMau(cocos2d::Sprite* sprite);
 	void getpercent(int x);
+	
 	~Item();
 
 private:

@@ -7,24 +7,31 @@
 #include <iostream>
 #include <Player.h>
 #include <Npclv1.h>
-#include <item-1.h>
 #include <ui/CocosGUI.h>
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
+#include <MenuLayer.h>
 USING_NS_CC;
+#define ATTACK 0
+#define RUN 1
+#define playertag 1000
+#define NpcSolotag 11
+#define NpcYolotag 12
+#define AILV1 13
+#define ATTACKTAG 8
+
 class MapTutorialScene : public cocos2d::Scene
 {
 public:
-
 	Player* mainPlayer;
 	AiLv1* ailv1;
-	Item* item;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
-	SneakyJoystickSkinnedBase* joystickBase;
+//	SneakyJoystickSkinnedBase* joystickBase;
 	Npclv1* npcsolo, *npcYolo;
 	TMXTiledMap* map;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
+	MenuLayer* menuLayer;
 	
 public:
     static cocos2d::Scene* createScene();
@@ -41,7 +48,7 @@ public:
 	void Quest(); // Button display quest
 	void createPhysicMap();
 	bool onContactBegin(const PhysicsContact& contact);
-
-
+	bool onContactPreSolve(const PhysicsContact& contact);
+	bool onContactSeparate(const PhysicsContact& contact);
 };
 #endif // __MAPTUTORIAL_SCENE_H__
