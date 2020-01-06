@@ -5,9 +5,24 @@ AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
 }
-
 void AiLv1::Update(float deltaTime)
 {
+
+	if (this->m_sprite->getPhysicsBody()->getVelocity().x < 0) {
+		faceRight = false;
+	}
+	else if (this->m_sprite->getPhysicsBody()->getVelocity().x > 0)
+	{
+		faceRight = true;
+
+	}
+	if (faceRight == true) {
+		this->m_sprite->setFlippedX(false);
+	}
+	else
+	{
+		this->m_sprite->setFlipX(true);
+	}
 
 }
 
@@ -17,24 +32,49 @@ void AiLv1::Init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
+	faceRight = true;
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
-	physicsBody1 = PhysicsBody::createBox(this->m_sprite->getContentSize()/2, PhysicsMaterial(0.1f, 1.0f, 0.0f));
-	physicsBody1->setDynamic(false);
-	physicsBody1->setRotationEnable(false);
-	physicsBody1->setCollisionBitmask(101);
-	physicsBody1->setContactTestBitmask(1);
-	this->m_sprite->setPhysicsBody(physicsBody1);
-	physicsBody1->setGravityEnable(false);
+	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	physicsBodyChar->setDynamic(true);
+	physicsBodyChar->setRotationEnable(false);
+	physicsBodyChar->setCollisionBitmask(101);
+	physicsBodyChar->setContactTestBitmask(1);
+	this->m_sprite->setPhysicsBody(physicsBodyChar);
+	physicsBodyChar->setGravityEnable(false);
 }
-
-void AiLv1::Collision()
+float timem = 0;
+void AiLv1::Collision(Player* player, float deltaTime)
 {
-	CCLOG("%f", (Distance(physicsBody1->getVelocity(), Vec2(0, 0))));
-	//if (Distance(physicsBody1->getVelocity(),Vec2(0,0))<50) {
-	//	m_sprite->stopAllActions();
-	//	m_sprite->runAction(AttackRight());
-	//}
+
+	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
+		timem += deltaTime;
+		if (timem >= 1.5) {
+			m_sprite->stopAllActions();
+			physicsBodyChar->setVelocity(Vec2(0, 0));
+			m_sprite->runAction(AttackAi());
+			timem = 0;
+		}
+	}
+	else if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80) {
+		this->physicsBodyChar->setVelocity((player->m_sprite->getPosition() - this->m_sprite->getPosition()) / 2);
+		timem += deltaTime;
+		if (timem >= 1) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(MovingRight());
+			timem = 0;
+		}
+	}
+	else
+	{
+		timem += deltaTime;
+		if (timem >= 1) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(IdleRight());
+			physicsBodyChar->setVelocity(Vec2(0, 0));
+			timem = 0;
+		}
+	}
 }
 
 bool AiLv1::StartAttack(int)
@@ -47,6 +87,10 @@ cocos2d::Animate* AiLv1::AttackRight() { return ObjectParent::AnimationObjectOnc
 cocos2d::RepeatForever* AiLv1::IdleRight() { return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle"); }
 cocos2d::Animate* AiLv1::AttackRightAngry() { return ObjectParent::AnimationObjectOnce(5, "Warrior_Attack_2"); }
 cocos2d::RepeatForever* AiLv1::DieRight() { return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died"); }
+cocos2d::RepeatForever* AiLv1::AttackAi()
+{
+	return ObjectParent::AnimationObjectRepeat(6, "Warrior_Attack_2");
+}
 cocos2d::Animate* AiLv1::HurtRight() { return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt"); }
 cocos2d::RepeatForever* AiLv1::MovingUp()
 {
@@ -98,5 +142,9 @@ cocos2d::RepeatForever* AiLv1::DieDown()
 }
 
 float AiLv1::Distance(Vec2 A, Vec2 C) {
-	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
+	return std::sqrt((A.x - C.x)  (A.x - C.x) + (A.y - C.y)  (A.y - C.y));
+}
+
+void AiLv1::SetFace()
+{
 }

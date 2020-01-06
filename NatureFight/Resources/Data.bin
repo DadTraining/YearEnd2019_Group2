@@ -2,11 +2,7 @@
 1 Sprites/Man1/Goblin/PNG/PNG_Sequences/Running/0_Goblin_Running_000.png
 2 circle-icon-3.jpg
 #BUTTON 5
-1 Button/play_normal.png Button/play_pressed.png
-2 Button/resume_normal.png Button/resume_pressed.png
-3 Button/home_normal.png Button/home_pressed.png
-4 Button/setting_normal.png Button/setting_pressed.png
 5 Button/Button_Attack_Normal.png Button/Button_Attack_Selected.png
 #FONTS 2
-1 Fonts/MarkerFelt.ttf
-2 Fonts/arial.ttf
+1 fonts/MarkerFelt.ttf
+2 fonts/arial.ttf
