@@ -41,7 +41,7 @@ using namespace CocosDenshion;
 #endif
 //#include <HelloWorldScene.h>
 #include <MapTutorialScene.h>
-
+#include<LoadingScene.h>
 USING_NS_CC;
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(912, 432);
@@ -121,9 +121,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     ResourceManager::GetInstance()->Init("Data.bin");
     // create a scene. it's an autorelease object
-    //auto scene = MapTutorialScene::createScene();
 	auto scene = MapTutorialScene::createScene();
-    
+	//auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);
 

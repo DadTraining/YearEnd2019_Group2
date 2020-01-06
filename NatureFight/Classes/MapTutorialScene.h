@@ -10,6 +10,7 @@
 #include <ui/CocosGUI.h>
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
+#include <MenuLayer.h>
 USING_NS_CC;
 class MapTutorialScene : public cocos2d::Scene
 {
@@ -22,6 +23,8 @@ public:
 	Npclv1* npcsolo, *npcYolo;
 	TMXTiledMap* map;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
+	MenuLayer* menuLayer;
+
 	
 public:
     static cocos2d::Scene* createScene();
@@ -32,11 +35,13 @@ public:
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
-	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
 	void MovePlayer();
 	void Quest(); // Button display quest
 	void createPhysicMap();
+
 	bool onContactBegin(const PhysicsContact& contact);
+	bool onContactPreSolve(const PhysicsContact& contact);
+	bool onContactSeparate(const PhysicsContact& contact);
 };
 #endif // __MAPTUTORIAL_SCENE_H__

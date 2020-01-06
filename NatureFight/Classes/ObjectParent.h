@@ -1,9 +1,7 @@
 #ifndef  _OBJECT_H_
 #define  _OBJECT_H_
-#include "cocos2d.h"
-#include <ResourceManager.h>
-#include"Model.h"
-USING_NS_CC;
+#include<ResourceManager.h>
+#include<Model.h>
 class ObjectParent
 {
 public:

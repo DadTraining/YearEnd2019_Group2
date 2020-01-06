@@ -1,6 +1,4 @@
 #include "Model.h"
-USING_NS_CC;
-
 Model::Model()
 {
 	mIsALive = true;

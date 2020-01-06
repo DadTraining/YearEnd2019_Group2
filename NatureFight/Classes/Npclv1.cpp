@@ -1,7 +1,5 @@
 #include "Npclv1.h"
-#include "SimpleAudioEngine.h"
-#define NpcSolotag 11
-USING_NS_CC;
+
 
 //using namespace CocosDenshion;
 Npclv1::Npclv1(cocos2d::Scene* scene)
@@ -34,7 +32,7 @@ void Npclv1::Init()
 	Body->setGravityEnable(false);
 	Body->setDynamic(false);
 	Body->setRotationEnable(false);
-	m_sprite->getPhysicsBody()->setCollisionBitmask(Model::BITMASK_PLAYER);
+	m_sprite->getPhysicsBody()->setCollisionBitmask(Model::BITMASK_NPC);
 	m_sprite->getPhysicsBody()->setContactTestBitmask(true);
 	
 }

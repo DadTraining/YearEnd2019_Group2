@@ -2,7 +2,7 @@
 #define _MODEL_H_
 
 #include "cocos2d.h"
-
+USING_NS_CC;
 class Model
 {
 public:
@@ -10,7 +10,7 @@ public:
 	static const int BITMASK_PLAYER = BITMASK_WORLD + 1;
 	static const int BITMASK_GROUND = BITMASK_PLAYER + 1;
 	static const int BITMASK_MONSTER = BITMASK_GROUND + 1;
-
+	static const int BITMASK_NPC = BITMASK_MONSTER + 1;
 	static const int MODLE_TYPE_MAIN_CHARACTER = 1;
 	static const int MODLE_TYPE_MONSTER = 2;
 protected:
