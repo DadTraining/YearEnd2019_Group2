@@ -65,7 +65,7 @@ bool MapTutorialScene::init()
 
 	
 
-	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize);
+	auto edgeBody = PhysicsBody::createEdgeBox(map->getContentSize());
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(visibleSize/2);
 	addChild(edgeNode);
@@ -88,7 +88,7 @@ void MapTutorialScene::update(float deltaTime)
 {
 	ailv1->Collision();
 	mainPlayer->Update(deltaTime);
-	menuLayer->update();
+	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
 

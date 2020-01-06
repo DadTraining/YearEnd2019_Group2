@@ -13,7 +13,7 @@ public:
     ~MenuLayer();
     void createQuest();
     virtual bool init();
-    void update();
+    void update(float);
     void createButtonLayer();
     void createJoyStickLayer();
     void createLabelLayer();

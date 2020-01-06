@@ -19,8 +19,10 @@ bool MenuLayer::init() {
 	this->addChild(camScene);
 	return true;
 }
-void MenuLayer::update() {
+float timeCount = 0;
+void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
+	timeCount += deltaTime;
 
 }
 void MenuLayer::createButtonLayer()
@@ -33,7 +35,10 @@ void MenuLayer::createButtonLayer()
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
+			if (timeCount > 1) {
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeCount = 0;
+			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
 			break;

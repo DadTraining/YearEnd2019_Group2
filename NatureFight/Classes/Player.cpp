@@ -14,6 +14,7 @@ Player::Player(cocos2d::Scene* scene)
 	sceneGame = scene;
 }
 float timeAttack = 0, timeDie = 0;
+bool checkAttack = false;
 void Player::Update(float deltaTime)
 {
 	if (m_health <= 0) {
@@ -26,20 +27,21 @@ void Player::Update(float deltaTime)
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
 			edgeNode->setPosition(Vec2(1000, 1000));
+			physicsBody->setEnabled(true);
 		}
 	}
 	else {
-		SetFace();
-		if (m_CurrentState == ACTION_ATTACK) {
-			timeAttack += deltaTime;
-			if (timeAttack > 1.0f) {
-				m_CurrentState = ACTION_IDLE;
-				timeAttack = 0;
-			}
-			if (timeAttack > 0.3f) {
-				edgeNode->setPosition(Vec2(1000, 1000));
-			}
+		if (m_CurrentState == ACTION_ATTACK) checkAttack = true;
+		if(checkAttack) timeAttack += deltaTime;
+		if (timeAttack > 1.0f) {
+			m_CurrentState = ACTION_IDLE;
+			timeAttack = 0;
+			checkAttack = false;
 		}
+		if (timeAttack > deltaTime) {
+			edgeNode->setPosition(Vec2(1000, 1000));
+		}
+		SetFace();
 	}
 }
 
@@ -146,7 +148,7 @@ void Player::SetDie(int state)
 		}
 		break;
 	}
-
+	physicsBody->setEnabled(false);
 }
 void Player::SetAttack(int state) {
 	switch (m_CurrentFace)
