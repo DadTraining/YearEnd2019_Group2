@@ -1,13 +1,11 @@
 #include "MapTutorialScene.h"
 
-USING_NS_CC;
-#define ATTACK 0
-#define RUN 1
-#define playertag 1000
-#define NpcSolotag 11
-#define NpcYolotag 12
 using namespace std;
 float times = 0;
+Sprite* quest;
+Label* label1, * label2;
+int count1 = 0;
+vector<Label*> vlabel, vlabel1;
 Scene* MapTutorialScene::createScene()
 {
     return MapTutorialScene::create();
@@ -41,9 +39,10 @@ bool MapTutorialScene::init()
 	mainPlayer->Init();
 	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());	
 	
-	auto mainPlayer1 = new Player(this);
-	mainPlayer1->Init();
-	mainPlayer1->m_sprite->runAction(mainPlayer1->MovingDown());
+	ailv1 = new AiLv1(this);
+	ailv1->Init();
+	ailv1->m_sprite->runAction(ailv1->MovingRight());
+	ailv1->m_sprite->setTag(AILV1);
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
@@ -51,28 +50,7 @@ bool MapTutorialScene::init()
 	listener->onTouchEnded = CC_CALLBACK_2(MapTutorialScene::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	Rect joystickBaseDimensions;
-	joystickBaseDimensions = Rect(0, 0, 160.0f, 160.0f);
-
-	Point joystickBasePosition;
-	joystickBasePosition = Vec2(visibleSize.width * 0.2f, visibleSize.height * 0.2f);
-
-	joystickBase = new SneakyJoystickSkinnedBase();
-	joystickBase->init();
-	joystickBase->setPosition(joystickBasePosition);
-	joystickBase->setBackgroundSprite(Sprite::create("res/joystick_bg.png"));
-	joystickBase->setThumbSprite(Sprite::create("res/joystick_center.png"));
-
-	SneakyJoystick* aJoystick = new SneakyJoystick();
-	aJoystick->initWithRect(joystickBaseDimensions);
-
-	aJoystick->autorelease();
-	joystickBase->setJoystick(aJoystick);
-	joystickBase->setPosition(joystickBasePosition);
-
-	leftJoystick = joystickBase->getJoystick();
-	leftJoystick->retain();
-	this->addChild(joystickBase,10);
+	
 
 	auto listenerKey = EventListenerKeyboard::create();
 	listenerKey->onKeyPressed = CC_CALLBACK_2(MapTutorialScene::onKeyPressed, this);
@@ -82,57 +60,43 @@ bool MapTutorialScene::init()
 	ailv1->Init();
 	ailv1->m_sprite->runAction(ailv1->MovingRight());*/
 	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-	auto followTheSprite = Follow::create(mainPlayer->m_sprite, Rect::ZERO);
-	this->runAction(followTheSprite);
-
-	ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
-	ButtonAttack->setPosition(Vec2(mainPlayer->m_sprite->getPosition())+Vec2(350,-150));
-	ButtonAttack->setScale(0.3f);
-	ButtonAttack->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
-		case ui::Widget::TouchEventType::MOVED:
-			if (times > 1.0f) {
-				times = 0;
-				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-			//	ailv1->health -= 10;
-				CCLOG("123");
-			}
-
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
-		}
+	this->getPhysicsWorld()->setSubsteps(4);
 	
-	});
 
-	addChild(ButtonAttack,1);
-
-	/*auto edgeBody = PhysicsBody::createEdgeBox(visibleSize);
+	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize);
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(visibleSize/2);
 	addChild(edgeNode);
-	edgeNode->setPhysicsBody(edgeBody);*/
+	edgeNode->setPhysicsBody(edgeBody);
 	// va cham npc
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(MapTutorialScene::onContactBegin, this);
+	contactListener->onContactPreSolve = CC_CALLBACK_1(MapTutorialScene::onContactPreSolve, this);
+	contactListener->onContactSeparate = CC_CALLBACK_1(MapTutorialScene::onContactSeparate, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 	Quest(); // Button display quest
 	createPhysicMap();
 	//end va cham npc
+	menuLayer = new MenuLayer(this->mainPlayer);
+	this->addChild(menuLayer, 2);
 	return true;
 }
-void MapTutorialScene::update(FLOAT deltaTime)
+
+void MapTutorialScene::update(float deltaTime)
 {
+	ailv1->Collision(mainPlayer,deltaTime);
 	mainPlayer->Update(deltaTime);
-	mainPlayer->physicsBody->setVelocity(Vect(leftJoystick->getVelocity())*200);
-	joystickBase->setPosition(Vec2(mainPlayer->m_sprite->getPosition()) + Vec2(-370, -130));
-	ButtonAttack->setPosition(Vec2(mainPlayer->m_sprite->getPosition()) + Vec2(350, -150));
+	menuLayer->update(deltaTime);
+	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
+	if (Distance(mainPlayer->m_sprite->getPosition(), ailv1->m_sprite->getPosition()) < 100)
+		ailv1->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ailv1->m_sprite->getPosition());
+	else ailv1->physicsBodyChar->setVelocity(Vec2(0, 0));
+	ailv1->Collision(mainPlayer,deltaTime);
+
+	ailv1->Update(deltaTime);
+
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -157,7 +121,7 @@ void MapTutorialScene::addMap()
 	mPhysicsLayer->setVisible(true);
 	mPhysicsLayer2 = map->getLayer("land_2");
 	mPhysicsLayer2->setVisible(true);
-	mPhysicsLayer1 = map->getLayer("item_2");
+	mPhysicsLayer1 = map->getLayer("item_1");
 	mPhysicsLayer1->setVisible(true);
 	addChild(map);
 }
@@ -197,16 +161,45 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			questYolo = 1;
 			d += 1;
 		}
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+		{
+			CCLOG("KILL");
+			ailv1->m_sprite->stopAllActions();
+			ailv1->m_sprite->runAction(ailv1->HurtRight());
+			ailv1->health -= 10;
+			if (ailv1->health <= 0) {
+				ailv1->m_sprite->runAction(ailv1->DieRight());
+				ailv1->physicsBodyChar->setEnabled(false);
+				mainPlayer->Exp += 20;
+			}
+		}
 	}
-
 	return true;
 
 }
 
-Sprite* quest;
-Label* label1, * label2;
-int count1 = 0;
-vector<Label*> vlabel, vlabel1;
+bool MapTutorialScene::onContactPreSolve(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA && nodeB)
+	{
+	}
+
+	return true;
+}
+
+bool MapTutorialScene::onContactSeparate(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA && nodeB)
+	{
+	}
+
+	return true;
+}
+
 void MapTutorialScene::Quest()
 {
 	quest = Sprite::create("frames/paused3.png");
@@ -332,9 +325,9 @@ void MapTutorialScene::createPhysicMap()
 	addChild(edgeNode);*/
 
 	createPhysicsLayer(mPhysicsLayer);
-	createPhysicsLayer(mPhysicsLayer1);
-	createPhysicsLayer(mPhysicsLayer2);
-	
+	//createPhysicsLayer(mPhysicsLayer1);
+	//createPhysicsLayer(mPhysicsLayer2);
+
 }
 void createPhysicsLayer(TMXLayer* mPhysic)
 {
