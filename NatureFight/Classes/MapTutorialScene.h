@@ -24,7 +24,7 @@ public:
 	TMXTiledMap* map;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
-
+	TMXObjectGroup* mObjectGroup;
 	
 public:
     static cocos2d::Scene* createScene();

@@ -28,7 +28,7 @@ void MenuLayer::update(float deltaTime) {
 void MenuLayer::createButtonLayer()
 {
 	auto ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
-	ButtonAttack->setPosition(Vec2(900, 150));
+	ButtonAttack->setPosition(Vec2(800, 100));
 	ButtonAttack->setScale(0.3f);
 	ButtonAttack->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)

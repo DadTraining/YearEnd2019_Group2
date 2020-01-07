@@ -57,11 +57,11 @@ bool MapTutorialScene::init()
 	this->getPhysicsWorld()->setSubsteps(4);
 
 
-	auto edgeBody = PhysicsBody::createEdgeBox(map->getContentSize());
+	/*auto edgeBody = PhysicsBody::createEdgeBox(map->getContentSize());
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(visibleSize / 2);
 	addChild(edgeNode);
-	edgeNode->setPhysicsBody(edgeBody);
+	edgeNode->setPhysicsBody(edgeBody);*/
 	// va cham npc
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(MapTutorialScene::onContactBegin, this);
@@ -100,9 +100,10 @@ void MapTutorialScene::addMap()
 {
 	map = TMXTiledMap::create("Map1/map1.tmx");
 	map->setAnchorPoint(Vec2(0, 0));
-	map->setScale(0.7);
+	//map->setScale(0.7);
 	map->setPosition(Vec2(0, 0));
 	//physic map
+	mObjectGroup = map->getObjectGroup("Physics");
 	mPhysicsLayer = map->getLayer("item_3");
 	mPhysicsLayer->setVisible(true);
 	mPhysicsLayer2 = map->getLayer("land_2");
@@ -295,10 +296,45 @@ void MapTutorialScene::Quest()
 void createPhysicsLayer(TMXLayer* mPhysic);
 void MapTutorialScene::createPhysicMap()
 {
-	createPhysicsLayer(mPhysicsLayer);
-	createPhysicsLayer(mPhysicsLayer1);
-	createPhysicsLayer(mPhysicsLayer2);
+	//createPhysicsLayer(mPhysicsLayer);
+	//createPhysicsLayer(mPhysicsLayer1);
+	//createPhysicsLayer(mPhysicsLayer2);
 	
+	
+	auto objects = mObjectGroup->getObjects();
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		auto object = objects.at(i);
+		auto properties = object.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		auto name = properties.at("name");
+		int type = object.asValueMap().at("type").asInt();
+		if (type ==1)
+		{
+			
+			auto physics = PhysicsBody::createBox(Size(properties.at("width").asFloat(), properties.at("height").asFloat()), PhysicsMaterial(1.0f, 0.0f, 1.0f));
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			auto x = properties.at("width").asFloat() /2 + posX;
+			auto y = properties.at("height").asFloat() /2 + posY;
+			auto node = Node::create();
+			node->setPosition(Vec2(x,y));
+			this->addChild(node);
+			node->setPhysicsBody(physics);
+		}
+		if (type == 2)
+		{
+
+			auto edgeBody = PhysicsBody::createEdgeBox(Size(properties.at("width").asFloat(), properties.at("height").asFloat()), PhysicsMaterial(1.0f, 0.0f, 1.0f));
+			auto edgeNode = Node::create();
+			edgeNode->setPosition(Vec2(properties.at("width").asFloat() / 2 + posX, properties.at("height").asFloat() / 2 + posY));
+			addChild(edgeNode);
+			edgeNode->setPhysicsBody(edgeBody);
+		}
+	}
 }
 void createPhysicsLayer(TMXLayer* mPhysic)
 {

@@ -29,11 +29,10 @@ void Npclv1::Init()
 	auto b = m_sprite->getContentSize().height;// +1000;
 	auto Body = PhysicsBody::createBox(cocos2d::Size(a/2,b/2));
 	this->m_sprite->setPhysicsBody(Body);
-	Body->setGravityEnable(false);
 	Body->setDynamic(false);
 	Body->setRotationEnable(false);
-	m_sprite->getPhysicsBody()->setCollisionBitmask(Model::BITMASK_NPC);
-	m_sprite->getPhysicsBody()->setContactTestBitmask(true);
+	Body->setCollisionBitmask(Model::BITMASK_NPC);
+	Body->setContactTestBitmask(true);
 	
 }
 
