@@ -273,11 +273,6 @@ void Player::SetState(int state)
 	}
 }
 
-int Player::SetAction()
-{
-	return 0;
-}
-
 void Player::SetFace()
 {
 	float radian = std::atan2f(physicsBody->getVelocity().y, physicsBody->getVelocity().x);
@@ -303,11 +298,7 @@ void Player::SetFace()
 		SetState(Player::ACTION_MOVEDOWN);
 	}
 }
-bool Player::StartAttack(int face)
-{
-	
-	return false;
-}
+
 cocos2d::RepeatForever* Player::MovingRight() {
 	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run");
 }

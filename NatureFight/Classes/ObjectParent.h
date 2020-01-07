@@ -16,8 +16,6 @@ public:
 	cocos2d::RepeatForever* AnimationObjectRepeat(int id, std::string name);
 	cocos2d::Animate* AnimationObjectOnce(int id, std::string name);
 
-	virtual bool StartAttack(int) = 0;
-
 	virtual cocos2d::RepeatForever* MovingRight() = 0;
 	virtual cocos2d::Animate* AttackRight() = 0;
 	virtual cocos2d::RepeatForever* IdleRight() = 0;

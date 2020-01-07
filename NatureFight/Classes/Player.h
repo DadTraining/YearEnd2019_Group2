@@ -39,17 +39,13 @@ public:
 	void Init();
 	void Collision();
 	void SetFace();
-	void SetAlive();
 	void SetState(int);
 	void SetIdle(int);
 	void SetDie(int);
 	void SetAttack(int state);
 	void SetHurt(int state);
 	void SetMove(int state);
-	int SetAction();
 	~Player();
-
-	bool StartAttack(int);
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();

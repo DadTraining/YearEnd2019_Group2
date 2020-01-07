@@ -32,7 +32,8 @@ void Npclv1::Init()
 	Body->setDynamic(false);
 	Body->setGravityEnable(false);
 	Body->setRotationEnable(false);
-	m_sprite->getPhysicsBody()->setContactTestBitmask(2);
+	Body->setCollisionBitmask(101);
+	Body->setContactTestBitmask(1);
 	
 }
 

@@ -86,14 +86,14 @@ bool MapTutorialScene::init()
 }
 void MapTutorialScene::update(float deltaTime)
 {
-	ailv1->Collision();
+	ailv1->Collision(mainPlayer,deltaTime);
 	mainPlayer->Update(deltaTime);
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
 	if(Distance(mainPlayer->m_sprite->getPosition(),ailv1->m_sprite->getPosition())<100) 
-		ailv1->physicsBody1->setVelocity(mainPlayer->m_sprite->getPosition() - ailv1->m_sprite->getPosition());
-	else ailv1->physicsBody1->setVelocity(Vec2(0, 0));
+		ailv1->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ailv1->m_sprite->getPosition());
+	else ailv1->physicsBodyChar->setVelocity(Vec2(0, 0));
 
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -154,10 +154,10 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			CCLOG("KILL");
 			ailv1->m_sprite->stopAllActions();
 			ailv1->m_sprite->runAction(ailv1->HurtRight());
-			ailv1->health -= 10;
-			if (ailv1->health <= 0) {
+			ailv1->m_health -= 10;
+			if (ailv1->m_health <= 0) {
 				ailv1->m_sprite->runAction(ailv1->DieRight());
-				ailv1->physicsBody1->setEnabled(false);
+				ailv1->physicsBodyChar->setEnabled(false);
 				mainPlayer->Exp += 20;
 			}
 		}
