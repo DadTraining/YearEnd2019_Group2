@@ -39,9 +39,10 @@ using namespace cocos2d::experimental;
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;
 #endif
-#include <HelloWorldScene.h>
+//#include <HelloWorldScene.h>
 #include <MapTutorialScene.h>
-
+#include<LoadingScene.h>
+#include <MainMenuScene.h>
 USING_NS_CC;
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(912, 432);
@@ -121,8 +122,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     ResourceManager::GetInstance()->Init("Data.bin");
     // create a scene. it's an autorelease object
-    auto scene = MapTutorialScene::createScene();
-    
+	auto scene = LoadingScene::createScene();
+	//auto scene = MainMenuScene::createScene();
     // run
     director->runWithScene(scene);
 

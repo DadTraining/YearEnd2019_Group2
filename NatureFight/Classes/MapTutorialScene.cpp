@@ -1,12 +1,5 @@
 #include "MapTutorialScene.h"
 
-USING_NS_CC;
-#define ATTACK 0
-#define RUN 1
-#define playertag 1000
-#define NpcSolotag 11
-#define NpcYolotag 12
-#define AILV1 13
 using namespace std;
 float times = 0;
 Sprite* quest;
@@ -67,7 +60,7 @@ bool MapTutorialScene::init()
 	ailv1->Init();
 	ailv1->m_sprite->runAction(ailv1->MovingRight());*/
 	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-
+	this->getPhysicsWorld()->setSubsteps(4);
 	
 
 	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize);
@@ -92,14 +85,16 @@ bool MapTutorialScene::init()
 
 void MapTutorialScene::update(float deltaTime)
 {
-	
 	ailv1->Collision(mainPlayer,deltaTime);
-
 	mainPlayer->Update(deltaTime);
-	menuLayer->update();
-	ailv1->Update(deltaTime);
+	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
+	if (Distance(mainPlayer->m_sprite->getPosition(), ailv1->m_sprite->getPosition()) < 100)
+		ailv1->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ailv1->m_sprite->getPosition());
+	else ailv1->physicsBodyChar->setVelocity(Vec2(0, 0));
+	ailv1->Collision(mainPlayer,deltaTime);
+	ailv1->Update(deltaTime);
 
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -165,8 +160,17 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			questYolo = 1;
 			d += 1;
 		}
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+		{
+			CCLOG("KILL");
+			ailv1->SetHurt(AiLv1::ACTION_HURT);
+			if (ailv1->m_health <= 0) {
+				ailv1->SetState(AiLv1::ACTION_DIE);
+				ailv1->physicsBodyChar->setEnabled(false);
+				mainPlayer->Exp += 20;
+			}
+		}
 	}
-
 	return true;
 
 }
@@ -177,11 +181,6 @@ bool MapTutorialScene::onContactPreSolve(const PhysicsContact& contact)
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 	if (nodeA && nodeB)
 	{
-		//ailv1 colider
-		if (nodeA->getTag() == playertag & nodeB->getTag() == AILV1 || nodeB->getTag() == playertag & nodeA->getTag() == AILV1)
-		{
-			ailv1->physicsBody1->setVelocity(mainPlayer->m_sprite->getPosition() - ailv1->m_sprite->getPosition());
-		}
 	}
 
 	return true;
@@ -193,11 +192,6 @@ bool MapTutorialScene::onContactSeparate(const PhysicsContact& contact)
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 	if (nodeA && nodeB)
 	{
-		//ailv1 colider
-		if (nodeA->getTag() == playertag & nodeB->getTag() == AILV1 || nodeB->getTag() == playertag & nodeA->getTag() == AILV1)
-		{
-			ailv1->physicsBody1->setVelocity(Vec2(0, 0));
-		}
 	}
 
 	return true;

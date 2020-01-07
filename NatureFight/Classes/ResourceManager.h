@@ -3,9 +3,10 @@
 #include "cocos2d.h"
 #include<string>
 #include<map>
+#include<vector>
+#include<list>
 #include <ui\CocosGUI.h>
 USING_NS_CC;
-
 class ResourceManager
 {
 public:

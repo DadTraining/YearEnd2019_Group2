@@ -1,9 +1,7 @@
 #ifndef  _OBJECT_H_
 #define  _OBJECT_H_
-#include "cocos2d.h"
-#include <ResourceManager.h>
-#define M_PI 3.14159265358979323846 
-USING_NS_CC;
+#include<ResourceManager.h>
+#include<Model.h>
 class ObjectParent
 {
 public:
@@ -15,8 +13,6 @@ public:
 	virtual void Update(float deltaTime) = 0; // setup initial values for object
 	cocos2d::RepeatForever* AnimationObjectRepeat(int id, std::string name);
 	cocos2d::Animate* AnimationObjectOnce(int id, std::string name);
-
-	virtual bool StartAttack(int) = 0;
 
 	virtual cocos2d::RepeatForever* MovingRight() = 0;
 	virtual cocos2d::Animate* AttackRight() = 0;

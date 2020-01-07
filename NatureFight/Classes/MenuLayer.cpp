@@ -19,22 +19,26 @@ bool MenuLayer::init() {
 	this->addChild(camScene);
 	return true;
 }
-void MenuLayer::update() {
+float timeCount = 0;
+void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
+	timeCount += deltaTime;
 
 }
 void MenuLayer::createButtonLayer()
 {
 	auto ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
-	ButtonAttack->setPosition(Vec2(350, 150));
+	ButtonAttack->setPosition(Vec2(900, 150));
 	ButtonAttack->setScale(0.3f);
 	ButtonAttack->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
+			if (timeCount > 1) {
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-			CCLOG("attack");
+				timeCount = 0;
+			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
 			break;

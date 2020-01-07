@@ -1,11 +1,9 @@
 #ifndef  __MENU_LAYER__
 #define  __MENU_LAYER__
-#include "cocos2d.h"
-#include <ui\CocosGUI.h>
 #include<ResourceManager.h>
-#include <SneakyJoystickSkinnedBase.h>
-#include <Player.h>
-USING_NS_CC;
+#include<Player.h>
+#include<SneakyJoystick.h>
+#include<SneakyJoystickSkinnedBase.h>
 class MenuLayer : public cocos2d::Layer
 {
 public:
@@ -13,7 +11,7 @@ public:
     ~MenuLayer();
     void createQuest();
     virtual bool init();
-    void update();
+    void update(float);
     void createButtonLayer();
     void createJoyStickLayer();
     void createLabelLayer();
