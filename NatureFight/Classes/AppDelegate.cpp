@@ -121,8 +121,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     ResourceManager::GetInstance()->Init("./Data.bin");
     // create a scene. it's an autorelease object
-	auto scene = MapTutorialScene::createScene();
-	//auto scene = LoadingScene::createScene();
+	//auto scene = MapTutorialScene::createScene();
+	auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);
 

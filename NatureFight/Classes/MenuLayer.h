@@ -18,6 +18,7 @@ public:
     void createJoyStickLayer();
     void createLabelLayer();
 	void showItemMau(cocos2d::Sprite * sprite);
+	void MenuLayer::getpersent(int a);
 protected:
 private:
 	cocos2d::ui::LoadingBar* load;

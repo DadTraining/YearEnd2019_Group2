@@ -1,5 +1,6 @@
 #include<MenuLayer.h>
 #include<MainMenuScene.h>
+#include<MapTutorialScene.h>
 MenuLayer::MenuLayer(Player* mainPlayer) {
 	this->mainPlayer = mainPlayer;
 
@@ -30,7 +31,7 @@ float timeCount = 0;
 void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
 	timeCount += deltaTime;
-
+//	load->getPercent();
 }
 void MenuLayer::createButtonLayer()
 {
@@ -56,10 +57,10 @@ void MenuLayer::createButtonLayer()
 	addChild(icon_bang);
 	//pause
 	auto btnPause = ui::Button::create("pause.png");
-	btnPause->setPosition(Vec2(850, 370));
-	btnPause->setScale(0.45);
+	btnPause->setPosition(Vec2(855, 375));
+	btnPause->setScale(0.4);
 	btnPause->addClickEventListener([](Ref* event) {
-
+		Director::getInstance()->pause();
 		mPauseLayer->setVisible(true);
 	});
 	addChild(btnPause);
@@ -101,7 +102,7 @@ void MenuLayer::createButtonLayer()
 	//attack
 	auto ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
 	ButtonAttack->setPosition(Vec2(870, 40));
-	ButtonAttack->setScale(0.3f);
+	ButtonAttack->setScale(0.4f);
 	ButtonAttack->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
 		{
@@ -119,6 +120,7 @@ void MenuLayer::createButtonLayer()
 		}
 
 	});
+	ButtonAttack->removeFromParent();
 	addChild(ButtonAttack, 1);
 }
 void MenuLayer::createJoyStickLayer()
@@ -155,15 +157,18 @@ void MenuLayer::createLabelLayer()
 void MenuLayer::showItemMau(cocos2d::Sprite * sprite)
 {
 	auto loadingbar = Sprite::create("loadingbar_bg.png");
-	loadingbar->setPosition(455,250);
-	loadingbar->setScale(0.4);
+	loadingbar->setPosition(455,415);
 	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
 	addChild(loadingbar, 1);
+	loadingbar->setScaleX(2.4);
 	load = ui::LoadingBar::create("progress.png");
 	load->setPercent(100);
-	load->setScale(0.3);
-	load->setScaleX(0.41);
+	load->setScale(0.9);
+	load->setScaleX(2.5);
 	load->setPosition(loadingbar->getPosition());
 	addChild(load, 2);
 	load->setDirection(ui::LoadingBar::Direction::LEFT);
+}
+void MenuLayer::getpersent(int a) {
+	load->setPercent(load->getPercent() + a);
 }

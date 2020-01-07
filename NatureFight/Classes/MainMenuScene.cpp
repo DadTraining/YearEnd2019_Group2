@@ -6,7 +6,17 @@
 #include "SimpleAudioEngine.h"
 Scene* MainMenuScene::createScene()
 {
-	return MainMenuScene::create();
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
+
+	// 'layer' is an autorelease object
+	auto layer = MainMenuScene::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
 }
 
 using namespace CocosDenshion;
@@ -18,9 +28,7 @@ bool MainMenuScene::init()
 	}
 
 	auto audio = SimpleAudioEngine::getInstance();
-	audio->preloadBackgroundMusic("melodyloops.mp3");
 	audio->playBackgroundMusic("melodyloops.mp3", true);
-	audio->setBackgroundMusicVolume(0.6f);
 	auto titlelb= Label::createWithTTF("Nature Fight", "fonts/MONSTAR.otf", 70);
 	titlelb->setPosition(450, 300);
 	titlelb->setColor(Color3B::RED);
@@ -30,14 +38,13 @@ bool MainMenuScene::init()
 	bgimg->setAnchorPoint(Vec2(0.5,0.5));
 	bgimg->setPosition(450, 220);
 	addChild(bgimg);
-	 play = ui::Button::create("play.png");
+	auto play = ui::Button::create("play.png");
 	play->setPosition(Vec2(450, 150));
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
 		if (type == ui::Widget::TouchEventType::ENDED) {
-			auto scene = MapTutorialScene::createScene();
-			Director::getInstance()->replaceScene(scene);
+			Director::getInstance()->replaceScene(MapTutorialScene::createScene());
 		}
 	});
 	addChild(play);
@@ -48,8 +55,7 @@ bool MainMenuScene::init()
 	setting->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
 		if (type == ui::Widget::TouchEventType::ENDED) {
-			auto scene = SettingScene::createScene();
-			Director::getInstance()->replaceScene(scene);
+			Director::getInstance()->replaceScene(SettingScene::createScene());
 		}
 	});
 

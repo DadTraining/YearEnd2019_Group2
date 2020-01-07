@@ -1,9 +1,21 @@
 
 #include "LoadingScene.h"
 #include "MainMenuScene.h"
+#include "SimpleAudioEngine.h"
+USING_NS_CC;
+using namespace CocosDenshion;
 Scene* LoadingScene::createScene()
 {
-	return LoadingScene::create();
+	auto scene = Scene::create();
+
+	// 'layer' is an autorelease object
+	auto layer = LoadingScene::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
 }
 
 bool LoadingScene::init()
@@ -12,6 +24,10 @@ bool LoadingScene::init()
 	{
 		return false;
 	}
+	//load sound
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("melodyloops.mp3");
+
+
 	auto loadingbar = Sprite::create("loadingbg.png");
 	loadingbar->setPosition(450, 200);
 	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
@@ -27,7 +43,7 @@ bool LoadingScene::init()
 	auto updateLoadingBar = CallFunc::create([]() {
 		if (load->getPercent() < 100)
 		{
-			load->setPercent(load->getPercent() + 3);
+			load->setPercent(load->getPercent() + 2.5);
 		}
 
 	});
@@ -38,7 +54,7 @@ bool LoadingScene::init()
 	scheduleUpdate();
 	return true;
 }
-void LoadingScene::update(FLOAT deltaTime)
+void LoadingScene::update(float deltaTime)
 {
 	countT += deltaTime;
 	if (countT >= 4) {

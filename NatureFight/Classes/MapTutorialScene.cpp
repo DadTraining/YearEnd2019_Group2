@@ -1,5 +1,5 @@
 #include "MapTutorialScene.h"
-
+#include "MenuLayer.h"
 using namespace std;
 float times = 0;
 Sprite* quest;
@@ -151,6 +151,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcSolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcSolotag)
 		{
 			questSolo = 2;
+			menuLayer->getpersent(-1);
 			npcsolo->Collision();
 			c += 1;
 
@@ -164,6 +165,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 		{
 			CCLOG("KILL");
+			
 			ailv1->m_sprite->stopAllActions();
 			ailv1->m_sprite->runAction(ailv1->HurtRight());
 			ailv1->health -= 10;

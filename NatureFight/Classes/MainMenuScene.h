@@ -8,8 +8,6 @@ USING_NS_CC;
 class MainMenuScene : public cocos2d::Scene
 {
 private: 
-	ui::Button* play;
-	ui::Button* setting;
 public:
 	float countT = 0;
 	static cocos2d::Scene* createScene();

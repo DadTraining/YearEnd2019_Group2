@@ -50,5 +50,6 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
+	int getpersent(int a);
 };
 #endif // __MAPTUTORIAL_SCENE_H__
