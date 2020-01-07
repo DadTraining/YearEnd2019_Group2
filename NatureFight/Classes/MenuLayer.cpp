@@ -54,6 +54,14 @@ void MenuLayer::createJoyStickLayer()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto particleSystem = ParticleSystemQuad::create("Particles/power.plist");
+	particleSystem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height / 2));
+	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
+	particleSystem->setScale(0.3f);
+	addChild(particleSystem, 10);
+
 	Rect joystickBaseDimensions;
 	joystickBaseDimensions = Rect(0, 0, 160.0f, 160.0f);
 	Point joystickBasePosition;

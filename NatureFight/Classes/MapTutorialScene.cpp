@@ -152,13 +152,14 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 		{
 			CCLOG("KILL");
-			ailv1->m_sprite->stopAllActions();
-			ailv1->m_sprite->runAction(ailv1->HurtRight());
-			ailv1->m_health -= 10;
+			ailv1->SetState(AiLv1::ACTION_HURT);
 			if (ailv1->m_health <= 0) {
 				ailv1->m_sprite->runAction(ailv1->DieRight());
 				ailv1->physicsBodyChar->setEnabled(false);
 				mainPlayer->Exp += 20;
+				mainPlayer->Level++;
+				ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+				mainPlayer->updateLevel();
 			}
 		}
 	}

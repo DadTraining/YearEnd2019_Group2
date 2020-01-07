@@ -464,13 +464,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>PlayerIdleRight.png</string>
+            <string>PlayerIdleUp.png</string>
             <key>size</key>
             <string>{6600,5500}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:3ddc4df4633e4ee0c4ef37e0ec4238f3:7859b8f555742eb7b6a3d9323acd4b58:17edf7869526662b810e936712b0cda4$</string>
+            <string>$TexturePacker:SmartUpdate:e1cefe7f25357c797bccef1cbf661713:e1d4c8e8938f68f717bc34fece41f3c9:1d1b1a68d754d39c2cdc4c4f8ecaf5a7$</string>
             <key>textureFileName</key>
-            <string>PlayerIdleRight.png</string>
+            <string>PlayerIdleUp.png</string>
         </dict>
     </dict>
 </plist>

@@ -1,5 +1,4 @@
 #include "ResourceManager.h"
-int ResourceManager::LevelPlayer = 1;
 ResourceManager* ResourceManager::s_instance;
 ResourceManager::ResourceManager()
 {
@@ -94,10 +93,7 @@ SpriteFrameCache* ResourceManager::GetFrameById(int id)
 	auto frame = m_framecache.find(id)->second;
 	return frame;
 }
-void ResourceManager::SetLevelPlayer(int level)
-{
-	LevelPlayer = level;
-}
+
 Sprite* ResourceManager::DuplicateSprite(Sprite* sprite)
 {
 	Sprite* pRet = Sprite::createWithTexture(sprite->getTexture());

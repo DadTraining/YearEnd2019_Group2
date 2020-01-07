@@ -69,7 +69,7 @@ void Player::Init()
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
 
-	auto edgeBody = PhysicsBody::createEdgeBox(Size(20,20));
+	auto edgeBody = PhysicsBody::createEdgeBox(Size(25,55));
 	edgeBody->setContactTestBitmask(1);
 	edgeNode = Node::create();
 	edgeNode->setPosition(m_sprite->getPosition());
@@ -161,10 +161,12 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		break;
@@ -172,11 +174,13 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 		}
 		break;
@@ -184,10 +188,12 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackUp());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackUp());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		break;
@@ -195,14 +201,21 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackDown());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackDown());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		break;
 	}
+	auto particleSystem = ParticleSystemQuad::create("Particles/power.plist");
+	particleSystem->setPosition(edgeNode->getPosition());
+	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
+	particleSystem->setScale(0.3f);
+	sceneGame->addChild(particleSystem, 10);
 }
 void Player::SetHurt(int state) {
 	switch (m_CurrentFace) {
@@ -303,9 +316,7 @@ cocos2d::RepeatForever* Player::MovingRight() {
 	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run");
 }
 cocos2d::Animate* Player::AttackRight() {
-	if(Level==1) return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
-	else if(Level==2) return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
-	else if(Level==3) return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
+	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_1");
 }
 cocos2d::RepeatForever* Player::IdleRight() {
 	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle");

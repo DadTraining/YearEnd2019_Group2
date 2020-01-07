@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>0_Warrior_Attack_1_000.png</key>
+            <key>0_Warrior_Hurt_000.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -19,7 +19,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_001.png</key>
+            <key>0_Warrior_Hurt_001.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -34,7 +34,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_002.png</key>
+            <key>0_Warrior_Hurt_002.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -49,7 +49,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_003.png</key>
+            <key>0_Warrior_Hurt_003.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -64,7 +64,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_004.png</key>
+            <key>0_Warrior_Hurt_004.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -79,7 +79,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_005.png</key>
+            <key>0_Warrior_Hurt_005.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -94,7 +94,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_006.png</key>
+            <key>0_Warrior_Hurt_006.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -109,7 +109,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_007.png</key>
+            <key>0_Warrior_Hurt_007.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -124,7 +124,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_008.png</key>
+            <key>0_Warrior_Hurt_008.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -139,7 +139,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_009.png</key>
+            <key>0_Warrior_Hurt_009.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -154,7 +154,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_010.png</key>
+            <key>0_Warrior_Hurt_010.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -169,7 +169,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_011.png</key>
+            <key>0_Warrior_Hurt_011.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -184,7 +184,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_012.png</key>
+            <key>0_Warrior_Hurt_012.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -199,7 +199,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_013.png</key>
+            <key>0_Warrior_Hurt_013.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -214,7 +214,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_014.png</key>
+            <key>0_Warrior_Hurt_014.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -239,13 +239,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>PlayerAttackRight.png</string>
+            <string>PlayerHurtUp.png</string>
             <key>size</key>
             <string>{3300,5500}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:828f3b3912d3274f1c072910736eded1:8c79749ffd3e2c4ca4dbb059291a4085:c7ee21fd520e3c488430240434161672$</string>
+            <string>$TexturePacker:SmartUpdate:c256f8173c11baf6b2a71034c41458c4:bf25012913e05301602942f8b9fbca11:75bd3d9116d40c9bfc9a891ea2344e66$</string>
             <key>textureFileName</key>
-            <string>PlayerAttackRight.png</string>
+            <string>PlayerHurtUp.png</string>
         </dict>
     </dict>
 </plist>

@@ -239,13 +239,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>PlayerAttackRight.png</string>
+            <string>PlayerAttackUp.png</string>
             <key>size</key>
             <string>{3300,5500}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:828f3b3912d3274f1c072910736eded1:8c79749ffd3e2c4ca4dbb059291a4085:c7ee21fd520e3c488430240434161672$</string>
+            <string>$TexturePacker:SmartUpdate:d9d89202fed1b34beeb509592e15e4c1:cee2ae162915498e2965f9034963d6ae:f9b25eb53b69e7258073e872a50f4ace$</string>
             <key>textureFileName</key>
-            <string>PlayerAttackRight.png</string>
+            <string>PlayerAttackUp.png</string>
         </dict>
     </dict>
 </plist>

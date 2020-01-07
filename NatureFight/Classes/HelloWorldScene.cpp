@@ -125,6 +125,13 @@ bool HelloWorld::init()
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
     }
+    auto particleSystem = ParticleSystemQuad::create("Particles/UpdatePlayer.plist");
+    particleSystem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+        origin.y + visibleSize.height/2));
+    particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
+
+    addChild(particleSystem,10);
+
     threadd2();
 
     return true;
