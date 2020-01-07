@@ -2,7 +2,6 @@
 #include "cocos2d.h"
 #include "ObjectParent.h"
 #include <vector> 
-#include<Defines.h>
 class Player :
 	public ObjectParent
 {
@@ -31,8 +30,8 @@ private:
 	int m_CurrentFace;
 	int m_CurrentState;
 	cocos2d::Scene* sceneGame;
-	int m_health = 100;
-	int m_dame = 10;
+	int m_health;
+	int m_dame;
 public:
 	Player(cocos2d::Scene* scene);
 	void Update(float deltaTime);
