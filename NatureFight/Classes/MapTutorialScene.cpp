@@ -1,5 +1,6 @@
 #include "MapTutorialScene.h"
 #include "MenuLayer.h"
+#include "item-1.h"
 using namespace std;
 float times = 0;
 Sprite* quest;
@@ -32,7 +33,6 @@ bool MapTutorialScene::init()
 	npcYolo->m_sprite->setPosition(Point(visibleSize.width / 2 + 350, visibleSize.height / 2 - 50));
 	npcYolo->m_sprite->setTag(NpcYolotag);
 	npcYolo->m_sprite->runAction(npcYolo->CommunicationNPCYolo());
-
 	// end  npc
 
 	mainPlayer = new Player(this);
@@ -151,7 +151,10 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcSolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcSolotag)
 		{
 			questSolo = 2;
-			menuLayer->getpersent(-1);
+			//menuLayer->getpersent(-1);
+			//menuLayer->showKiem();
+			//menuLayer->showBang();
+			//menuLayer->showLua();
 			npcsolo->Collision();
 			c += 1;
 

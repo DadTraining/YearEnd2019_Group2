@@ -9,6 +9,7 @@
 #define NpcYolotag 12
 #define AILV1 13
 #define ATTACKTAG 8
+#define LOADING_TIME 4
 
 
 

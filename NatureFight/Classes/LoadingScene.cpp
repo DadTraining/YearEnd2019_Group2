@@ -1,9 +1,10 @@
-
+#include"Defines.h"
 #include "LoadingScene.h"
 #include "MainMenuScene.h"
 #include "SimpleAudioEngine.h"
 USING_NS_CC;
 using namespace CocosDenshion;
+int i = 1;
 Scene* LoadingScene::createScene()
 {
 	auto scene = Scene::create();
@@ -39,27 +40,33 @@ bool LoadingScene::init()
 	load->setScaleX(2.3f);
 	load->setDirection(ui::LoadingBar::Direction::LEFT);
 	addChild(load, 0);
-
 	auto updateLoadingBar = CallFunc::create([]() {
 		if (load->getPercent() < 100)
 		{
-			load->setPercent(load->getPercent() + 2.5);
+			i++;
+			std::string loaddata = "Data" + std::to_string(i)+".bin";
+			load->setPercent(load->getPercent() + 4);
+			if(i<=4) ResourceManager::GetInstance()->Init(loaddata);
 		}
 
 	});
 	auto sqLoad = Sequence::createWithTwoActions(updateLoadingBar, DelayTime::create(0.1f));
 	auto repeat = Repeat::create(sqLoad, 100);
 	load->runAction(repeat);
-
+	auto gotoMainMenu = CallFunc::create([]() {
+		Director::getInstance()->replaceScene(MainMenuScene::createScene());
+	});
+	auto waitAction = Sequence::create(DelayTime::create(LOADING_TIME), gotoMainMenu, nullptr);
+	runAction(waitAction);
 	scheduleUpdate();
 	return true;
 }
 void LoadingScene::update(float deltaTime)
 {
-	countT += deltaTime;
+	/*countT += deltaTime;
 	if (countT >= 4) {
 		auto scene = MainMenuScene::createScene();
 		Director::getInstance()->replaceScene(scene);
-	}
+	}*/
 }
 

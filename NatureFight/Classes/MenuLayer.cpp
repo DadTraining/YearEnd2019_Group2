@@ -1,10 +1,10 @@
 #include<MenuLayer.h>
 #include<MainMenuScene.h>
 #include<MapTutorialScene.h>
+#include<item-1.h>
 MenuLayer::MenuLayer(Player* mainPlayer) {
 	this->mainPlayer = mainPlayer;
-
-	showItemMau(mainPlayer->m_sprite);
+	//showItemMau(mainPlayer->m_sprite);
 	init();
 }
 
@@ -16,6 +16,7 @@ bool MenuLayer::init() {
 	{
 		return false;
 	}
+
 	createButtonLayer();
 	createJoyStickLayer();
 	auto camScene = Camera::create();
@@ -25,40 +26,24 @@ bool MenuLayer::init() {
 	return true;
 
 	//
-	
+
 }
 float timeCount = 0;
 void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
 	timeCount += deltaTime;
-//	load->getPercent();
 }
 void MenuLayer::createButtonLayer()
 {
 	//icon
-
-	auto icon_kiem = Sprite::create("Sprites/Item/icon-kiem.png");
-	icon_kiem->setScale(0.3);
-	icon_kiem->setOpacity(-150);
-	icon_kiem->setPosition(760, 40);
-	icon_kiem->setRotation(-60);
-	addChild(icon_kiem);
-	auto icon_lua = Sprite::create("Sprites/Item/icon-lua.png");
-	icon_lua->setScale(0.3);
-	icon_lua->setOpacity(-150);
-	icon_lua->setRotation(-45);
-	icon_lua->setPosition(800, 100);
-	addChild(icon_lua);
-	auto icon_bang = Sprite::create("Sprites/Item/icon-bang.png");
-	icon_bang->setScale(0.3);
-	icon_bang->setOpacity(-150);
-	icon_bang->setRotation(-25);
-	icon_bang->setPosition(870, 140);
-	addChild(icon_bang);
+	item = new ItemLayer();
+	item->Init();
+	this->addChild(item);
+	
 	//pause
 	auto btnPause = ui::Button::create("pause.png");
 	btnPause->setPosition(Vec2(855, 375));
-	btnPause->setScale(0.4);
+	btnPause->setScale(0.35);
 	btnPause->addClickEventListener([](Ref* event) {
 		Director::getInstance()->pause();
 		mPauseLayer->setVisible(true);
@@ -154,21 +139,4 @@ void MenuLayer::createLabelLayer()
 {
 
 }
-void MenuLayer::showItemMau(cocos2d::Sprite * sprite)
-{
-	auto loadingbar = Sprite::create("loadingbar_bg.png");
-	loadingbar->setPosition(455,415);
-	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
-	addChild(loadingbar, 1);
-	loadingbar->setScaleX(2.4);
-	load = ui::LoadingBar::create("progress.png");
-	load->setPercent(100);
-	load->setScale(0.9);
-	load->setScaleX(2.5);
-	load->setPosition(loadingbar->getPosition());
-	addChild(load, 2);
-	load->setDirection(ui::LoadingBar::Direction::LEFT);
-}
-void MenuLayer::getpersent(int a) {
-	load->setPercent(load->getPercent() + a);
-}
+

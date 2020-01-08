@@ -47,6 +47,10 @@ void Player::Update(float deltaTime)
 
 void Player::Init()
 {
+
+
+
+
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
