@@ -11,11 +11,16 @@ bool MenuLayer::init() {
 	{
 		return false;
 	}
+	CCLOG("MenuLayer 0******************");
 	createButtonLayer();
+	CCLOG("MenuLayer 1******************");
 	createJoyStickLayer();
+	CCLOG("MenuLayer 02******************");
 	auto camScene = Camera::create();
 	camScene->setCameraFlag(CameraFlag::USER1);
+	CCLOG("MenuLayer 03******************");
 	this->setCameraMask((unsigned short)CameraFlag::USER1);
+	CCLOG("MenuLayer 04******************");
 	this->addChild(camScene);
 	return true;
 }
@@ -27,8 +32,10 @@ void MenuLayer::update(float deltaTime) {
 }
 void MenuLayer::createButtonLayer()
 {
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
-	ButtonAttack->setPosition(Vec2(800, 100));
+	ButtonAttack->setAnchorPoint(Vec2(1,0));
+	ButtonAttack->setPosition(Vec2(visibleSize.width,0));
 	ButtonAttack->setScale(0.3f);
 	ButtonAttack->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
@@ -54,6 +61,14 @@ void MenuLayer::createJoyStickLayer()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto particleSystem = ParticleSystemQuad::create("Particles/power.plist");
+	particleSystem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+		origin.y + visibleSize.height / 2));
+	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
+	particleSystem->setScale(0.3f);
+	addChild(particleSystem, 10);
+
 	Rect joystickBaseDimensions;
 	joystickBaseDimensions = Rect(0, 0, 160.0f, 160.0f);
 	Point joystickBasePosition;

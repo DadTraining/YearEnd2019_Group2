@@ -1,6 +1,7 @@
 #pragma once
 #include "cocos2d.h"
 #include "ObjectParent.h"
+#include"Model.h"
 #include <vector> 
 class Player :
 	public ObjectParent
@@ -21,7 +22,7 @@ public:
 	static const int ACTION_HURT = 9;
 	static const int ACTION_DIE = 10;
 
-public:
+public: 
 	PhysicsBody* physicsBody;
 	Node* edgeNode;
 	static int Level;
@@ -39,17 +40,13 @@ public:
 	void Init();
 	void Collision();
 	void SetFace();
-	void SetAlive();
 	void SetState(int);
 	void SetIdle(int);
 	void SetDie(int);
 	void SetAttack(int state);
 	void SetHurt(int state);
 	void SetMove(int state);
-	int SetAction();
 	~Player();
-
-	bool StartAttack(int);
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();

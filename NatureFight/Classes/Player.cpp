@@ -17,32 +17,8 @@ float timeAttack = 0, timeDie = 0;
 bool checkAttack = false;
 void Player::Update(float deltaTime)
 {
-	if (m_health <= 0) {
-		timeDie += deltaTime;
-		SetState(ACTION_DIE);
-		if (timeDie >= 5) {
-			timeDie = 0;
-			m_sprite->setPosition(10, 10);
-			updateLevel();
-			m_CurrentState = ACTION_DEFAULT;
-			m_CurrentFace = FACE_DEFAULT;
-			edgeNode->setPosition(Vec2(1000, 1000));
-			physicsBody->setEnabled(true);
-		}
-	}
-	else {
-		if (m_CurrentState == ACTION_ATTACK) checkAttack = true;
-		if (checkAttack) timeAttack += deltaTime;
-		if (timeAttack > 1.0f) {
-			m_CurrentState = ACTION_DEFAULT;
-			timeAttack = 0;
-			checkAttack = false;
-		}
-		if (timeAttack > deltaTime) {
-			edgeNode->setPosition(Vec2(1000, 1000));
-		}
+	
 		SetFace();
-	}
 }
 
 void Player::Init()
@@ -52,12 +28,14 @@ void Player::Init()
 
 	Level = 1;
 	Exp = 0;
+	CCLOG("Player 0******************");
 	updateLevel();
-
+	CCLOG("Player 1******************");
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(10, 10);
 	this->m_sprite->setScale(0.1);
-	this->sceneGame->addChild(this->m_sprite);
+	this->sceneGame->addChild(this->m_sprite, 1);
+	CCLOG("Player 3******************");
 	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2);
 	//physicsBody->setDynamic(true);
 	physicsBody->setRotationEnable(false);
@@ -66,17 +44,24 @@ void Player::Init()
 	this->m_sprite->setPhysicsBody(physicsBody);
 	this->m_sprite->setTag(playertag);
 	physicsBody->setGravityEnable(false);
+	CCLOG("Player 4******************");
 	m_CurrentState = ACTION_IDLE;
+	CCLOG("Player 5******************");
 	m_CurrentFace = FACE_DEFAULT;
+	CCLOG("Player 6******************");
 
 	auto edgeBody = PhysicsBody::createEdgeBox(Size(20, 20));
 	edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
 	edgeBody->setCollisionBitmask(false);
 	edgeNode = Node::create();
+	CCLOG("Player 7******************");
 	edgeNode->setPosition(m_sprite->getPosition());
 	sceneGame->addChild(edgeNode);
+	CCLOG("Player 8******************");
 	edgeNode->setPhysicsBody(edgeBody);
+	CCLOG("Player 9******************");
 	edgeNode->setTag(ATTACKTAG);
+	CCLOG("Player end******************");
 }
 
 void Player::Collision()
@@ -162,10 +147,12 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		break;
@@ -173,11 +160,13 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
+			edgeNode->setRotation(0);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 		}
 		break;
@@ -185,10 +174,12 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackUp());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackUp());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		break;
@@ -196,14 +187,21 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackDown());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackDown());
+			edgeNode->setRotation(90);
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		break;
 	}
+	auto particleSystem = ParticleSystemQuad::create("Particles/power.plist");
+	particleSystem->setPosition(edgeNode->getPosition());
+	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
+	particleSystem->setScale(0.3f);
+	sceneGame->addChild(particleSystem, 10);
 }
 void Player::SetHurt(int state) {
 	switch (m_CurrentFace) {
@@ -274,11 +272,6 @@ void Player::SetState(int state)
 	}
 }
 
-int Player::SetAction()
-{
-	return 0;
-}
-
 void Player::SetFace()
 {
 	float radian = std::atan2f(physicsBody->getVelocity().y, physicsBody->getVelocity().x);
@@ -304,18 +297,12 @@ void Player::SetFace()
 		SetState(Player::ACTION_MOVEDOWN);
 	}
 }
-bool Player::StartAttack(int face)
-{
 
-	return false;
-}
 cocos2d::RepeatForever* Player::MovingRight() {
 	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run");
 }
 cocos2d::Animate* Player::AttackRight() {
-	if (Level == 1) return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
-	else if (Level == 2) return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
-	else if (Level == 3) return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
+	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_1");
 }
 cocos2d::RepeatForever* Player::IdleRight() {
 	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle");

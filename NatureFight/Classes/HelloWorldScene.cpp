@@ -24,6 +24,8 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include <ResourceManager.h>
+#include <MapTutorialScene.h>
 
 USING_NS_CC;
 
@@ -75,8 +77,16 @@ bool HelloWorld::init()
         closeItem->setPosition(Vec2(x,y));
     }
 
+    auto closeItem2 = MenuItemImage::create(
+        "CloseNormal.png",
+        "CloseSelected.png",
+        CC_CALLBACK_1(HelloWorld::menuCloseCallback2, this));
+        float x = origin.x + visibleSize.width - closeItem2->getContentSize().width / 2;
+        float y = origin.y + closeItem2->getContentSize().height / 2;
+        closeItem2->setPosition(Vec2(x-50, y));
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
+
+    auto menu = Menu::create(closeItem,closeItem2, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -115,14 +125,25 @@ bool HelloWorld::init()
         // add the sprite as a child to this layer
         this->addChild(sprite, 0);
     }
+    auto particleSystem = ParticleSystemQuad::create("Particles/UpdatePlayer.plist");
+    particleSystem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+        origin.y + visibleSize.height/2));
+    particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
+
+    addChild(particleSystem,10);
+
+    threadd2();
+
     return true;
 }
 
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
+
     //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
+    auto scene = MapTutorialScene::createScene();
+    Director::getInstance()->replaceScene(scene);
 
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
@@ -132,6 +153,58 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
+
+
+}
+void HelloWorld::menuCloseCallback2(Ref* pSender) {
+    //std::thread thread_object(&HelloWorld::threadd, this);
+    //std::thread thread_object2(&HelloWorld::threadd2, this);
+    //thread_object.join();
+    //thread_object2.join();
+    threadd();
+}
+void HelloWorld::threadd() {
+    Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {
+        ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
+    });
+}
+int i = 0;
+void HelloWorld::threadd2() {
+    auto loadingBarGB = Sprite::create("loadingbar_bg.png");
+	CCLOG("Loadding bar0******************");
+    loadingBarGB->setPosition(Vec2(300, 350));
+    
+	addChild(loadingBarGB);
+	CCLOG("Loadding bar1******************");
+	static auto loadingbar = ui::LoadingBar::create("loadingbar.png");
+	CCLOG("Loadding bar2******************");
+	loadingbar->setPosition(loadingBarGB->getPosition());
+	CCLOG("Loadding bar3******************");
+    loadingbar->setPercent(0);
+	CCLOG("Loadding bar4******************");
+    loadingbar->setDirection(ui::LoadingBar::Direction::LEFT);
+	CCLOG("Loadding bar5******************");
+    addChild(loadingbar);
+	
+    auto updateLoadingBar = CallFunc::create([]() {
+        if (loadingbar->getPercent() < 100)
+        {
+            loadingbar->setPercent(loadingbar->getPercent() + 1);
+			CCLOG("Loadding bar 6******************");
+			if (i < 2) {
+				std::string loadfile = "DataPlayerLv1_" + std::to_string(i) + ".bin";
+				
+				ResourceManager::GetInstance()->Init(loadfile);
+				CCLOG("Loadding DataPlayer  End******************");
+				i++;
+			}
+			CCLOG("Loadding bar End******************");
+        }
+    });
+
+    auto sequenceRunUpdateLoadingBar = Sequence::createWithTwoActions(updateLoadingBar, DelayTime::create(0.1f));
+    auto repeat = Repeat::create(sequenceRunUpdateLoadingBar, 100);
+    loadingbar->runAction(repeat);
 
 
 }

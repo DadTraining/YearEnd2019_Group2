@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 #include<ObjectParent.h>
-#include <AiLv1.h>
 #include <iostream>
 #include <Player.h>
 #include <Npclv1.h>
@@ -23,12 +22,11 @@ class MapTutorialScene : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
-	AiLv1* ailv1;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 //	SneakyJoystickSkinnedBase* joystickBase;
 	Npclv1* npcsolo, *npcYolo;
-	TMXTiledMap* map;
+	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;

@@ -87,7 +87,7 @@ bool SettingScene::init()
 	//scheduleUpdate();
 	return true;
 }
-void SettingScene::update(FLOAT deltaTime)
+void SettingScene::update(float deltaTime)
 {
 	countT += deltaTime;
 	if (countT >= 4) {
