@@ -41,7 +41,7 @@ bool MapTutorialScene::init()
 	
 	ailv1 = new AiLv1(this);
 	ailv1->Init();
-	ailv1->m_sprite->runAction(ailv1->MovingRight());
+	ailv1->SetState(AiLv1::ACTION_IDLE);
 	ailv1->m_sprite->setTag(AILV1);
 
 	auto listener = EventListenerTouchOneByOne::create();
@@ -163,7 +163,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 		{
 			CCLOG("KILL");
-			ailv1->SetHurt(AiLv1::ACTION_HURT);
+			ailv1->SetState(AiLv1::ACTION_HURT);
 			if (ailv1->m_health <= 0) {
 				ailv1->SetState(AiLv1::ACTION_DIE);
 				ailv1->physicsBodyChar->setEnabled(false);

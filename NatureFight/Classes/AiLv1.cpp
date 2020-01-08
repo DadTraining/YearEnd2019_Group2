@@ -5,7 +5,7 @@ AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
 }
-float timeAttackAI = 0, timeDieAI = 0;
+float timeAttackAI = 0, timeDieAI = 0,timeColor=0;
 bool checkAttackAI = false;
 void AiLv1::Update(float deltaTime)
 {
@@ -33,6 +33,13 @@ void AiLv1::Update(float deltaTime)
 			edgeNode->setPosition(Vec2(1000, 1000));
 		}
 		SetFace();
+	}
+	if (m_sprite->getColor() == ccc3(255, 0, 0)) {
+		timeColor += deltaTime;
+		if (timeColor >= 2) {
+			m_sprite->setColor(ccc3(255, 255, 255));
+			timeColor = 0;
+		}
 	}
 }
 
@@ -111,60 +118,60 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
-	switch (m_CurrentFace)
-	{
-	case FACE_LEFT:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
-		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
-		}
-		break;
-	case FACE_RIGHT:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
+		switch (m_CurrentFace)
+		{
+		case FACE_LEFT:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
+			}
+			break;
+		case FACE_RIGHT:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
+			}
+			break;
+		case FACE_UP:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+			}
+			break;
+		case FACE_DOWN:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+			}
+			break;
 		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
-		}
-		break;
-	case FACE_UP:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
-		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
-		}
-		break;
-	case FACE_DOWN:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
-		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
-		}
-		break;
-	}
 }
 void AiLv1::SetHurt(int state) {
 	if (state != m_CurrentState) {
 		m_sprite->stopAllActions();
 		m_health -= 10;
-		m_sprite->runAction(HurtRight());
+		m_sprite->setColor(ccc3(255, 0, 0));
 	}
 	else if (m_sprite->getNumberOfRunningActions() == 0) {
 		m_sprite->runAction(HurtRight());
