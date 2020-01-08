@@ -1,12 +1,6 @@
 #include <Player.h>
 #include "SimpleAudioEngine.h"
-#define ATTACK 0
-#define RUN 1
-#define playertag 1000
-#define ATTACKTAG 8
-#define NpcSolotag 11
-#define NpcYolotag 12
-using namespace CocosDenshion; 
+using namespace CocosDenshion;
 int Player::Level;
 int Player::Exp;
 Player::Player(cocos2d::Scene* scene)
@@ -38,7 +32,13 @@ void Player::Update(float deltaTime)
 			timeAttack = 0;
 			checkAttack = false;
 		}
-		if (timeAttack > deltaTime) {
+		if (timeAttack > deltaTime && m_CurrentSkill == SKILL_DEFAULT) {
+			edgeNode->setPosition(Vec2(1000, 1000));
+		}
+		if (timeAttack > 0.15 && m_CurrentSkill == SKILL_FIRE) {
+			edgeNode->setPosition(Vec2(1000, 1000));
+		}
+		if (timeAttack > 0.3 && m_CurrentSkill == SKILL_ICE) {
 			edgeNode->setPosition(Vec2(1000, 1000));
 		}
 		SetFace();
@@ -68,14 +68,11 @@ void Player::Init()
 	physicsBody->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
+	m_CurrentSkill = SKILL_DEFAULT;
 
-	auto edgeBody = PhysicsBody::createEdgeBox(Size(25,55));
-	edgeBody->setContactTestBitmask(1);
 	edgeNode = Node::create();
-	edgeNode->setPosition(m_sprite->getPosition());
 	sceneGame->addChild(edgeNode);
-	edgeNode->setPhysicsBody(edgeBody);
-	edgeNode->setTag(ATTACKTAG);
+
 }
 
 void Player::Collision()
@@ -161,61 +158,41 @@ void Player::SetAttack(int state) {
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
-			edgeNode->setRotation(0);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
-			edgeNode->setRotation(0);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
 		break;
 	case FACE_RIGHT:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
-			edgeNode->setRotation(0);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
-
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackRight());
-			edgeNode->setRotation(0);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
 		}
 		break;
 	case FACE_UP:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackUp());
-			edgeNode->setRotation(90);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackUp());
-			edgeNode->setRotation(90);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 		}
 		break;
 	case FACE_DOWN:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackDown());
-			edgeNode->setRotation(90);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
 			m_sprite->runAction(AttackDown());
-			edgeNode->setRotation(90);
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 		}
 		break;
 	}
-	auto particleSystem = ParticleSystemQuad::create("Particles/power.plist");
-	particleSystem->setPosition(edgeNode->getPosition());
-	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
-	particleSystem->setScale(0.3f);
-	sceneGame->addChild(particleSystem, 10);
+	m_CurrentSkill = SKILL_ICE;
+	if(Level>=1) SetSkill();
 }
 void Player::SetHurt(int state) {
 	switch (m_CurrentFace) {
@@ -236,6 +213,74 @@ void Player::SetHurt(int state) {
 			m_health -= 10;
 	}
 	CCLOG("%d", m_health);
+}
+void Player::SetSkill()
+{
+	switch (m_CurrentSkill)
+	{
+	case SKILL_FIRE:
+		SetSkillFire();
+		break;
+	case SKILL_ICE:
+		SetSkillIce();
+		break;
+	case SKILL_DEFAULT:
+		SetSkillDefault();
+		break;
+	}
+}
+void Player::SetSkillFire()
+{
+	if (m_CurrentSkill != SKILL_DEFAULT) {
+		auto edgeBody = PhysicsBody::createEdgeBox(Size(70, 70));
+		edgeBody->setContactTestBitmask(1);
+		edgeNode->setPhysicsBody(edgeBody);
+		edgeNode->setPosition(m_sprite->getPosition());
+		edgeNode->setTag(ATTACK_FIRE);
+	}
+	auto particleSystem = ParticleAttack("Particles/skill_fire.plist");
+	particleSystem->setPosition(edgeNode->getPosition());
+	sceneGame->addChild(particleSystem);
+}
+void Player::SetSkillIce()
+{
+	if (m_CurrentSkill != SKILL_DEFAULT) {
+		auto edgeBody = PhysicsBody::createEdgeBox(Size(30, 60));
+		edgeBody->setContactTestBitmask(1);
+		edgeNode->setPhysicsBody(edgeBody);
+		edgeNode->setPosition(m_sprite->getPosition());
+		edgeNode->setTag(ATTACK_ICE);
+	}
+	switch (m_CurrentFace)
+	{
+	case FACE_RIGHT:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(100, 0)));
+		break;
+	case FACE_UP:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, 100)));
+		break;
+	case FACE_DOWN:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, -100)));
+		break;
+	case FACE_LEFT:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(-100, 0)));
+		break;
+	}
+	auto particleSystem = ParticleAttack("Particles/skill_ice.plist");
+	particleSystem->setPosition(edgeNode->getPosition());
+	sceneGame->addChild(particleSystem);
+}
+void Player::SetSkillDefault()
+{
+	if (m_CurrentSkill != SKILL_DEFAULT) {
+		auto edgeBody = PhysicsBody::createEdgeBox(Size(25, 55));
+		edgeBody->setContactTestBitmask(1);
+		edgeNode->setPhysicsBody(edgeBody);
+		edgeNode->setTag(ATTACKTAG);
+	}
+	auto particleSystem = ParticleAttack("Particles/PlayerAttack.plist");
+	particleSystem->setPosition(edgeNode->getPosition());
+	sceneGame->addChild(particleSystem);
 }
 void Player::SetState(int state)
 {
@@ -377,4 +422,38 @@ cocos2d::Animate* Player::HurtDown()
 cocos2d::RepeatForever* Player::DieDown()
 {
 	return ObjectParent::AnimationObjectRepeat(16, "Warrior_Died");
+}
+
+cocos2d::ParticleSystemQuad* Player::ParticleAttack(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.2f);
+	particleSystem->setDuration(0.15f);
+	switch (m_CurrentFace)
+	{
+	case FACE_LEFT:
+		particleSystem->setAngle(180);
+		edgeNode->setRotation(0);
+		edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
+		break;
+	case FACE_RIGHT:
+		edgeNode->setRotation(0);
+		edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
+		break;
+	case FACE_UP:
+		particleSystem->setPosVar(Vec2(particleSystem->getPosVar().y, particleSystem->getPosVar().x));
+		particleSystem->setGravity(Vec2(particleSystem->getGravity().y, particleSystem->getGravity().x));
+		particleSystem->setAngle(90);
+		edgeNode->setRotation(90);
+		edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+		break;
+	case FACE_DOWN:
+		particleSystem->setPosVar(Vec2(particleSystem->getPosVar().y, particleSystem->getPosVar().x));
+		particleSystem->setGravity(Vec2(particleSystem->getGravity().y, particleSystem->getGravity().x));
+		particleSystem->setAngle(-90);
+		edgeNode->setRotation(90);
+		edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+		break;
+	}
+	return particleSystem;
 }

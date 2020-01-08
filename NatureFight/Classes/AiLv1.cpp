@@ -47,7 +47,7 @@ void AiLv1::Init()
 	this->m_sprite->setScale(0.1);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
-	physicsBodyChar->setDynamic(true);
+	physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
 	physicsBodyChar->setCollisionBitmask(101);
 	physicsBodyChar->setContactTestBitmask(1);
@@ -70,25 +70,10 @@ float timem = 0;
 void AiLv1::Collision(Player* player, float deltaTime)
 {
 	Update(deltaTime);
+	timem += deltaTime;
 	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
-		timem += deltaTime;
-		if (timem >= 1.5) {
+		if (timem > 1.0f) {
 			SetState(AiLv1::ACTION_ATTACK);
-			timem = 0;
-		}
-	}
-	else if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80) {
-		this->physicsBodyChar->setVelocity((player->m_sprite->getPosition() - this->m_sprite->getPosition()) / 2);
-		timem += deltaTime;
-		if (timem >= 1) {
-			SetState(AiLv1::ACTION_MOVE);
-		}
-	}
-	else
-	{
-		timem += deltaTime;
-		if (timem >= 1) {
-			SetState(AiLv1::ACTION_IDLE);
 			timem = 0;
 		}
 	}

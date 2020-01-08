@@ -2,6 +2,14 @@
 #include "cocos2d.h"
 #include "ObjectParent.h"
 #include <vector> 
+#define ATTACK 0
+#define RUN 1
+#define playertag 1000
+#define ATTACKTAG 8
+#define ATTACK_FIRE 9
+#define ATTACK_ICE 10
+#define NpcSolotag 11
+#define NpcYolotag 12
 class Player :
 	public ObjectParent
 {
@@ -21,6 +29,10 @@ public:
 	static const int ACTION_HURT = 9;
 	static const int ACTION_DIE = 10;
 
+	static const int SKILL_DEFAULT = -1;
+	static const int SKILL_FIRE = 1;
+	static const int SKILL_ICE = 2;
+
 public: 
 	PhysicsBody* physicsBody;
 	Node* edgeNode;
@@ -29,6 +41,7 @@ public:
 private:
 	int m_CurrentFace;
 	int m_CurrentState;
+	int m_CurrentSkill;
 	cocos2d::Scene* sceneGame;
 	int m_health;
 	int m_dame;
@@ -45,6 +58,12 @@ public:
 	void SetAttack(int state);
 	void SetHurt(int state);
 	void SetMove(int state);
+
+	void SetSkill();
+	void SetSkillFire();
+	void SetSkillIce();
+	void SetSkillDefault();
+
 	~Player();
 
 	cocos2d::RepeatForever* MovingRight();
@@ -67,4 +86,7 @@ public:
 	cocos2d::Animate* AttackDownAngry();
 	cocos2d::Animate* HurtDown();
 	cocos2d::RepeatForever* DieDown();
+
+	cocos2d::ParticleSystemQuad* ParticleAttack(std::string name);
+
 };
