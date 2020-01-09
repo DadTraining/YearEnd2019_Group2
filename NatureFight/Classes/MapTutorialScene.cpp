@@ -153,7 +153,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		{
 			CCLOG("KILL");
 			ailv1->SetState(AiLv1::ACTION_HURT);
-			if (ailv1->m_health <= 0) {
+			if (ailv1->m_health == 0) {
 				ailv1->m_sprite->runAction(ailv1->DieRight());
 				ailv1->physicsBodyChar->setEnabled(false);
 				mainPlayer->Exp += 20;

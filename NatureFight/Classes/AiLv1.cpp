@@ -56,6 +56,7 @@ void AiLv1::Init()
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
+	AttackSpeed = 1.0f;
 
 	auto edgeBody = PhysicsBody::createEdgeBox(Size(20, 20));
 	edgeBody->setContactTestBitmask(1);
@@ -208,22 +209,22 @@ void AiLv1::SetFace()
 }
 
 cocos2d::RepeatForever* AiLv1::MovingRight() {
-	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run");
+	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::AttackRight() {
-	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
+	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::IdleRight() {
-	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle");
+	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::AttackRightAngry() {
-	return ObjectParent::AnimationObjectOnce(5, "Warrior_Attack_2");
+	return ObjectParent::AnimationObjectOnce(5, "Warrior_Attack_2", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died");
+	return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::HurtRight() {
-	return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt");
+	return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::MovingUp() { return NULL; }
 cocos2d::Animate* AiLv1::AttackUp() { return NULL; }

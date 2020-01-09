@@ -33,18 +33,34 @@ public:
 	static const int SKILL_FIRE = 1;
 	static const int SKILL_ICE = 2;
 
+	static const int STONE_CBN = 1;
+	static const int STONE_FIRE = 2;
+
 public: 
 	PhysicsBody* physicsBody;
 	Node* edgeNode;
+	int m_CurrentSkill;
+
 	static int Level;
 	static int Exp;
-private:
-	int m_CurrentFace;
-	int m_CurrentState;
-	int m_CurrentSkill;
-	cocos2d::Scene* sceneGame;
 	int m_health;
 	int m_dame;
+
+	bool haveSword;
+	bool haveMagicSword;
+
+	bool haveHeatBalanceStone;
+	bool haveFireStone;
+
+	bool haveMask;
+
+	float AttackSpeed;
+	float MoveSpeed;
+private:
+	cocos2d::Scene* sceneGame;
+	static int m_CurrentStone;
+	int m_CurrentFace;
+	int m_CurrentState;
 public:
 	Player(cocos2d::Scene* scene);
 	void Update(float deltaTime);
@@ -64,6 +80,7 @@ public:
 	void SetSkillIce();
 	void SetSkillDefault();
 
+	void UseStone(int);
 	~Player();
 
 	cocos2d::RepeatForever* MovingRight();

@@ -35,7 +35,7 @@ void MenuLayer::createButtonLayer()
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
-			if (timeCount > 1) {
+			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeCount = 0;
 			}

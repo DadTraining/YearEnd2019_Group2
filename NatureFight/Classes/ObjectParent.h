@@ -13,8 +13,8 @@ public:
 	~ObjectParent();
 	virtual void Init() = 0; //	handles all game objects logic
 	virtual void Update(float deltaTime) = 0; // setup initial values for object
-	cocos2d::RepeatForever* AnimationObjectRepeat(int id, std::string name);
-	cocos2d::Animate* AnimationObjectOnce(int id, std::string name);
+	cocos2d::RepeatForever* AnimationObjectRepeat(int id, std::string name, float speed);
+	cocos2d::Animate* AnimationObjectOnce(int id, std::string name, float speed);
 
 	virtual cocos2d::RepeatForever* MovingRight() = 0;
 	virtual cocos2d::Animate* AttackRight() = 0;

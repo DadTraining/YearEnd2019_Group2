@@ -9,7 +9,7 @@ ObjectParent::~ObjectParent()
 {
 }
 
-cocos2d::RepeatForever* ObjectParent::AnimationObjectRepeat(int id, std::string name)
+cocos2d::RepeatForever* ObjectParent::AnimationObjectRepeat(int id, std::string name, float speed)
 {
 	auto spriteCache = ResourceManager::GetInstance()->GetFrameById(id);
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
@@ -22,13 +22,13 @@ cocos2d::RepeatForever* ObjectParent::AnimationObjectRepeat(int id, std::string 
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
 		i++;
 	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05/speed);
 	auto animate = cocos2d::Animate::create(animation);
 	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
 	return repeat;
 }
 
-cocos2d::Animate* ObjectParent::AnimationObjectOnce(int id, std::string name)
+cocos2d::Animate* ObjectParent::AnimationObjectOnce(int id, std::string name,float speed)
 {
 	auto spriteCache = ResourceManager::GetInstance()->GetFrameById(id);
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
@@ -41,7 +41,7 @@ cocos2d::Animate* ObjectParent::AnimationObjectOnce(int id, std::string name)
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
 		i++;
 	}
-	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05 / speed);
 	auto animate = cocos2d::Animate::create(animation);
 	return animate;
 }

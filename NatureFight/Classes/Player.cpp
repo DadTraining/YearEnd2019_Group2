@@ -3,6 +3,7 @@
 using namespace CocosDenshion;
 int Player::Level;
 int Player::Exp;
+int Player::m_CurrentStone;
 Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -27,7 +28,7 @@ void Player::Update(float deltaTime)
 	else {
 		if (m_CurrentState == ACTION_ATTACK) checkAttack = true;
 		if(checkAttack) timeAttack += deltaTime;
-		if (timeAttack > 1.0f) {
+		if (timeAttack > 2.0f-AttackSpeed) {
 			m_CurrentState = ACTION_DEFAULT;
 			timeAttack = 0;
 			checkAttack = false;
@@ -38,7 +39,7 @@ void Player::Update(float deltaTime)
 		if (timeAttack > 0.15 && m_CurrentSkill == SKILL_FIRE) {
 			edgeNode->setPosition(Vec2(1000, 1000));
 		}
-		if (timeAttack > 0.3 && m_CurrentSkill == SKILL_ICE) {
+		if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
 			edgeNode->setPosition(Vec2(1000, 1000));
 		}
 		SetFace();
@@ -81,6 +82,8 @@ void Player::Collision()
 
 void Player::updateLevel()
 {
+	AttackSpeed = 1.0f + (Level-1)*0.5;
+	MoveSpeed = 1.0f;
 	m_health = Level * 300;
 	m_dame = Level * 10;
 }
@@ -191,7 +194,7 @@ void Player::SetAttack(int state) {
 		}
 		break;
 	}
-	m_CurrentSkill = SKILL_ICE;
+	m_CurrentSkill = SKILL_DEFAULT;
 	if(Level>=1) SetSkill();
 }
 void Player::SetHurt(int state) {
@@ -224,14 +227,14 @@ void Player::SetSkill()
 	case SKILL_ICE:
 		SetSkillIce();
 		break;
-	case SKILL_DEFAULT:
+	default:
 		SetSkillDefault();
 		break;
 	}
 }
 void Player::SetSkillFire()
 {
-	if (m_CurrentSkill != SKILL_DEFAULT) {
+	if (edgeNode->getTag() != ATTACK_FIRE) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(70, 70));
 		edgeBody->setContactTestBitmask(1);
 		edgeNode->setPhysicsBody(edgeBody);
@@ -244,8 +247,8 @@ void Player::SetSkillFire()
 }
 void Player::SetSkillIce()
 {
-	if (m_CurrentSkill != SKILL_DEFAULT) {
-		auto edgeBody = PhysicsBody::createEdgeBox(Size(30, 60));
+	if (edgeNode->getTag() != ATTACK_ICE) {
+		auto edgeBody = PhysicsBody::createEdgeBox(Size(30, 70));
 		edgeBody->setContactTestBitmask(1);
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setPosition(m_sprite->getPosition());
@@ -254,16 +257,16 @@ void Player::SetSkillIce()
 	switch (m_CurrentFace)
 	{
 	case FACE_RIGHT:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(100, 0)));
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(60, 0)));
 		break;
 	case FACE_UP:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, 100)));
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, 60)));
 		break;
 	case FACE_DOWN:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, -100)));
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, -60)));
 		break;
 	case FACE_LEFT:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(-100, 0)));
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(-60, 0)));
 		break;
 	}
 	auto particleSystem = ParticleAttack("Particles/skill_ice.plist");
@@ -272,7 +275,7 @@ void Player::SetSkillIce()
 }
 void Player::SetSkillDefault()
 {
-	if (m_CurrentSkill != SKILL_DEFAULT) {
+	if (edgeNode->getTag() != ATTACKTAG) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(25, 55));
 		edgeBody->setContactTestBitmask(1);
 		edgeNode->setPhysicsBody(edgeBody);
@@ -281,6 +284,10 @@ void Player::SetSkillDefault()
 	auto particleSystem = ParticleAttack("Particles/PlayerAttack.plist");
 	particleSystem->setPosition(edgeNode->getPosition());
 	sceneGame->addChild(particleSystem);
+}
+void Player::UseStone(int stone)
+{
+	m_CurrentStone = stone;
 }
 void Player::SetState(int state)
 {
@@ -358,70 +365,70 @@ void Player::SetFace()
 }
 
 cocos2d::RepeatForever* Player::MovingRight() {
-	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run");
+	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run", AttackSpeed);
 }
 cocos2d::Animate* Player::AttackRight() {
-	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_1");
+	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_1", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::IdleRight() {
-	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle");
+	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle", AttackSpeed);
 }
 cocos2d::Animate* Player::AttackRightAngry() {
-	return ObjectParent::AnimationObjectOnce(5, "Warrior_Attack_2");
+	return ObjectParent::AnimationObjectOnce(5, "Warrior_Attack_2", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died");
+	return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died", AttackSpeed);
 }
 cocos2d::Animate* Player::HurtRight() {
-	return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt");
+	return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::MovingUp()
 {
-	return ObjectParent::AnimationObjectRepeat(8, "Warrior_Run");
+	return ObjectParent::AnimationObjectRepeat(8, "Warrior_Run", AttackSpeed);
 }
 cocos2d::Animate* Player::AttackUp()
 {
-	return ObjectParent::AnimationObjectOnce(12, "Warrior_Attack_1");
+	return ObjectParent::AnimationObjectOnce(12, "Warrior_Attack_1", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::IdleUp()
 {
-	return ObjectParent::AnimationObjectRepeat(7, "Warrior_Idle");
+	return ObjectParent::AnimationObjectRepeat(7, "Warrior_Idle", AttackSpeed);
 }
 cocos2d::Animate* Player::AttackUpAngry()
 {
-	return ObjectParent::AnimationObjectOnce(11, "Warrior_Attack_2");
+	return ObjectParent::AnimationObjectOnce(11, "Warrior_Attack_2", AttackSpeed);
 }
 cocos2d::Animate* Player::HurtUp()
 {
-	return ObjectParent::AnimationObjectOnce(9, "Warrior_Hurt");
+	return ObjectParent::AnimationObjectOnce(9, "Warrior_Hurt", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::DieUp()
 {
-	return ObjectParent::AnimationObjectRepeat(10, "Warrior_Died");
+	return ObjectParent::AnimationObjectRepeat(10, "Warrior_Died", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::MovingDown()
 {
-	return ObjectParent::AnimationObjectRepeat(14, "Warrior_Run");
+	return ObjectParent::AnimationObjectRepeat(14, "Warrior_Run", AttackSpeed);
 }
 cocos2d::Animate* Player::AttackDown()
 {
-	return ObjectParent::AnimationObjectOnce(18, "Warrior_Attack_1");
+	return ObjectParent::AnimationObjectOnce(18, "Warrior_Attack_1", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::IdleDown()
 {
-	return ObjectParent::AnimationObjectRepeat(13, "Warrior_Idle");
+	return ObjectParent::AnimationObjectRepeat(13, "Warrior_Idle", AttackSpeed);
 }
 cocos2d::Animate* Player::AttackDownAngry()
 {
-	return ObjectParent::AnimationObjectOnce(17, "Warrior_Attack_2");
+	return ObjectParent::AnimationObjectOnce(17, "Warrior_Attack_2", AttackSpeed);
 }
 cocos2d::Animate* Player::HurtDown()
 {
-	return ObjectParent::AnimationObjectOnce(15, "Warrior_Hurt");
+	return ObjectParent::AnimationObjectOnce(15, "Warrior_Hurt", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::DieDown()
 {
-	return ObjectParent::AnimationObjectRepeat(16, "Warrior_Died");
+	return ObjectParent::AnimationObjectRepeat(16, "Warrior_Died", AttackSpeed);
 }
 
 cocos2d::ParticleSystemQuad* Player::ParticleAttack(std::string name)

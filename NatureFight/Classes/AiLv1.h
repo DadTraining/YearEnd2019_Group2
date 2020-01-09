@@ -34,6 +34,7 @@ public:
 	Node* edgeNode;
 	int m_CurrentFace;
 	int m_CurrentState;
+	float AttackSpeed;
 public:
 	AiLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
