@@ -102,7 +102,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     ResourceManager::GetInstance()->Init("Data.bin");
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 4; i++) {
 		std::string loadfile = "DataPlayerLv1_" + std::to_string(i) + ".bin";
 
 		ResourceManager::GetInstance()->Init(loadfile);

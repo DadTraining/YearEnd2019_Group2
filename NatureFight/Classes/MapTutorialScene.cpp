@@ -94,18 +94,12 @@ void MapTutorialScene::addMap()
 	map = TMXTiledMap::create("Map1/map1.tmx");
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setPosition(Vec2(0, 0));
-	CCLOG("AddMap 1******************");
 	MapBackGround = TMXTiledMap::create("Map1/BackGround2.tmx");
-	CCLOG("AddMap 2******************");
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
-	CCLOG("AddMap 3******************");
 	mObjectGroup1 = map->getObjectGroup("event");
-	CCLOG("AddMap 4******************");
 	mPhysicsLayer = map->getLayer("item_3");
-	CCLOG("AddMap 5******************");
 	mPhysicsLayer->setVisible(true);
-	CCLOG("AddMap 6******************");
 	addChild(map,20);
 	addChild(MapBackGround);
 	

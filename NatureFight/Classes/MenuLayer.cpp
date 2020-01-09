@@ -11,16 +11,13 @@ bool MenuLayer::init() {
 	{
 		return false;
 	}
-	CCLOG("MenuLayer 0******************");
 	createButtonLayer();
-	CCLOG("MenuLayer 1******************");
+
 	createJoyStickLayer();
-	CCLOG("MenuLayer 02******************");
+
 	auto camScene = Camera::create();
 	camScene->setCameraFlag(CameraFlag::USER1);
-	CCLOG("MenuLayer 03******************");
 	this->setCameraMask((unsigned short)CameraFlag::USER1);
-	CCLOG("MenuLayer 04******************");
 	this->addChild(camScene);
 	return true;
 }

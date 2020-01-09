@@ -33,7 +33,7 @@ void Player::Init()
 	CCLOG("Player 1******************");
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(10, 10);
-	this->m_sprite->setScale(0.1);
+	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite, 1);
 	CCLOG("Player 3******************");
 	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2);
