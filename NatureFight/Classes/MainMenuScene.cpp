@@ -6,7 +6,17 @@
 #include "SimpleAudioEngine.h"
 Scene* MainMenuScene::createScene()
 {
-	return MainMenuScene::create();
+	// 'scene' is an autorelease object
+	auto scene = Scene::create();
+
+	// 'layer' is an autorelease object
+	auto layer = MainMenuScene::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
 }
 
 using namespace CocosDenshion;
@@ -18,45 +28,40 @@ bool MainMenuScene::init()
 	}
 
 	auto audio = SimpleAudioEngine::getInstance();
-	audio->preloadBackgroundMusic("melodyloops.mp3");
 	audio->playBackgroundMusic("melodyloops.mp3", true);
-	audio->setBackgroundMusicVolume(0.6f);
-	auto titlelb= Label::createWithTTF("Nature Fight", "fonts/MONSTAR.otf", 70);
-	titlelb->setPosition(450, 300);
+	auto titlelb = Label::createWithTTF("Nature \n \n Fight", "fonts/Blazed.ttf", 100);
+	titlelb->setPosition(420, 250);
 	titlelb->setColor(Color3B::RED);
 	addChild(titlelb,1);
-	auto bgimg = Sprite::create("Battleground3.png");
-	bgimg->setScale(0.55);
-	bgimg->setAnchorPoint(Vec2(0.5,0.5));
-	bgimg->setPosition(450, 220);
+	auto bgimg = Sprite::create("settings/bgmain.jpg");
+	bgimg->setScale(0.80);
+	bgimg->setAnchorPoint(Vec2(0.5, 0.5));
+	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
 	addChild(bgimg);
-	auto play = ui::Button::create("play.png");
-	play->setPosition(Vec2(450, 150));
+	auto play = ui::Button::create("settings/playbtn.png");
+	play->setPosition(Vec2(420, 250));
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
 		if (type == ui::Widget::TouchEventType::ENDED) {
-			auto scene = MapTutorialScene::createScene();
-			Director::getInstance()->replaceScene(scene);
+			Director::getInstance()->replaceScene(MapTutorialScene::createScene());
 		}
 	});
 	addChild(play);
-	auto setting = ui::Button::create("settings.png");
+
+	auto setting = ui::Button::create("settings/setting.png");
 	setting->setPosition(Vec2(850, 370));
-	setting->setScale(0.5);
+	setting->setScale(0.6);
 	addChild(setting);
 	setting->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
 		if (type == ui::Widget::TouchEventType::ENDED) {
-			auto scene = SettingScene::createScene();
-			Director::getInstance()->replaceScene(scene);
+			Director::getInstance()->replaceScene(SettingScene::createScene());
 		}
 	});
 
 	return true;
 }
-void MainMenuScene::update(FLOAT deltaTime)
+void MainMenuScene::update(float deltaTime)
 {
 }
-
-

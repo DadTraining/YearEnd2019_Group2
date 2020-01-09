@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 #include<ObjectParent.h>
-#include <AiLv1.h>
 #include <iostream>
 #include <Player.h>
 #include <Npclv1.h>
@@ -11,6 +10,7 @@
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
+#include<AiLv1.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -24,14 +24,17 @@ class MapTutorialScene : public cocos2d::Scene
 public:
 	Player* mainPlayer;
 	AiLv1* ailv1;
+	AiLv1* ailv2;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 //	SneakyJoystickSkinnedBase* joystickBase;
 	Npclv1* npcsolo, *npcYolo;
-	TMXTiledMap* map;
+	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
-	
+	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
+	std::vector<AiLv1*> ai;
+	int countCreepDie=0;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();

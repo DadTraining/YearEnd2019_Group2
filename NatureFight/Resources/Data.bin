@@ -1,27 +1,6 @@
 0SPRITE 2
-1 Sprites/Man1/Goblin/PNG/PNG_Sequences/Running/0_Goblin_Running_000.png
-2 circle-icon-3.jpg
 0BUTTON 5
 5 Button/Button_Attack_Normal.png Button/Button_Attack_Selected.png
 0FONTS 2
 1 fonts/MarkerFelt.ttf
 2 fonts/arial.ttf
-0FrameCache 6
-1 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/PlayerIdleRight.plist
-2 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunRight.plist
-3 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Hurt/PlayerHurtRight.plist
-4 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDiedRight.plist
-5 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_2/PlayerAttackRight.plist
-6 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_1/PlayerAttackRight.plist
-7 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Idle/PlayerIdleUp.plist
-8 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunUp.plist
-9 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Hurt/PlayerHurtUp.plist
-10 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDieUp.plist
-11 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Attack_2/PlayerAttackUp.plist
-12 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Attack_1/PlayerAttackUp.plist
-13 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/PlayerIdleDown.plist
-14 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunDown.plist
-15 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Hurt/PlayerHurtDown.plist
-16 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDieDown.plist
-17 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Attack_2/PlayerAttackDown.plist
-18 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Attack_1/PlayerAttackDown.plist

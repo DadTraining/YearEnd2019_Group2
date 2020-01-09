@@ -33,7 +33,7 @@ void Npclv1::Init()
 	Body->setDynamic(false);
 	Body->setRotationEnable(false);
 	m_sprite->getPhysicsBody()->setCollisionBitmask(Model::BITMASK_NPC);
-	m_sprite->getPhysicsBody()->setContactTestBitmask(true);
+	m_sprite->getPhysicsBody()->setContactTestBitmask(1);
 	
 }
 
@@ -135,7 +135,7 @@ cocos2d::RepeatForever * Npclv1::Hello()
 cocos2d::RepeatForever * Npclv1::Communication()
 {
 	auto spriteCache = SpriteFrameCache::getInstance();
-	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Solo)/PNG/Front/PNG_Sequences/Communication/communication.plist");
+	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Solo)/PNG/Front/PNG_Sequences/Communication/Communication.plist");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	std::string name;
 	for (int i = 0; i < 30; i++) {
@@ -159,24 +159,33 @@ cocos2d::RepeatForever * Npclv1::Communication()
 
 cocos2d::RepeatForever * Npclv1::CommunicationNPCYolo()
 {
+	CCLOG("NPC YOLO 0******************");
 	auto spriteCache = SpriteFrameCache::getInstance();
 	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Yolo)/PNG/PNG_Sequences/Communication/Communication.plist");
+	CCLOG("NPC YOLO 01******************");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	std::string name;
 	for (int i = 0; i < 30; i++) {
 		if (i<10)
 		{
+
 			name = "0_Blacksmith_Communication_00" + std::to_string(i) + ".png";
+			CCLOG("NPC YOLO 02******************");
 		}
 		else {
 			name = "0_Blacksmith_Communication_0" + std::to_string(i) + ".png";
+			CCLOG("NPC YOLO 03******************");
 		}
 
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
+		CCLOG("NPC YOLO 04******************");
 	}
 	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	CCLOG("NPC YOLO 05******************");
 	auto animate = cocos2d::Animate::create(animation);
+	CCLOG("NPC YOLO 06******************");
 	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
+	CCLOG("NPC YOLO END******************");
 
 
 	return repeat;
