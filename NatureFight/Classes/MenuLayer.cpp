@@ -55,9 +55,9 @@ void MenuLayer::createJoyStickLayer()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto particleSystem = ParticleSystemQuad::create("Particles/power.plist");
+	auto particleSystem = ParticleSystemQuad::create("Particles/move2.plist");
 	particleSystem->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height / 2));
+		origin.y + visibleSize.height / 2 - 20));
 	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
 	particleSystem->setScale(0.3f);
 	addChild(particleSystem, 10);
