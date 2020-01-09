@@ -7,6 +7,7 @@ int Player::m_CurrentStone;
 Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
+	Init();
 }
 float timeAttack = 0, timeDie = 0;
 bool checkAttack = false;

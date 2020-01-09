@@ -4,6 +4,7 @@
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
+	Init();
 }
 float timeAttackAI = 0, timeDieAI = 0;
 bool checkAttackAI = false;
@@ -52,7 +53,6 @@ void AiLv1::Init()
 	physicsBodyChar->setCollisionBitmask(101);
 	physicsBodyChar->setContactTestBitmask(1);
 	this->m_sprite->setPhysicsBody(physicsBodyChar);
-	this->m_sprite->setTag(CREEPTAG);
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
@@ -172,6 +172,10 @@ void AiLv1::SetMove(int state)
 		m_sprite->runAction(MovingRight());
 	}
 }
+void AiLv1::SetTagAI(int tag)
+{
+	tagAI = tag;
+}
 void AiLv1::SetState(int state)
 {
 	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0))
@@ -252,7 +256,7 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
-	if (nodeA->getTag() == CREEPTAG & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == CREEPTAG & nodeA->getTag() == ATTACKTAG)
+	if (nodeA->getTag() == m_sprite->getTag() & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == m_sprite->getTag() & nodeA->getTag() == ATTACKTAG)
 	{
 		CCLOG("KILL");
 		SetState(AiLv1::ACTION_HURT);

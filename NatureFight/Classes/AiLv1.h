@@ -13,20 +13,10 @@ class AiLv1 :
 	public ObjectParent
 {
 public:
-	static const int FACE_DEFAULT = 0;
-	static const int FACE_DOWN = 1;
-	static const int FACE_LEFT = 2;
-	static const int FACE_RIGHT = 3;
-	static const int FACE_UP = 4;
+	static const int GOBIN_TAG = 1;
 
-	static const int ACTION_DEFAULT = -1;
-	static const int ACTION_MOVE = 0;
-	static const int ACTION_MOVEDOWN = 1;
-	static const int ACTION_MOVEUP = 2;
-	static const int ACTION_ATTACK = 3;
-	static const int ACTION_IDLE = 6;
-	static const int ACTION_HURT = 9;
-	static const int ACTION_DIE = 10;
+private:
+	int tagAI;
 
 public:
 	PhysicsBody* physicsBodyChar;
@@ -35,7 +25,7 @@ public:
 	int m_CurrentFace;
 	int m_CurrentState;
 	float AttackSpeed;
-	Player* player;
+
 public:
 	AiLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
@@ -51,6 +41,7 @@ public:
 	void SetAttack(int state);
 	void SetHurt(int state);
 	void SetMove(int state);
+	void SetTagAI(int);
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
@@ -75,5 +66,6 @@ public:
 	~AiLv1();
 private:
 	cocos2d::Scene* sceneGame;
+	Player* player;
 };
 #endif // _HERO_SCENE_H_

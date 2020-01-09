@@ -44,12 +44,13 @@ bool MapTutorialScene::init()
 	// end  npc
 
 	mainPlayer = new Player(this);
-	mainPlayer->Init();
-	mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());	
 	
 	ailv1 = new AiLv1(this);
-	ailv1->Init();
-	ailv1->m_sprite->runAction(ailv1->MovingRight());
+	ailv1->SetTagAI(AiLv1::GOBIN_TAG);
+
+	ailv2 = new AiLv1(this);
+	ailv2->m_sprite->setPosition(Vec2(300, 300));
+	ailv2->SetTagAI(AiLv1::GOBIN_TAG+1);
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
@@ -57,12 +58,7 @@ bool MapTutorialScene::init()
 	listener->onTouchEnded = CC_CALLBACK_2(MapTutorialScene::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	/*ailv1 = new AiLv1(this);
-	ailv1->Init();
-	ailv1->m_sprite->runAction(ailv1->MovingRight());*/
 	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-
-	
 
 	auto edgeBody = PhysicsBody::createEdgeBox(map->getContentSize());
 	auto edgeNode = Node::create();
@@ -87,6 +83,7 @@ bool MapTutorialScene::init()
 void MapTutorialScene::update(float deltaTime)
 {
 	ailv1->Collision(mainPlayer,deltaTime);
+	ailv2->Collision(mainPlayer,deltaTime);
 	mainPlayer->Update(deltaTime);
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());

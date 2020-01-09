@@ -17,6 +17,7 @@ class MapTutorialScene : public cocos2d::Scene
 public:
 	Player* mainPlayer;
 	AiLv1* ailv1;
+	AiLv1* ailv2;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 //	SneakyJoystickSkinnedBase* joystickBase;
