@@ -30,6 +30,8 @@ public:
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
+	int questYolo = 0, questSolo;//nhan
+	int c = -1, d = -1;//nhan
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
