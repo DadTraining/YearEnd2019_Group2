@@ -1,10 +1,8 @@
 #include<MenuLayer.h>
 #include<MainMenuScene.h>
 #include<MapTutorialScene.h>
-#include<item-1.h>
 MenuLayer::MenuLayer(Player* mainPlayer) {
 	this->mainPlayer = mainPlayer;
-	//showItemMau(mainPlayer->m_sprite);
 	init();
 }
 
@@ -35,38 +33,46 @@ void MenuLayer::update(float deltaTime) {
 }
 void MenuLayer::createButtonLayer()
 {
-	//icon
+	//
 	item = new ItemLayer();
 	item->Init();
+	item->showIce();
+	item->showFire();
+	item->showToxic();
+	item->showWood();
+	item->showIconSword();
+	item->showIconFire();
+	item->showIconIce();
+	item->showItemBlood();
 	this->addChild(item);
-	
 	//pause
-	auto btnPause = ui::Button::create("pause.png");
-	btnPause->setPosition(Vec2(855, 375));
+	auto btnPause = ui::Button::create("settings/pause.png");
+	btnPause->setPosition(Vec2(880, 400));
+	btnPause->setOpacity(-50);
 	btnPause->setScale(0.35);
 	btnPause->addClickEventListener([](Ref* event) {
 		Director::getInstance()->pause();
 		mPauseLayer->setVisible(true);
 	});
-	addChild(btnPause);
+	addChild(btnPause,10);
 	mPauseLayer = Sprite::create("settings/bg.png");
 	mPauseLayer->setAnchorPoint(Vec2(0.5, 0.5));
-	mPauseLayer->setOpacity(-125);
+	//mPauseLayer->setOpacity(-125);
 	mPauseLayer->setPosition(400, 225);
 	mPauseLayer->setVisible(false);
-	addChild(mPauseLayer, 3);
-	auto paulb = Sprite::create("header.png");
+	addChild(mPauseLayer, 10);
+	auto paulb = Sprite::create("settings/header.png");
 	paulb->setAnchorPoint(Vec2(0.5, 0.5));
 	paulb->setScale(0.6);
 	paulb->setPosition(620, 520);
 	mPauseLayer->addChild(paulb, 1);
-	auto paubg = Sprite::create("table.png");
+	auto paubg = Sprite::create("settings/tablepause.png");
 	paubg->setAnchorPoint(Vec2(0.5, 0.5));
 	paubg->setScale(0.7);
 	paubg->setPosition(630, 400);
 	mPauseLayer->addChild(paubg);
 
-	auto btnHome = ui::Button::create("menu.png");
+	auto btnHome = ui::Button::create("settings/menu.png");
 	btnHome->setPosition(mPauseLayer->getPosition() + Vec2(150, 150));
 	btnHome->setScale(0.5);
 	btnHome->addClickEventListener([](Ref* event) {
@@ -75,7 +81,7 @@ void MenuLayer::createButtonLayer()
 	});
 	mPauseLayer->addChild(btnHome);
 
-	auto btnResume = ui::Button::create("restart.png");
+	auto btnResume = ui::Button::create("settings/restart.png");
 	btnResume->setPosition(mPauseLayer->getPosition() + Vec2(320, 150));
 	btnResume->setScale(0.5);
 	btnResume->addClickEventListener([](Ref* event) {
@@ -132,7 +138,7 @@ void MenuLayer::createJoyStickLayer()
 
 	leftJoystick = joystickBase->getJoystick();
 	leftJoystick->retain();
-	this->addChild(joystickBase, 10);
+	this->addChild(joystickBase, 5);
 }
 
 void MenuLayer::createLabelLayer()

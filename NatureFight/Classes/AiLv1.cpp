@@ -33,7 +33,7 @@ void AiLv1::Init()
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	faceRight = true;
-	this->m_sprite->setScale(0.1);
+	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize()/3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	physicsBodyChar->setDynamic(true);

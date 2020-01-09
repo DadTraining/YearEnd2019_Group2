@@ -27,16 +27,15 @@ bool LoadingScene::init()
 	}
 	//load sound
 	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("melodyloops.mp3");
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 
-
-	auto loadingbar = Sprite::create("loadingbg.png");
-	loadingbar->setPosition(450, 200);
+	auto loadingbar = Sprite::create("settings/loadingbg.png");
+	loadingbar->setPosition(visibleSize/2);
 	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
-	loadingbar->setScale(1.0f);
 	addChild(loadingbar, 1);
-	static auto load = ui::LoadingBar::create("loadingbar.png");
+	static auto load = ui::LoadingBar::create("settings/loadingbar.png");
 	load->setPercent(0);
-	load->setPosition(loadingbar->getPosition() + Vec2(-40, 25));
+	load->setPosition(loadingbar->getPosition() + Vec2(0, 25));
 	load->setScaleX(2.3f);
 	load->setDirection(ui::LoadingBar::Direction::LEFT);
 	addChild(load, 0);

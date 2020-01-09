@@ -1,4 +1,6 @@
 #include <Player.h>
+#include <ItemLayer.h>
+#include <ItemLayer.h>
 #include "SimpleAudioEngine.h"
 #define ATTACK 0
 #define RUN 1
@@ -7,6 +9,7 @@
 #define NpcSolotag 11
 #define NpcYolotag 12
 using namespace CocosDenshion;
+ItemLayer* item1;
 int Player::Level;
 int Player::Exp;
 Player::Player(cocos2d::Scene* scene)
@@ -49,8 +52,6 @@ void Player::Init()
 {
 
 
-
-
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -60,7 +61,7 @@ void Player::Init()
 
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(10, 10);
-	this->m_sprite->setScale(0.1);
+	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2);
 	physicsBody->setDynamic(false);
@@ -80,6 +81,10 @@ void Player::Init()
 	sceneGame->addChild(edgeNode);
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(ATTACKTAG);
+
+	//
+	item1 = new ItemLayer();
+	this->sceneGame->addChild(item1);
 }
 
 void Player::Collision()
@@ -232,6 +237,7 @@ void Player::SetState(int state)
 {
 	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0))
 	{
+
 		switch (state) {
 		case ACTION_IDLE:
 			SetIdle(state);
@@ -276,6 +282,7 @@ void Player::SetState(int state)
 		m_CurrentState = state;
 	}
 }
+
 
 int Player::SetAction()
 {

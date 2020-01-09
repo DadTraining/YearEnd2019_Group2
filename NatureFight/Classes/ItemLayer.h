@@ -8,20 +8,33 @@ class ItemLayer : public cocos2d::Layer
 {
 public:
 	void Init();
-	void showKiem();
-	void showLua();
-	void showBang();
-	void showItemKiem();
-	void showItemLua();
-	void showItemBang();
-	void showItemMau(cocos2d::Sprite* sprite);
-	void getpercent(int x);
+	//
+	void showIconSword();
+	void showIconIce();
+	void showIconFire();
+	//
+	void showItemSword();
+	void showItemFire();
+	void showItemIce();
+	void showItemBlood(/*cocos2d::Sprite* sprite*/);
+	//
+	void getpercentBlood(int x);
+	//da
+	void showFire();
+	void showIce();
+	void showToxic();
+	void showWood();
+
 
 private:
 	cocos2d::ui::LoadingBar* load;
-	cocos2d::Sprite* item_mau;
-	cocos2d::Sprite* icon_kiem;
-	cocos2d::Sprite* icon_lua;
-	cocos2d::Sprite* icon_bang;
+	cocos2d::ui::Button* item_blood;
+	cocos2d::ui::Button* icon_sword;
+	cocos2d::ui::Button* icon_fire;
+	cocos2d::ui::Button* icon_ice;
+	cocos2d::Sprite* Ice;
+	cocos2d::Sprite* fire;
+	cocos2d::Sprite* wood;
+	cocos2d::Sprite* toxic;
 };
 #endif

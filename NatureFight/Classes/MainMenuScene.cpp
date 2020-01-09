@@ -33,12 +33,12 @@ bool MainMenuScene::init()
 	titlelb->setPosition(450, 300);
 	titlelb->setColor(Color3B::RED);
 	addChild(titlelb,1);
-	auto bgimg = Sprite::create("Battleground3.png");
+	auto bgimg = Sprite::create("settings/Battleground3.png");
 	bgimg->setScale(0.55);
 	bgimg->setAnchorPoint(Vec2(0.5,0.5));
 	bgimg->setPosition(450, 220);
 	addChild(bgimg);
-	auto play = ui::Button::create("play.png");
+	auto play = ui::Button::create("settings/play.png");
 	play->setPosition(Vec2(450, 150));
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
@@ -48,7 +48,7 @@ bool MainMenuScene::init()
 		}
 	});
 	addChild(play);
-	auto setting = ui::Button::create("settings.png");
+	auto setting = ui::Button::create("settings/settings.png");
 	setting->setPosition(Vec2(850, 370));
 	setting->setScale(0.5);
 	addChild(setting);

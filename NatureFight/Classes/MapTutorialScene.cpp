@@ -1,6 +1,5 @@
 #include "MapTutorialScene.h"
 #include "MenuLayer.h"
-#include "item-1.h"
 using namespace std;
 float times = 0;
 Sprite* quest;
