@@ -46,18 +46,17 @@ void MenuLayer::createButtonLayer()
 	item->showItemBlood();
 	this->addChild(item);
 	//pause
-	auto btnPause = ui::Button::create("settings/pause.png");
+	auto btnPause = ui::Button::create("settings/pausebtn.png");
 	btnPause->setPosition(Vec2(880, 400));
-	btnPause->setOpacity(-50);
-	btnPause->setScale(0.35);
 	btnPause->addClickEventListener([](Ref* event) {
 		Director::getInstance()->pause();
 		mPauseLayer->setVisible(true);
 	});
 	addChild(btnPause,10);
 	mPauseLayer = Sprite::create("settings/bg.png");
+	mPauseLayer->setColor(Color3B::BLACK);
 	mPauseLayer->setAnchorPoint(Vec2(0.5, 0.5));
-	//mPauseLayer->setOpacity(-125);
+	mPauseLayer->setOpacity(-80);
 	mPauseLayer->setPosition(400, 225);
 	mPauseLayer->setVisible(false);
 	addChild(mPauseLayer, 10);

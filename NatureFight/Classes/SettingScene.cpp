@@ -31,9 +31,14 @@ bool SettingScene::init()
 	{
 		return false;
 	}
-
+	auto bgimg = Sprite::create("settings/bgmain.jpg");
+	bgimg->setScale(0.80);
+	bgimg->setOpacity(-150);
+	bgimg->setAnchorPoint(Vec2(0.5, 0.5));
+	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
+	addChild(bgimg);
 	auto bg = Sprite::create("settings/bg.png");
-	bg->setPosition(Vec2(450, 210));
+	bg->setPosition(Director::getInstance()->getVisibleSize() / 2);
 	bg->setScale(0.45);
 	addChild(bg, 1);
 	auto bglb = Sprite::create("settings/92.png");
