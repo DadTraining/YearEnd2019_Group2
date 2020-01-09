@@ -217,6 +217,9 @@ void Player::SetHurt(int state) {
 	}
 	CCLOG("%d", m_health);
 }
+void Player::SetMove(int state)
+{
+}
 void Player::SetSkill()
 {
 	switch (m_CurrentSkill)

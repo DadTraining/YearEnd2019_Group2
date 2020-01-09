@@ -50,7 +50,6 @@ bool MapTutorialScene::init()
 	ailv1 = new AiLv1(this);
 	ailv1->Init();
 	ailv1->m_sprite->runAction(ailv1->MovingRight());
-	ailv1->m_sprite->setTag(AILV1);
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
@@ -76,6 +75,7 @@ bool MapTutorialScene::init()
 	contactListener->onContactPreSolve = CC_CALLBACK_1(MapTutorialScene::onContactPreSolve, this);
 	contactListener->onContactSeparate = CC_CALLBACK_1(MapTutorialScene::onContactSeparate, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+	
 
 	Quest(); // Button display quest
 	//createPhysicMap();
@@ -149,19 +149,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			questYolo = 1;
 			d += 1;
 		}
-		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
-		{
-			CCLOG("KILL");
-			ailv1->SetState(AiLv1::ACTION_HURT);
-			if (ailv1->m_health == 0) {
-				ailv1->m_sprite->runAction(ailv1->DieRight());
-				ailv1->physicsBodyChar->setEnabled(false);
-				mainPlayer->Exp += 20;
-				mainPlayer->Level++;
-				ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
-				mainPlayer->updateLevel();
-			}
-		}
+		
 	}
 	return true;
 
@@ -223,7 +211,6 @@ void MapTutorialScene::Quest()
 		this->addChild(label2, 102 + i);
 		vlabel.push_back(label2);
 	}
-
 
 	auto button = ui::Button::create("Button/buttons/normal/records.png", "Button/buttons/click/records.png", "Button/buttons/hover/records.png");
 	button->setPosition(Vec2(890, 400));

@@ -35,12 +35,15 @@ public:
 	int m_CurrentFace;
 	int m_CurrentState;
 	float AttackSpeed;
+	Player* player;
 public:
 	AiLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
 	void Init();
 	void Collision(Player* player, float deltaTime);
 	float Distance(Vec2 A, Vec2 C);
+	bool onContactBegin(const PhysicsContact& contact);
+
 	void SetFace();
 	void SetState(int);
 	void SetIdle(int);

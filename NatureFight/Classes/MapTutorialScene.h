@@ -38,7 +38,7 @@ public:
 	void MovePlayer();
 	void Quest(); // Button display quest
 	//void createPhysicMap();
-	bool onContactBegin(const PhysicsContact& contact);
+	virtual bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
 };

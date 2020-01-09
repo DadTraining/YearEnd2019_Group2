@@ -17,7 +17,7 @@ void AiLv1::Update(float deltaTime)
 			m_sprite->setPosition(10, 10);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
-			edgeNode->setPosition(Vec2(1000, 1000));
+			edgeNode->setPosition(Vec2(10000, 1000));
 			physicsBodyChar->setEnabled(true);
 		}
 	}
@@ -65,11 +65,16 @@ void AiLv1::Init()
 	sceneGame->addChild(edgeNode);
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(CREEPATTACK);
+
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(AiLv1::onContactBegin, this);
+	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener,sceneGame);
 }
 
 float timem = 0;
 void AiLv1::Collision(Player* player, float deltaTime)
 {
+	this->player = player;
 	Update(deltaTime);
 	timem += deltaTime;
 	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
@@ -241,4 +246,24 @@ cocos2d::RepeatForever* AiLv1::DieDown() { return NULL; }
 
 float AiLv1::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
+}
+
+bool AiLv1::onContactBegin(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA->getTag() == CREEPTAG & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == CREEPTAG & nodeA->getTag() == ATTACKTAG)
+	{
+		CCLOG("KILL");
+		SetState(AiLv1::ACTION_HURT);
+		if (m_health == 0) {
+			m_sprite->runAction(DieRight());
+			physicsBodyChar->setEnabled(false);
+			player->Exp += 20;
+			player->Level++;
+			ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+			player->updateLevel();
+		}
+	}
+	return true;
 }
