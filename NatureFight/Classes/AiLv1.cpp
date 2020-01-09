@@ -159,8 +159,6 @@ void AiLv1::SetAttack(int state) {
 void AiLv1::SetHurt(int state) {
 	m_sprite->stopAllActions();
 	m_sprite->runAction(HurtRight());
-	m_health -= 10;
-	CCLOG("%d", m_health);
 }
 void AiLv1::SetMove(int state)
 {
@@ -174,7 +172,7 @@ void AiLv1::SetMove(int state)
 }
 void AiLv1::SetTagAI(int tag)
 {
-	tagAI = tag;
+	m_sprite->setTag(tag);
 }
 void AiLv1::SetState(int state)
 {
@@ -258,7 +256,8 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 	if (nodeA->getTag() == m_sprite->getTag() & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == m_sprite->getTag() & nodeA->getTag() == ATTACKTAG)
 	{
-		CCLOG("KILL");
+		m_health -= 10;
+		CCLOG("%d", m_health);
 		SetState(AiLv1::ACTION_HURT);
 		if (m_health == 0) {
 			m_sprite->runAction(DieRight());
