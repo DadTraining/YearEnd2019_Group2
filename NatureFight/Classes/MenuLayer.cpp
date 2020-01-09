@@ -1,4 +1,5 @@
 #include<MenuLayer.h>
+
 MenuLayer::MenuLayer(Player* mainPlayer) {
 	this->mainPlayer = mainPlayer;
 	init();
@@ -98,7 +99,7 @@ void MenuLayer::createLabelLayer()
 
 }
 /////////////////////////begin nhan
-
+std::vector<Label*> vlabel1,vlabel2;
 int count1 = 0;//nhan
 void MenuLayer::Quest()
 {
@@ -108,32 +109,32 @@ void MenuLayer::Quest()
 	quest->setAnchorPoint(Point(0.0f, 1.0f));
 	addChild(quest, 80);
 	quest->setOpacity(0);
-	//
+	
 	//Quest 1 of Yolo
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	label1 = Label::createWithSystemFont("Danh 3 con quai Goblin (" + std::to_string(i) + " / 3)", "Arial", 16);
-	//	label1->setAnchorPoint(Vec2(0, 1));
-	//	label1->setPositionX(quest->getPositionX() + 20);
-	//	label1->setPositionY(quest->getPositionY() - 20);
-	//	label1->setTextColor(Color4B::BLACK);
-	//	label1->setVisible(false);
-	//	this->addChild(label1, 97 + i);
-	//	vlabel1.push_back(label1);
-	//}
-	////Quest 2 of Solo
+	for (int i = 0; i < 4; i++)
+	{
+		label1 = Label::createWithSystemFont("Danh 3 con quai Goblin (" + std::to_string(i) + " / 3)", "Arial", 16);
+		label1->setAnchorPoint(Vec2(0, 1));
+		label1->setPositionX(quest->getPositionX() + 20);
+		label1->setPositionY(quest->getPositionY() - 20);
+		label1->setTextColor(Color4B::BLACK);
+		label1->setVisible(false);
+		this->addChild(label1, 97 + i);
+		vlabel1.push_back(label1);
+	}
+	//Quest 2 of Solo
 
-	//for (int i = 0; i <= 6; i++)
-	//{
-	//	label2 = Label::createWithSystemFont("Danh 6 con quai Goblin (" + std::to_string(i) + " / 6)", "Arial", 16);
-	//	label2->setAnchorPoint(Vec2(0, 1));
-	//	label2->setPositionX(quest->getPositionX() + 20);
-	//	label2->setPositionY(label1->getPositionY() - 30);
-	//	label2->setTextColor(Color4B::BLACK);
-	//	label2->setVisible(false);
-	//	this->addChild(label2, 102 + i);
-	//	vlabel.push_back(label2);
-	//}
+	for (int i = 0; i <= 6; i++)
+	{
+		label2 = Label::createWithSystemFont("Danh 6 con quai Goblin (" + std::to_string(i) + " / 6)", "Arial", 16);
+		label2->setAnchorPoint(Vec2(0, 1));
+		label2->setPositionX(quest->getPositionX() + 20);
+		label2->setPositionY(label1->getPositionY() - 30);
+		label2->setTextColor(Color4B::BLACK);
+		label2->setVisible(false);
+		this->addChild(label2, 102 + i);
+		vlabel2.push_back(label2);
+	}
 
 
 	auto buttonQuest = ui::Button::create("Button/buttons/normal/records.png", "Button/buttons/click/records.png", "Button/buttons/hover/records.png");
@@ -149,7 +150,6 @@ void MenuLayer::Quest()
 			count1 += 1;
 			break;
 		}
-
 		case ui::Widget::TouchEventType::ENDED:
 		{
 			auto fadeIn = FadeIn::create(0.1f);

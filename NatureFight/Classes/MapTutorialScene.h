@@ -10,6 +10,7 @@
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
+#include<AiLv1.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -22,6 +23,7 @@ class MapTutorialScene : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
+	AiLv1* ailv1;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 //	SneakyJoystickSkinnedBase* joystickBase;
@@ -30,8 +32,7 @@ public:
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
-	int questYolo = 0, questSolo;//nhan
-	int c = -1, d = -1;//nhan
+	std::vector<AiLv1*> ai;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();

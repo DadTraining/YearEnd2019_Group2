@@ -302,7 +302,7 @@ cocos2d::RepeatForever* Player::MovingRight() {
 	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run");
 }
 cocos2d::Animate* Player::AttackRight() {
-	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_1");
+	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2");
 }
 cocos2d::RepeatForever* Player::IdleRight() {
 	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle");

@@ -46,7 +46,7 @@ bool MapTutorialScene::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	CCLOG("LoadMapTutorial 5******************");
-	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc
@@ -74,7 +74,14 @@ void MapTutorialScene::update(float deltaTime)
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
-
+	for (int i = 0; i < ai.size(); i++) {
+		ai[i]->Collision(mainPlayer, deltaTime);
+		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
+			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
+		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
+		ai[i]->Collision(mainPlayer, deltaTime);
+		ai[i]->Update(deltaTime);
+	}
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -119,7 +126,8 @@ void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event
 	}
 }
 //nhan
-
+int questYolo = 0, questSolo;//nhan
+int c = -1, d = -1;//nhan
 bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
@@ -139,18 +147,18 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			questYolo = 1;
 			d += 1;
 		}
-		/*if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 		{
-			CCLOG("KILL");
-			ailv1->m_sprite->stopAllActions();
-			ailv1->m_sprite->runAction(ailv1->HurtRight());
-			ailv1->health -= 10;
-			if (ailv1->health <= 0) {
-				ailv1->m_sprite->runAction(ailv1->DieRight());
-				ailv1->physicsBodyChar->setEnabled(false);
-				mainPlayer->Exp += 20;
+			for (int i = 0; i < ai.size(); i++) {
+				CCLOG("KILL");
+				ai[i]->SetState(AiLv1::ACTION_HURT);
+				if (ai[i]->m_health <= 0) {
+					ai[i]->SetState(AiLv1::ACTION_DIE);
+					ai[i]->physicsBodyChar->setEnabled(false);
+					mainPlayer->Exp += 20;
+				}
 			}
-		}*/
+		}
 	}
 	return true;
 
@@ -275,14 +283,15 @@ void MapTutorialScene::createPhysicMap()
 			npcYolo->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 325******************");
 		}
-		/*if (type == 1)
+		if (type == 1)
 		{
-			ailv1 = new AiLv1(this);
-			ailv1->Init();
-			ailv1->m_sprite->runAction(ailv1->MovingRight());
-			ailv1->m_sprite->setTag(AILV1);
-			ailv1->m_sprite->setPosition(Vec2(posX, posY));
-		}*/
+			AiLv1* ailv = new AiLv1(this);
+			ailv->Init();
+			ailv->m_sprite->runAction(ailv->IdleRight());
+			ailv->m_sprite->setTag(AILV1);
+			ailv->m_sprite->setPosition(Vec2(posX, posY));
+			ai.push_back(ailv);
+		}
 	}
 	CCLOG("LoadMapTutorial 3 END******************");
 }

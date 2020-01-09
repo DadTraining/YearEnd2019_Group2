@@ -15,22 +15,16 @@ cocos2d::RepeatForever* ObjectParent::AnimationObjectRepeat(int id, std::string 
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	int i = 0;
 	std::string link;
-	CCLOG("MainPlayer Idle 0******************");
 	while(true){
 		if (i < 10)link = "0_" + name + "_00" + std::to_string(i) + ".png";
-		CCLOG("MainPlayer Idle 01******************");
 		if (i >= 10) link = "0_" + name + "_0" + std::to_string(i) + ".png";
-		CCLOG("MainPlayer Idle 02******************");
 		if (spriteCache->getSpriteFrameByName(link) == nullptr) break;
-		CCLOG("MainPlayer Idle 01******************");
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
-		CCLOG("MainPlayer Idle 01******************");
 		i++;
 	}
 	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
 	auto animate = cocos2d::Animate::create(animation);
 	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
-	CCLOG("MainPlayer Idle 01******************");
 	return repeat;
 }
 
