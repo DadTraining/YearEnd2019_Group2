@@ -4,8 +4,9 @@
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
+	Init();
 }
-float timeAttackAI = 0, timeDieAI = 0,timeColor=0;
+float timeAttackAI = 0, timeDieAI = 0, timeColor = 0;
 bool checkAttackAI = false;
 void AiLv1::Update(float deltaTime)
 {
@@ -36,12 +37,11 @@ void AiLv1::Update(float deltaTime)
 	}
 	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
 		timeColor += deltaTime;
-		if (timeColor >= 2) {
+		if (timeColor >= 1) {
 			m_sprite->setColor(ccc3(255, 255, 255));
 			timeColor = 0;
 		}
 	}
-
 }
 
 
@@ -50,23 +50,24 @@ void AiLv1::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	this->m_sprite = cocos2d::Sprite::create("Sprites/Man1/Goblin/PNG/PNG_Sequences/Idle/0_Goblin_Idle_000.png");
+	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
-	this->m_sprite->setScale(0.1);
+	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
-	physicsBodyChar->setDynamic(true);
+	//physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
-	physicsBodyChar->setCollisionBitmask(101);
+	physicsBodyChar->setCollisionBitmask(Model::BITMASK_MONSTER);
 	physicsBodyChar->setContactTestBitmask(1);
 	this->m_sprite->setPhysicsBody(physicsBodyChar);
 	this->m_sprite->setTag(AILV1);
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
-
+	AttackSpeed = 1;
 	auto edgeBody = PhysicsBody::createEdgeBox(Size(20, 20));
-	edgeBody->setContactTestBitmask(1);
+	edgeBody->setContactTestBitmask(Model::BITMASK_MONSTER);
+	edgeBody->setCollisionBitmask(false);
 	edgeNode = Node::create();
 	edgeNode->setPosition(m_sprite->getPosition());
 	sceneGame->addChild(edgeNode);
@@ -77,29 +78,13 @@ void AiLv1::Init()
 float timem = 0;
 void AiLv1::Collision(Player* player, float deltaTime)
 {
-	Update(deltaTime);
 	timem += deltaTime;
 	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
-			this->m_sprite->getPhysicsBody()->setVelocity(Vec2(0, 0));
-			if (timem>=2)
-			{
-				SetState(AiLv1::ACTION_ATTACK);
-				timem = 0;
-			}	
+		if (timem > 1.0f) {
+			SetState(AiLv1::ACTION_ATTACK);
+			timem = 0;
+		}
 	}
-	else if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80) {
-		this->physicsBodyChar->setVelocity((player->m_sprite->getPosition() - this->m_sprite->getPosition()) / 2);
-			SetState(AiLv1::ACTION_MOVE);
-	}
-	else
-	{
-			SetState(AiLv1::ACTION_IDLE);
-	}
-	//if (this->m_health <= 0) {
-	//	this->SetState(AiLv1::ACTION_DIE);
-	//	this->physicsBodyChar->setEnabled(false);
-	//	player->Exp += 20;
-	//}
 }
 
 void AiLv1::SetIdle(int state) {
@@ -124,64 +109,69 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
-		switch (m_CurrentFace)
-		{
-		case FACE_LEFT:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
-			}
-			break;
-		case FACE_RIGHT:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
-
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
-			}
-			break;
-		case FACE_UP:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
-			}
-			break;
-		case FACE_DOWN:
-			if (state != m_CurrentState) {
-				m_sprite->stopAllActions();
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
-			}
-			else if (m_sprite->getNumberOfRunningActions() == 0) {
-				m_sprite->runAction(AttackRight());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
-			}
-			break;
+	switch (m_CurrentFace)
+	{
+	case FACE_LEFT:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
 		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
+		}
+		break;
+	case FACE_RIGHT:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
+
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
+		}
+		break;
+	case FACE_UP:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+		}
+		break;
+	case FACE_DOWN:
+		if (state != m_CurrentState) {
+			m_sprite->stopAllActions();
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+		}
+		else if (m_sprite->getNumberOfRunningActions() == 0) {
+			m_sprite->runAction(AttackRight());
+			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+		}
+		break;
+	}
 }
-void AiLv1::SetHurt(int state,int skill) {
+void AiLv1::SetHurt(int state)
+{
+}
+void AiLv1::SetHurtAi(int state,int skill) {
 	if (state != m_CurrentState) {
 		m_sprite->stopAllActions();
 		m_health -= 10;
 		if (skill == NORMALSKILL) {
 			m_sprite->setColor(ccc3(255, 0, 0));
-		}else if (skill == SKILLICE) {
+		}
+		else if (skill == SKILLICE) {
 			m_sprite->setColor(ccc3(0, 0, 255));
-		}else if (skill == SKILLFIRE) {
+		}
+		else if (skill == SKILLFIRE) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
 	}
@@ -216,13 +206,19 @@ void AiLv1::SetState(int state)
 			SetAttack(state);
 			break;
 		case ACTION_HURT:
-			SetHurt(state, NORMALSKILL);
+			SetHurtAi(state, NORMALSKILL);
 			break;
 		case ACTION_DIE:
 			SetDie(state);
+			break;
 		case ACTION_HURT_ICE:
-			SetHurt(state, SKILLICE);
+			SetHurtAi(state, SKILLICE);
+			break;
+		case ACTION_HURT_FIRE:
+			SetHurtAi(state, SKILLFIRE);
+			break;
 		}
+
 		m_CurrentState = state;
 	}
 }
@@ -244,26 +240,28 @@ void AiLv1::SetFace()
 	}
 }
 
+void AiLv1::setIndex(int index)
+{
+	this->m_sprite->getPhysicsBody()->setGroup(index);
+}
+
 cocos2d::RepeatForever* AiLv1::MovingRight() {
-	return ObjectParent::AnimationObjectRepeat(101, "Goblin_Running");
+	return ObjectParent::AnimationObjectRepeat(101, "Goblin_Running", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::AttackRight() {
-	return ObjectParent::AnimationObjectOnce(102, "Goblin_Slashing");
-}
-cocos2d::Animate* AiLv1::KickRight() {
-	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking");
+	return ObjectParent::AnimationObjectOnce(102, "Goblin_Slashing", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::IdleRight() {
-	return ObjectParent::AnimationObjectRepeat(100, "Goblin_Idle");
+	return ObjectParent::AnimationObjectRepeat(100, "Goblin_Idle", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::AttackRightAngry() {
-	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking");
+	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(104, "Goblin_Dying");
+	return ObjectParent::AnimationObjectRepeat(104, "Goblin_Dying", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::HurtRight() {
-	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt");
+	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::MovingUp() { return NULL; }
 cocos2d::Animate* AiLv1::AttackUp() { return NULL; }

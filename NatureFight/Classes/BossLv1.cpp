@@ -248,22 +248,22 @@ void BossLv1::SetFace()
 }
 
 cocos2d::RepeatForever* BossLv1::MovingRight() {
-	return ObjectParent::AnimationObjectRepeat(107, "Ogre_Running");
+	return ObjectParent::AnimationObjectRepeat(107, "Ogre_Running", AttackSpeed);
 }
 cocos2d::Animate* BossLv1::AttackRight() {
-	return ObjectParent::AnimationObjectOnce(108, "Ogre_Slashing");
+	return ObjectParent::AnimationObjectOnce(108, "Ogre_Slashing", AttackSpeed);
 }
 cocos2d::RepeatForever* BossLv1::IdleRight() {
-	return ObjectParent::AnimationObjectRepeat(106, "Ogre_Idle");
+	return ObjectParent::AnimationObjectRepeat(106, "Ogre_Idle", AttackSpeed);
 }
 cocos2d::Animate* BossLv1::AttackRightAngry() {
-	return ObjectParent::AnimationObjectOnce(105, "Ogre_Kicking");
+	return ObjectParent::AnimationObjectOnce(105, "Ogre_Kicking", AttackSpeed);
 }
 cocos2d::RepeatForever* BossLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(104, "Ogre_Dying");
+	return ObjectParent::AnimationObjectRepeat(104, "Ogre_Dying", AttackSpeed);
 }
 cocos2d::Animate* BossLv1::HurtRight() {
-	return ObjectParent::AnimationObjectOnce(103, "Ogre_Hurt");
+	return ObjectParent::AnimationObjectOnce(103, "Ogre_Hurt",AttackSpeed);
 }
 cocos2d::RepeatForever* BossLv1::MovingUp() { return NULL; }
 cocos2d::Animate* BossLv1::AttackUp() { return NULL; }

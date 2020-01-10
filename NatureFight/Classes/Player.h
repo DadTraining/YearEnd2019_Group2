@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "ObjectParent.h"
 #include <vector> 
+#include<Model.h>
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
@@ -14,37 +15,32 @@ class Player :
 	public ObjectParent
 {
 public:
-	static const int FACE_DEFAULT = 0;
-	static const int FACE_DOWN = 1;
-	static const int FACE_LEFT = 2;
-	static const int FACE_RIGHT = 3;
-	static const int FACE_UP = 4;
-
-	static const int ACTION_DEFAULT = -1;
-	static const int ACTION_MOVE = 0;
-	static const int ACTION_MOVEDOWN = 1;
-	static const int ACTION_MOVEUP = 2;
-	static const int ACTION_ATTACK = 3;
-	static const int ACTION_IDLE = 6;
-	static const int ACTION_HURT = 9;
-	static const int ACTION_DIE = 10;
-
 	static const int SKILL_DEFAULT = -1;
 	static const int SKILL_FIRE = 1;
 	static const int SKILL_ICE = 2;
 
-public: 
+	static const int STONE_CBN = 1;
+	static const int STONE_FIRE = 2;
+
+public:
 	PhysicsBody* physicsBody;
 	Node* edgeNode;
+	int m_CurrentSkill;
+
 	static int Level;
 	static int Exp;
+
+	bool haveSword;
+	bool haveMagicSword;
+
+	bool haveHeatBalanceStone;
+	bool haveFireStone;
+
+	bool haveMask;
+
 private:
-	int m_CurrentFace;
-	int m_CurrentState;
-	int m_CurrentSkill;
 	cocos2d::Scene* sceneGame;
-	int m_health;
-	int m_dame;
+	static int m_CurrentStone;
 public:
 	Player(cocos2d::Scene* scene);
 	void Update(float deltaTime);
@@ -64,6 +60,7 @@ public:
 	void SetSkillIce();
 	void SetSkillDefault();
 
+	void UseStone(int);
 	~Player();
 
 	cocos2d::RepeatForever* MovingRight();
