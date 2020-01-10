@@ -24,6 +24,7 @@ class MapTutorialScene : public cocos2d::Scene
 public:
 	Player* mainPlayer;
 	AiLv1* ailv1;
+	AiLv1* ailv2;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 //	SneakyJoystickSkinnedBase* joystickBase;
@@ -33,6 +34,7 @@ public:
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
+	int countCreepDie=0;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();

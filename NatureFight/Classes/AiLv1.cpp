@@ -4,6 +4,7 @@
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
+	Init();
 }
 float timeAttackAI = 0, timeDieAI = 0;
 bool checkAttackAI = false;
@@ -209,22 +210,22 @@ void AiLv1::SetFace()
 }
 
 cocos2d::RepeatForever* AiLv1::MovingRight() {
-	return ObjectParent::AnimationObjectRepeat(101, "Goblin_Running");
+	return ObjectParent::AnimationObjectRepeat(101, "Goblin_Running", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::AttackRight() {
-	return ObjectParent::AnimationObjectOnce(102, "Goblin_Slashing");
+	return ObjectParent::AnimationObjectOnce(102, "Goblin_Slashing", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::IdleRight() {
-	return ObjectParent::AnimationObjectRepeat(100, "Goblin_Idle");
+	return ObjectParent::AnimationObjectRepeat(100, "Goblin_Idle", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::AttackRightAngry() {
-	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking");
+	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(104, "Goblin_Dying");
+	return ObjectParent::AnimationObjectRepeat(104, "Goblin_Dying", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::HurtRight() {
-	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt");
+	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt", AttackSpeed);
 }
 cocos2d::RepeatForever* AiLv1::MovingUp() { return NULL; }
 cocos2d::Animate* AiLv1::AttackUp() { return NULL; }

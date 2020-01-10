@@ -79,8 +79,6 @@ void MapTutorialScene::update(float deltaTime)
 		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
 			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
 		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-		ai[i]->Collision(mainPlayer, deltaTime);
-		ai[i]->Update(deltaTime);
 	}
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -126,8 +124,7 @@ void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event
 	}
 }
 //nhan
-int questYolo = 0, questSolo;//nhan
-int c = -1, d = -1;//nhan
+
 bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
@@ -136,16 +133,14 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 	{
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcSolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcSolotag)
 		{
-			questSolo = 2;
+			menuLayer->setQuestSolo(2);
 			npcsolo->Collision();
-			c += 1;
 
 		}
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
 		{
 			npcYolo->Collision1();
-			questYolo = 1;
-			d += 1;
+			menuLayer->setQuestYolo(1);
 		}
 		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 		{
@@ -156,6 +151,8 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 					ai[i]->SetState(AiLv1::ACTION_DIE);
 					ai[i]->physicsBodyChar->setEnabled(false);
 					mainPlayer->Exp += 20;
+					countCreepDie = 1;
+					menuLayer->setD(countCreepDie);
 				}
 			}
 		}
@@ -249,10 +246,6 @@ void MapTutorialScene::createPhysicMap()
 		{
 			//
 			mainPlayer = new Player(this);
-			CCLOG("LoadMapTutorial 314******************");
-			mainPlayer->Init();
-			CCLOG("LoadMapTutorial 315******************");
-			mainPlayer->m_sprite->runAction(mainPlayer->IdleRight());
 			CCLOG("LoadMapTutorial 316******************");
 			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 317******************");
@@ -286,8 +279,6 @@ void MapTutorialScene::createPhysicMap()
 		if (type == 1)
 		{
 			AiLv1* ailv = new AiLv1(this);
-			ailv->Init();
-			ailv->m_sprite->runAction(ailv->IdleRight());
 			ailv->m_sprite->setTag(AILV1);
 			ailv->m_sprite->setPosition(Vec2(posX, posY));
 			ai.push_back(ailv);
