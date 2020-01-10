@@ -40,11 +40,8 @@ bool LoadingScene::init()
 	addChild(load, 0);
 	auto updateLoadingBar = CallFunc::create([]() {
 		if (load->getPercent() < 100)
-		{
-			/*i++;
-			std::string loaddata = "Data" + std::to_string(i) + ".bin";
+		{	
 			load->setPercent(load->getPercent() + 4);
-			if (i <= 4) ResourceManager::GetInstance()->Init(loaddata);*/
 		}
 
 	});

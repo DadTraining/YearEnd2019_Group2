@@ -13,6 +13,8 @@ bool MenuLayer::init() {
 		return false;
 	}
 	createButtonLayer();
+	createSkillFire();
+	createSkillIce();
 
 	createJoyStickLayer();
 
@@ -36,49 +38,49 @@ void MenuLayer::update(float deltaTime) {
 cocos2d::Sprite* mPauseLayer;
 void MenuLayer::createButtonLayer()
 {
-	
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 		//
 		item = new ItemLayer();
 		item->Init();
-		item->showIce();
-		item->showFire();
 		item->showToxic();
 		item->showWood();
 		item->showIconSword();
-		item->showIconFire();
-		item->showIconIce();
+		item->showIce();
+		item->showFire();
 		item->showItemBlood();
 		this->addChild(item);
 		//pause
 		auto btnPause = ui::Button::create("settings/pause.png");
-		btnPause->setPosition(Vec2(880, 400));
+		btnPause->setPosition(Vec2(visibleSize));
+		btnPause->setAnchorPoint(Vec2(1,1));
 		btnPause->setOpacity(-50);
-		btnPause->setScale(0.35);
+		btnPause->setScale(0.2);
 		btnPause->addClickEventListener([](Ref* event) {
 			Director::getInstance()->pause();
 			mPauseLayer->setVisible(true);
 		});
 		addChild(btnPause, 10);
 		mPauseLayer = Sprite::create("settings/bg.png");
-		mPauseLayer->setAnchorPoint(Vec2(0.5, 0.5));
+		//mPauseLayer->setAnchorPoint(Vec2(0.5, 0.5));
 		//mPauseLayer->setOpacity(-125);
-		mPauseLayer->setPosition(400, 225);
+		mPauseLayer->setScale(0.3);
+		mPauseLayer->setPosition(Vec2(visibleSize/2));
 		mPauseLayer->setVisible(false);
 		addChild(mPauseLayer, 10);
 		auto paulb = Sprite::create("settings/header.png");
-		paulb->setAnchorPoint(Vec2(0.5, 0.5));
-		paulb->setScale(0.6);
-		paulb->setPosition(620, 520);
+		//paulb->setAnchorPoint(Vec2(0.5, 0.5));
+		paulb->setScale(0.8);
+		paulb->setPosition(mPauseLayer->getPosition() + Vec2(250,380));
 		mPauseLayer->addChild(paulb, 1);
 		auto paubg = Sprite::create("settings/tablepause.png");
-		paubg->setAnchorPoint(Vec2(0.5, 0.5));
-		paubg->setScale(0.7);
-		paubg->setPosition(630, 400);
+		//paubg->setAnchorPoint(Vec2(0.5, 0.5));
+		paubg->setScale(1.4);
+		paubg->setPosition(Vec2(visibleSize/2) + Vec2(170,270));
 		mPauseLayer->addChild(paubg);
 
 		auto btnHome = ui::Button::create("settings/menu.png");
-		btnHome->setPosition(mPauseLayer->getPosition() + Vec2(150, 150));
-		btnHome->setScale(0.5);
+		btnHome->setPosition(mPauseLayer->getPosition() + Vec2(100, 150));
+		//btnHome->setScale(0.5);
 		btnHome->addClickEventListener([](Ref* event) {
 			Director::getInstance()->resume();
 			Director::getInstance()->replaceScene(MainMenuScene::createScene());
@@ -86,8 +88,8 @@ void MenuLayer::createButtonLayer()
 		mPauseLayer->addChild(btnHome);
 
 		auto btnResume = ui::Button::create("settings/restart.png");
-		btnResume->setPosition(mPauseLayer->getPosition() + Vec2(320, 150));
-		btnResume->setScale(0.5);
+		btnResume->setPosition(mPauseLayer->getPosition() + Vec2(350, 150));
+		//btnResume->setScale(0.5);
 		btnResume->addClickEventListener([](Ref* event) {
 			Director::getInstance()->resume();
 			mPauseLayer->setVisible(false);
@@ -96,7 +98,7 @@ void MenuLayer::createButtonLayer()
 ////////
 
 	auto ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+	
 	ButtonAttack->setPosition(Vec2(visibleSize.width,0));
 	ButtonAttack->setAnchorPoint(Vec2(1, 0));
 	ButtonAttack->setScale(0.3f);
@@ -106,6 +108,7 @@ void MenuLayer::createButtonLayer()
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
 			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_DEFAULT;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeCount = 0;
 			}
@@ -155,9 +158,66 @@ void MenuLayer::createJoyStickLayer()
 	this->addChild(joystickBase, 10);
 }
 
-void MenuLayer::createLabelLayer()
+void MenuLayer::createSkillIce()
 {
+	auto icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
+	icon_ice->setScale(0.3);
+	icon_ice->setOpacity(-150);
+	icon_ice->setRotation(-25);
+	icon_ice->setTouchEnabled(false);
+	icon_ice->setPosition(Vec2(870, 140));
+	this->addChild(icon_ice);
+	icon_ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+		case ui::Widget::TouchEventType::MOVED:
+			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE;
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeCount = 0;
+			}
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
 
+	});
+	auto fin = FadeIn::create(3.0f);
+	icon_ice->setTouchEnabled(true);
+	icon_ice->runAction(fin);
+}
+void MenuLayer::createSkillFire() {
+	auto icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
+	icon_fire->setScale(0.3);
+	icon_fire->setOpacity(-150);
+	icon_fire->setTouchEnabled(false);
+	icon_fire->setRotation(-45);
+	icon_fire->setPosition(Vec2(800, 100));
+	this->addChild(icon_fire); 
+	icon_fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+		case ui::Widget::TouchEventType::MOVED:
+			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeCount = 0;
+			}
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+	});
+	auto fin = FadeIn::create(3.0f);
+	icon_fire->runAction(fin);
+	icon_fire->setTouchEnabled(true);
 }
 /////////////////////////begin nhan
 std::vector<Label*> vlabel1,vlabel2;
@@ -167,7 +227,7 @@ void MenuLayer::Quest()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	quest = Sprite::create("frames/paused3.png");
-	quest->setPosition(visibleSize-Size(330,30));
+	quest->setPosition(visibleSize-Size(350,50));
 	quest->setScale(0.2);
 	quest->setAnchorPoint(Point(0.0f, 1.0f));
 	addChild(quest, 80);
@@ -203,7 +263,7 @@ void MenuLayer::Quest()
 	auto buttonQuest = ui::Button::create("Button/buttons/normal/records.png", "Button/buttons/click/records.png", "Button/buttons/hover/records.png");
 	
 	buttonQuest->setAnchorPoint(Vec2(1, 1));
-	buttonQuest->setPosition(Vec2(visibleSize)-Size(0,50));
+	buttonQuest->setPosition(Vec2(visibleSize)-Size(0,100));
 	buttonQuest->setScale(0.06);
 	buttonQuest->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)

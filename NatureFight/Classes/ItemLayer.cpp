@@ -32,20 +32,7 @@ void ItemLayer::Init()
 	icon_sword->setPosition(Vec2(760, 40));
 	icon_sword->setRotation(-60);
 	this->addChild(icon_sword);
-	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
-	icon_fire->setScale(0.3);
-	icon_fire->setOpacity(-150);
-	icon_fire->setTouchEnabled(false);
-	icon_fire->setRotation(-45);
-	icon_fire->setPosition(Vec2(800, 100));
-	this->addChild(icon_fire);
-	icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
-	icon_ice->setScale(0.3);
-	icon_ice->setOpacity(-150);
-	icon_ice->setRotation(-25);
-	icon_ice->setTouchEnabled(false);
-	icon_ice->setPosition(Vec2(870, 140));
-	this->addChild(icon_ice);
+
 }
 void ItemLayer::showIconSword()
 {
@@ -54,19 +41,6 @@ void ItemLayer::showIconSword()
 	icon_sword->runAction(fin);
 }
 
-void ItemLayer::showIconFire()
-{
-	auto fin = FadeIn::create(3.0f);
-	icon_fire->runAction(fin);
-	icon_fire->setTouchEnabled(true);
-}
-
-void ItemLayer::showIconIce()
-{
-	auto fin = FadeIn::create(3.0f);
-	icon_ice->setTouchEnabled(true);
-	icon_ice->runAction(fin);
-}
 
 void ItemLayer::showItemSword()
 {

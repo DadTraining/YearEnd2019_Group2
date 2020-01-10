@@ -6,7 +6,7 @@ AiLv1::AiLv1(cocos2d::Scene* scene)
 	sceneGame = scene;
 	Init();
 }
-float timeAttackAI = 0, timeDieAI = 0;
+float timeAttackAI = 0, timeDieAI = 0, timeColor = 0;
 bool checkAttackAI = false;
 void AiLv1::Update(float deltaTime)
 {
@@ -35,6 +35,13 @@ void AiLv1::Update(float deltaTime)
 		}
 		SetFace();
 	}
+	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
+		timeColor += deltaTime;
+		if (timeColor >= 2) {
+			m_sprite->setColor(ccc3(255, 255, 255));
+			timeColor = 0;
+		}
+	}
 }
 
 
@@ -48,7 +55,7 @@ void AiLv1::Init()
 	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
-	physicsBodyChar->setDynamic(false);
+	//physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
 	physicsBodyChar->setCollisionBitmask(Model::BITMASK_MONSTER);
 	physicsBodyChar->setContactTestBitmask(1);
@@ -57,7 +64,7 @@ void AiLv1::Init()
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
-
+	AttackSpeed = 1;
 	auto edgeBody = PhysicsBody::createEdgeBox(Size(20, 20));
 	edgeBody->setContactTestBitmask(Model::BITMASK_MONSTER);
 	edgeBody->setCollisionBitmask(false);
@@ -152,10 +159,27 @@ void AiLv1::SetAttack(int state) {
 		break;
 	}
 }
-void AiLv1::SetHurt(int state) {
-	m_sprite->stopAllActions();
-	m_sprite->runAction(HurtRight());
-	m_health -= 10;
+void AiLv1::SetHurt(int state)
+{
+}
+void AiLv1::SetHurtAi(int state,int skill) {
+	if (state != m_CurrentState) {
+		m_sprite->stopAllActions();
+		m_health -= 10;
+		if (skill == NORMALSKILL) {
+			m_sprite->setColor(ccc3(255, 0, 0));
+		}
+		else if (skill == SKILLICE) {
+			m_sprite->setColor(ccc3(0, 0, 255));
+		}
+		else if (skill == SKILLFIRE) {
+			m_sprite->setColor(ccc3(255, 0, 0));
+		}
+	}
+	else if (m_sprite->getNumberOfRunningActions() == 0) {
+		m_sprite->runAction(HurtRight());
+		m_health -= 10;
+	}
 	CCLOG("%d", m_health);
 }
 void AiLv1::SetMove(int state)
@@ -183,11 +207,19 @@ void AiLv1::SetState(int state)
 			SetAttack(state);
 			break;
 		case ACTION_HURT:
-			SetHurt(state);
+			SetHurtAi(state, NORMALSKILL);
 			break;
 		case ACTION_DIE:
 			SetDie(state);
+			break;
+		case ACTION_HURT_ICE:
+			SetHurtAi(state, SKILLICE);
+			break;
+		case ACTION_HURT_FIRE:
+			SetHurtAi(state, SKILLFIRE);
+			break;
 		}
+
 		m_CurrentState = state;
 	}
 }

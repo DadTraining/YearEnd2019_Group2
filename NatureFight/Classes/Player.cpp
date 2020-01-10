@@ -64,7 +64,7 @@ void Player::Init()
 	//physicsBody->setDynamic(false);
 	physicsBody->setRotationEnable(false);
 	physicsBody->setCollisionBitmask(Model::BITMASK_PLAYER);
-	physicsBody->setContactTestBitmask(1);
+	physicsBody->setContactTestBitmask(true);
 	this->m_sprite->setPhysicsBody(physicsBody);
 	this->m_sprite->setTag(playertag);
 	physicsBody->setGravityEnable(false);
@@ -195,7 +195,6 @@ void Player::SetAttack(int state) {
 		}
 		break;
 	}
-	m_CurrentSkill = SKILL_DEFAULT;
 	if (Level >= 1) SetSkill();
 }
 void Player::SetHurt(int state) {
@@ -240,7 +239,8 @@ void Player::SetSkillFire()
 {
 	if (edgeNode->getTag() != ATTACK_FIRE) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(70, 70));
-		edgeBody->setContactTestBitmask(1);
+		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
+		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setPosition(m_sprite->getPosition());
 		edgeNode->setTag(ATTACK_FIRE);
@@ -253,7 +253,8 @@ void Player::SetSkillIce()
 {
 	if (edgeNode->getTag() != ATTACK_ICE) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(30, 70));
-		edgeBody->setContactTestBitmask(1);
+		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
+		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setPosition(m_sprite->getPosition());
 		edgeNode->setTag(ATTACK_ICE);

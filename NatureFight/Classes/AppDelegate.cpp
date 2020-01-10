@@ -102,13 +102,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     ResourceManager::GetInstance()->Init("Data.bin");
-	
-	for (int i = 0; i < 4; i++) {
+	ResourceManager::GetInstance()->Init("DataCreep.bin");
+	ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
+	/*for (int i = 0; i < 4; i++) {
 		std::string loadfile = "DataPlayerLv1_" + std::to_string(i) + ".bin";
 
-		ResourceManager::GetInstance()->Init(loadfile);
+		ResourceManager::GetInstance()->Init(loadfile);*/
 		CCLOG("Loadding DataPlayer  End******************");
-	}
+	//}
 	//ResourceManager::GetInstance()->Init("DataCreep.bin");
     // create a scene. it's an autorelease object
 	//auto scene = MapTutorialScene::createScene();

@@ -39,7 +39,7 @@ bool SettingScene::init()
 	addChild(bgimg);
 	auto bg = Sprite::create("settings/bg.png");
 	bg->setPosition(Director::getInstance()->getVisibleSize() / 2);
-	bg->setScale(0.45);
+	bg->setScale(0.3);
 	addChild(bg, 1);
 	auto bglb = Sprite::create("settings/92.png");
 	bglb->setPosition(Vec2(450, 370));

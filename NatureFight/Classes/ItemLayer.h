@@ -10,8 +10,6 @@ public:
 	void Init();
 	//
 	void showIconSword();
-	void showIconIce();
-	void showIconFire();
 	//
 	void showItemSword();
 	void showItemFire();

@@ -18,6 +18,8 @@ public:
     void createButtonLayer();
     void createJoyStickLayer();
     void createLabelLayer();
+	void createSkillIce();
+	void createSkillFire();
 	
 	void Quest(); // nhan
 	void setQuestSolo(int );// nhan

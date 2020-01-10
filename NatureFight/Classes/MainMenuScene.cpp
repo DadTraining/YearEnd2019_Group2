@@ -26,11 +26,11 @@ bool MainMenuScene::init()
 	{
 		return false;
 	}
-
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->playBackgroundMusic("melodyloops.mp3", true);
-	auto titlelb = Label::createWithTTF("Nature \n \n Fight", "fonts/Blazed.ttf", 100);
-	titlelb->setPosition(420, 250);
+	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Blazed.ttf", 70);
+	titlelb->setPosition(Vec2(visibleSize.width/2,visibleSize.height-visibleSize.height/4));
 	titlelb->setColor(Color3B::RED);
 	addChild(titlelb,1);
 	auto bgimg = Sprite::create("settings/bgmain.jpg");
@@ -39,7 +39,7 @@ bool MainMenuScene::init()
 	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
 	addChild(bgimg);
 	auto play = ui::Button::create("settings/playbtn.png");
-	play->setPosition(Vec2(420, 250));
+	play->setPosition(Vec2(visibleSize.width/2,visibleSize.height/3));
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
@@ -50,8 +50,9 @@ bool MainMenuScene::init()
 	addChild(play);
 
 	auto setting = ui::Button::create("settings/setting.png");
-	setting->setPosition(Vec2(850, 370));
-	setting->setScale(0.6);
+	setting->setPosition(Vec2(visibleSize));
+	setting->setAnchorPoint(Vec2(1, 1));
+	setting->setScale(0.4);
 	addChild(setting);
 	setting->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
