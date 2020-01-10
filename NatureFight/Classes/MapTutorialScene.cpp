@@ -42,7 +42,9 @@ bool MapTutorialScene::init()
 	ailv1 = new AiLv1(this);
 	ailv1->Init();
 	ailv1->SetState(AiLv1::ACTION_IDLE);
-	ailv1->m_sprite->setTag(AILV1);
+	bossLv1 = new BossLv1(this);
+	bossLv1->Init();
+	bossLv1->SetState(BossLv1::ACTION_IDLE);
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapTutorialScene::onTouchBegan, this);
@@ -86,6 +88,7 @@ bool MapTutorialScene::init()
 void MapTutorialScene::update(float deltaTime)
 {
 	ailv1->Collision(mainPlayer,deltaTime);
+	bossLv1->Collision(mainPlayer, deltaTime);
 	mainPlayer->Update(deltaTime);
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
@@ -93,8 +96,8 @@ void MapTutorialScene::update(float deltaTime)
 	if (Distance(mainPlayer->m_sprite->getPosition(), ailv1->m_sprite->getPosition()) < 100)
 		ailv1->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ailv1->m_sprite->getPosition());
 	else ailv1->physicsBodyChar->setVelocity(Vec2(0, 0));
-	ailv1->Collision(mainPlayer,deltaTime);
 	ailv1->Update(deltaTime);
+	bossLv1->Update(deltaTime);
 
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -162,13 +165,19 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		}
 		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 		{
-			CCLOG("KILL");
 			ailv1->SetState(AiLv1::ACTION_HURT);
-			if (ailv1->m_health <= 0) {
-				ailv1->SetState(AiLv1::ACTION_DIE);
-				ailv1->physicsBodyChar->setEnabled(false);
-				mainPlayer->Exp += 20;
-			}
+		}
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACK_ICE)
+		{
+			ailv1->SetState(AiLv1::ACTION_HURT_ICE);
+		}
+		if (nodeA->getTag() == BOSSTAG & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSTAG & nodeA->getTag() == ATTACKTAG)
+		{
+			bossLv1->SetState(BossLv1::ACTION_HURT);
+		}
+		if (nodeA->getTag() == BOSSTAG & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSTAG & nodeA->getTag() == ATTACK_ICE)
+		{
+			bossLv1->SetState(BossLv1::ACTION_HURT_ICE);
 		}
 	}
 	return true;

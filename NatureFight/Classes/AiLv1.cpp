@@ -34,13 +34,14 @@ void AiLv1::Update(float deltaTime)
 		}
 		SetFace();
 	}
-	if (m_sprite->getColor() == ccc3(255, 0, 0)) {
+	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
 		timeColor += deltaTime;
 		if (timeColor >= 2) {
 			m_sprite->setColor(ccc3(255, 255, 255));
 			timeColor = 0;
 		}
 	}
+
 }
 
 
@@ -59,7 +60,7 @@ void AiLv1::Init()
 	physicsBodyChar->setCollisionBitmask(101);
 	physicsBodyChar->setContactTestBitmask(1);
 	this->m_sprite->setPhysicsBody(physicsBodyChar);
-	this->m_sprite->setTag(CREEPTAG);
+	this->m_sprite->setTag(AILV1);
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
@@ -94,6 +95,11 @@ void AiLv1::Collision(Player* player, float deltaTime)
 	{
 			SetState(AiLv1::ACTION_IDLE);
 	}
+	//if (this->m_health <= 0) {
+	//	this->SetState(AiLv1::ACTION_DIE);
+	//	this->physicsBodyChar->setEnabled(false);
+	//	player->Exp += 20;
+	//}
 }
 
 void AiLv1::SetIdle(int state) {
@@ -167,11 +173,17 @@ void AiLv1::SetAttack(int state) {
 			break;
 		}
 }
-void AiLv1::SetHurt(int state) {
+void AiLv1::SetHurt(int state,int skill) {
 	if (state != m_CurrentState) {
 		m_sprite->stopAllActions();
 		m_health -= 10;
-		m_sprite->setColor(ccc3(255, 0, 0));
+		if (skill == NORMALSKILL) {
+			m_sprite->setColor(ccc3(255, 0, 0));
+		}else if (skill == SKILLICE) {
+			m_sprite->setColor(ccc3(0, 0, 255));
+		}else if (skill == SKILLFIRE) {
+			m_sprite->setColor(ccc3(255, 0, 0));
+		}
 	}
 	else if (m_sprite->getNumberOfRunningActions() == 0) {
 		m_sprite->runAction(HurtRight());
@@ -204,10 +216,12 @@ void AiLv1::SetState(int state)
 			SetAttack(state);
 			break;
 		case ACTION_HURT:
-			SetHurt(state);
+			SetHurt(state, NORMALSKILL);
 			break;
 		case ACTION_DIE:
 			SetDie(state);
+		case ACTION_HURT_ICE:
+			SetHurt(state, SKILLICE);
 		}
 		m_CurrentState = state;
 	}
@@ -235,6 +249,9 @@ cocos2d::RepeatForever* AiLv1::MovingRight() {
 }
 cocos2d::Animate* AiLv1::AttackRight() {
 	return ObjectParent::AnimationObjectOnce(102, "Goblin_Slashing");
+}
+cocos2d::Animate* AiLv1::KickRight() {
+	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking");
 }
 cocos2d::RepeatForever* AiLv1::IdleRight() {
 	return ObjectParent::AnimationObjectRepeat(100, "Goblin_Idle");

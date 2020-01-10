@@ -1,16 +1,19 @@
 #pragma once
-#include "cocos2d.h"
+#ifndef _Boss_SCENE_H_
+#define _Boss_SCENE_H_
 #include "ObjectParent.h"
+#include <list>
 #include <vector> 
-#define ATTACK 0
-#define RUN 1
-#define playertag 1000
-#define ATTACKTAG 8
-#define ATTACK_FIRE 9
-#define ATTACK_ICE 10
-#define NpcSolotag 11
-#define NpcYolotag 12
-class Player :
+#include "cocos2d.h"
+#include <Player.h>
+#define CREEPTAG 11
+#define CREEPATTACK 111
+#define BOSSTAG 14
+#define SKILLICE 1
+#define SKILLFIRE 2
+#define NORMALSKILL 0
+USING_NS_CC;
+class BossLv1 :
 	public ObjectParent
 {
 public:
@@ -28,46 +31,31 @@ public:
 	static const int ACTION_IDLE = 6;
 	static const int ACTION_HURT = 9;
 	static const int ACTION_DIE = 10;
+	static const int ACTION_HURT_ICE = 11;
 
-	static const int SKILL_DEFAULT = -1;
-	static const int SKILL_FIRE = 1;
-	static const int SKILL_ICE = 2;
-
-public: 
-	PhysicsBody* physicsBody;
+public:
+	PhysicsBody* physicsBodyChar;
+	int m_health = 100;
 	Node* edgeNode;
-	static int Level;
-	static int Exp;
-private:
 	int m_CurrentFace;
 	int m_CurrentState;
-	int m_CurrentSkill;
-	cocos2d::Scene* sceneGame;
-	int m_health;
-	int m_dame;
 public:
-	Player(cocos2d::Scene* scene);
+	BossLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
-	void updateLevel();
 	void Init();
-	void Collision();
+	void Collision(Player* player, float deltaTime);
+	float Distance(Vec2 A, Vec2 C);
 	void SetFace();
 	void SetState(int);
 	void SetIdle(int);
 	void SetDie(int);
 	void SetAttack(int state);
-	void SetHurt(int state);
+	void SetHurt(int state, int skill);
 	void SetMove(int state);
-
-	void SetSkill();
-	void SetSkillFire();
-	void SetSkillIce();
-	void SetSkillDefault();
-
-	~Player();
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
+	cocos2d::Animate* KickRight();
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
@@ -86,7 +74,8 @@ public:
 	cocos2d::Animate* AttackDownAngry();
 	cocos2d::Animate* HurtDown();
 	cocos2d::RepeatForever* DieDown();
-
-	cocos2d::ParticleSystemQuad* ParticleAttack(std::string name);
-
+	~BossLv1();
+private:
+	cocos2d::Scene* sceneGame;
 };
+#endif // _Boss_SCENE_H_

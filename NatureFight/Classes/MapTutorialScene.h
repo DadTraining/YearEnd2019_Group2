@@ -11,19 +11,24 @@
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
+#include <BossLv1.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
 #define NpcSolotag 11
 #define NpcYolotag 12
+#define ATTACK_FIRE 9
+#define ATTACK_ICE 10
 #define AILV1 13
+#define BOSSTAG 14
 #define ATTACKTAG 8
 class MapTutorialScene : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
 	AiLv1* ailv1;
+	BossLv1* bossLv1;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 //	SneakyJoystickSkinnedBase* joystickBase;
