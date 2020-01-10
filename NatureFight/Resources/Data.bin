@@ -1,8 +1,6 @@
-#SPRITE 2
-1 Sprites/Man1/Goblin/PNG/PNG_Sequences/Running/0_Goblin_Running_000.png
-2 circle-icon-3.jpg
-#BUTTON 5
+0SPRITE 2
+0BUTTON 5
 5 Button/Button_Attack_Normal.png Button/Button_Attack_Selected.png
-#FONTS 2
+0FONTS 2
 1 fonts/MarkerFelt.ttf
 2 fonts/arial.ttf

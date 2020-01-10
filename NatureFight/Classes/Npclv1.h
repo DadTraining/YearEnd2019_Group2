@@ -1,7 +1,9 @@
 #pragma once
-#include "cocos2d.h"
-#include "ObjectParent.h"
-#include <vector> 
+#ifndef  _NPC_H_
+#define  _NPC_H_
+#include"cocos2d.h"
+#include"Model.h"
+USING_NS_CC;
 class Npclv1
 {
 public:
@@ -19,3 +21,4 @@ private:
 	float count=0;
 	cocos2d::Scene* sceneGame;
 };
+#endif

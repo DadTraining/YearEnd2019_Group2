@@ -1,7 +1,7 @@
-#SPRITE 2
-#BUTTON 5
-#FONTS 2
-#FrameCache 6
+0SPRITE 2
+0BUTTON 5
+0FONTS 2
+0FrameCache 6
 1 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_1/Idle_Blinking/PlayerIdleRight.plist
 2 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_1/Run/PlayerRunRight.plist
 3 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_1/Hurt/PlayerHurtRight.plist

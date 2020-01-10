@@ -5,16 +5,24 @@
 #include <list>
 #include <vector> 
 #include "cocos2d.h"
+#include "Model.h"
 #include <Player.h>
 #define CREEPTAG 11
 #define CREEPATTACK 111
+#define CREEPTAG 11
+#define CREEPATTACK 111
+#define SKILLICE 1
+#define SKILLFIRE 2
+#define NORMALSKILL 0
+#define AILV1 13
 USING_NS_CC;
 class AiLv1 :
 	public ObjectParent
 {
 public:
 	static const int GOBIN_TAG = 1;
-
+	static const int ACTION_HURT_ICE = 11;
+	static const int ACTION_HURT_FIRE = 12;
 private:
 	int tagAI;
 
@@ -40,6 +48,7 @@ public:
 	void SetDie(int);
 	void SetAttack(int state);
 	void SetHurt(int state);
+	void SetHurtAi(int state, int skill);
 	void SetMove(int state);
 	void SetTagAI(int);
 

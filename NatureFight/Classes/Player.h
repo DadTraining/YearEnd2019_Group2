@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "ObjectParent.h"
 #include <vector> 
+#include<Model.h>
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
@@ -21,7 +22,7 @@ public:
 	static const int STONE_CBN = 1;
 	static const int STONE_FIRE = 2;
 
-public: 
+public:
 	PhysicsBody* physicsBody;
 	Node* edgeNode;
 	int m_CurrentSkill;
@@ -46,7 +47,7 @@ public:
 	void updateLevel();
 	void Init();
 	void Collision();
-	void SetFace();
+	void SetFace(Vec2);
 	void SetState(int);
 	void SetIdle(int);
 	void SetDie(int);

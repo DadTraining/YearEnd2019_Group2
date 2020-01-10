@@ -165,26 +165,40 @@ void HelloWorld::menuCloseCallback2(Ref* pSender) {
 }
 void HelloWorld::threadd() {
     Director::getInstance()->getScheduler()->performFunctionInCocosThread([] {
-        ResourceManager::GetInstance()->Init("Data.bin");
         ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
     });
 }
+int i = 0;
 void HelloWorld::threadd2() {
     auto loadingBarGB = Sprite::create("loadingbar_bg.png");
+	CCLOG("Loadding bar0******************");
     loadingBarGB->setPosition(Vec2(300, 350));
-    addChild(loadingBarGB);
-
-    static auto loadingbar = ui::LoadingBar::create("loadingbar.png");
-    loadingbar->setPosition(loadingBarGB->getPosition());
-
+    
+	addChild(loadingBarGB);
+	CCLOG("Loadding bar1******************");
+	static auto loadingbar = ui::LoadingBar::create("loadingbar.png");
+	CCLOG("Loadding bar2******************");
+	loadingbar->setPosition(loadingBarGB->getPosition());
+	CCLOG("Loadding bar3******************");
     loadingbar->setPercent(0);
+	CCLOG("Loadding bar4******************");
     loadingbar->setDirection(ui::LoadingBar::Direction::LEFT);
-
+	CCLOG("Loadding bar5******************");
     addChild(loadingbar);
+	
     auto updateLoadingBar = CallFunc::create([]() {
         if (loadingbar->getPercent() < 100)
         {
             loadingbar->setPercent(loadingbar->getPercent() + 1);
+			CCLOG("Loadding bar 6******************");
+			if (i < 2) {
+				std::string loadfile = "DataPlayerLv1_" + std::to_string(i) + ".bin";
+				
+				ResourceManager::GetInstance()->Init(loadfile);
+				CCLOG("Loadding DataPlayer  End******************");
+				i++;
+			}
+			CCLOG("Loadding bar End******************");
         }
     });
 

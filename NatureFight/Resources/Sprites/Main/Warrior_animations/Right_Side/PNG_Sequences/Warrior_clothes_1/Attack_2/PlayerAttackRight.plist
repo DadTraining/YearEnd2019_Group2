@@ -4,228 +4,228 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>0_Warrior_Attack_1_000.png</key>
+            <key>0_Warrior_Attack_2_000.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{0,0},{1100,1100}}</string>
+                <string>{{0,0},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_001.png</key>
+            <key>0_Warrior_Attack_2_001.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{1100,0},{1100,1100}}</string>
+                <string>{{64,0},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_002.png</key>
+            <key>0_Warrior_Attack_2_002.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{2200,0},{1100,1100}}</string>
+                <string>{{128,0},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_003.png</key>
+            <key>0_Warrior_Attack_2_003.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{0,1100},{1100,1100}}</string>
+                <string>{{192,0},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_004.png</key>
+            <key>0_Warrior_Attack_2_004.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{1100,1100},{1100,1100}}</string>
+                <string>{{0,64},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_005.png</key>
+            <key>0_Warrior_Attack_2_005.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{2200,1100},{1100,1100}}</string>
+                <string>{{64,64},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_006.png</key>
+            <key>0_Warrior_Attack_2_006.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{0,2200},{1100,1100}}</string>
+                <string>{{128,64},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_007.png</key>
+            <key>0_Warrior_Attack_2_007.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{1100,2200},{1100,1100}}</string>
+                <string>{{192,64},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_008.png</key>
+            <key>0_Warrior_Attack_2_008.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{2200,2200},{1100,1100}}</string>
+                <string>{{0,128},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_009.png</key>
+            <key>0_Warrior_Attack_2_009.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{0,3300},{1100,1100}}</string>
+                <string>{{64,128},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_010.png</key>
+            <key>0_Warrior_Attack_2_010.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{1100,3300},{1100,1100}}</string>
+                <string>{{128,128},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_011.png</key>
+            <key>0_Warrior_Attack_2_011.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{2200,3300},{1100,1100}}</string>
+                <string>{{192,128},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_012.png</key>
+            <key>0_Warrior_Attack_2_012.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{0,4400},{1100,1100}}</string>
+                <string>{{0,192},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_013.png</key>
+            <key>0_Warrior_Attack_2_013.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{1100,4400},{1100,1100}}</string>
+                <string>{{64,192},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>0_Warrior_Attack_1_014.png</key>
+            <key>0_Warrior_Attack_2_014.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>spriteSourceSize</key>
-                <string>{1100,1100}</string>
+                <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{2200,4400},{1100,1100}}</string>
+                <string>{{128,192},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -241,9 +241,9 @@
             <key>realTextureFileName</key>
             <string>PlayerAttackRight.png</string>
             <key>size</key>
-            <string>{3300,5500}</string>
+            <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:111c8158f4242b6034c0ec44f39ba505:f9130541306ba91891396b0ee5e8eb46:c7ee21fd520e3c488430240434161672$</string>
+            <string>$TexturePacker:SmartUpdate:9e77f4e3506fa04891150fbafc6bfd05:cf7cadf237fce7aa4ff9d66395d401bc:c7ee21fd520e3c488430240434161672$</string>
             <key>textureFileName</key>
             <string>PlayerAttackRight.png</string>
         </dict>

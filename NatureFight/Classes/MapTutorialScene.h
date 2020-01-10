@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 #include<ObjectParent.h>
-#include <AiLv1.h>
 #include <iostream>
 #include <Player.h>
 #include <Npclv1.h>
@@ -11,7 +10,15 @@
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
+#include<AiLv1.h>
 USING_NS_CC;
+#define ATTACK 0
+#define RUN 1
+#define playertag 1000
+#define NpcSolotag 11
+#define NpcYolotag 12
+#define AILV1 13
+#define ATTACKTAG 8
 class MapTutorialScene : public cocos2d::Scene
 {
 public:
@@ -22,10 +29,12 @@ public:
 	SneakyJoystick* leftJoystick;
 //	SneakyJoystickSkinnedBase* joystickBase;
 	Npclv1* npcsolo, *npcYolo;
-	TMXTiledMap* map;
+	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
-	
+	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
+	std::vector<AiLv1*> ai;
+	int countCreepDie=0;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
@@ -35,11 +44,12 @@ public:
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
 	void MovePlayer();
 	void Quest(); // Button display quest
-	//void createPhysicMap();
-	virtual bool onContactBegin(const PhysicsContact& contact);
+	void createPhysicMap();
+	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
 };

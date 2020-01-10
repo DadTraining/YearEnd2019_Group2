@@ -28,8 +28,8 @@ void Player::Update(float deltaTime)
 	}
 	else {
 		if (m_CurrentState == ACTION_ATTACK) checkAttack = true;
-		if(checkAttack) timeAttack += deltaTime;
-		if (timeAttack > 2.0f-AttackSpeed) {
+		if (checkAttack) timeAttack += deltaTime;
+		if (timeAttack > 2.0f - AttackSpeed) {
 			m_CurrentState = ACTION_DEFAULT;
 			timeAttack = 0;
 			checkAttack = false;
@@ -43,7 +43,6 @@ void Player::Update(float deltaTime)
 		if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
 			edgeNode->setPosition(Vec2(1000, 1000));
 		}
-		SetFace();
 	}
 }
 
@@ -57,14 +56,15 @@ void Player::Init()
 	updateLevel();
 
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
-	this->m_sprite->setPosition(10,10);
-	this->m_sprite->setScale(0.1);
+	this->m_sprite->setPosition(10, 10);
+	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
-	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize()/2);
-	physicsBody->setDynamic(false);
+	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2);
+	//physicsBody->setDynamic(false);
 	physicsBody->setRotationEnable(false);
-	physicsBody->setCollisionBitmask(101);
+	physicsBody->setCollisionBitmask(Model::BITMASK_PLAYER);
 	physicsBody->setContactTestBitmask(1);
+
 	this->m_sprite->setPhysicsBody(physicsBody);
 	this->m_sprite->setTag(playertag);
 	physicsBody->setGravityEnable(false);
@@ -83,7 +83,7 @@ void Player::Collision()
 
 void Player::updateLevel()
 {
-	AttackSpeed = 1.0f + (Level-1)*0.5;
+	AttackSpeed = 1.0f + (Level - 1)*0.5;
 	MoveSpeed = 1.0f;
 	m_health = Level * 300;
 	m_dame = Level * 10;
@@ -195,26 +195,25 @@ void Player::SetAttack(int state) {
 		}
 		break;
 	}
-	m_CurrentSkill = SKILL_DEFAULT;
-	if(Level>=1) SetSkill();
+	if (Level >= 1) SetSkill();
 }
 void Player::SetHurt(int state) {
 	switch (m_CurrentFace) {
 	case FACE_LEFT:
 	case FACE_RIGHT:
-			m_sprite->stopAllActions();
-			m_sprite->runAction(HurtRight());
-			m_health -= 10;
+		m_sprite->stopAllActions();
+		m_sprite->runAction(HurtRight());
+		m_health -= 10;
 		break;
 	case FACE_UP:
-			m_sprite->stopAllActions();
-			m_sprite->runAction(HurtUp());
-			m_health -= 10;
+		m_sprite->stopAllActions();
+		m_sprite->runAction(HurtUp());
+		m_health -= 10;
 		break;
 	case FACE_DOWN:
-			m_sprite->stopAllActions();
-			m_sprite->runAction(HurtDown());
-			m_health -= 10;
+		m_sprite->stopAllActions();
+		m_sprite->runAction(HurtDown());
+		m_health -= 10;
 	}
 	CCLOG("%d", m_health);
 }
@@ -239,8 +238,9 @@ void Player::SetSkill()
 void Player::SetSkillFire()
 {
 	if (edgeNode->getTag() != ATTACK_FIRE) {
-		auto edgeBody = PhysicsBody::createEdgeBox(Size(70, 70));
-		edgeBody->setContactTestBitmask(1);
+		auto edgeBody = PhysicsBody::createEdgeBox(Size(70, 70)); 
+		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
+		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setPosition(m_sprite->getPosition());
 		edgeNode->setTag(ATTACK_FIRE);
@@ -253,7 +253,8 @@ void Player::SetSkillIce()
 {
 	if (edgeNode->getTag() != ATTACK_ICE) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(30, 70));
-		edgeBody->setContactTestBitmask(1);
+		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
+		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setPosition(m_sprite->getPosition());
 		edgeNode->setTag(ATTACK_ICE);
@@ -281,7 +282,8 @@ void Player::SetSkillDefault()
 {
 	if (edgeNode->getTag() != ATTACKTAG) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(25, 55));
-		edgeBody->setContactTestBitmask(1);
+		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
+		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setTag(ATTACKTAG);
 	}
@@ -342,9 +344,9 @@ void Player::SetState(int state)
 	}
 }
 
-void Player::SetFace()
+void Player::SetFace(Vec2 velocity)
 {
-	float radian = std::atan2f(physicsBody->getVelocity().y, physicsBody->getVelocity().x);
+	float radian = std::atan2f(velocity.y, velocity.x);
 	if (physicsBody->getVelocity().x == 0 && physicsBody->getVelocity().y == 0) {
 		SetState(Player::ACTION_IDLE);
 	}
@@ -372,7 +374,7 @@ cocos2d::RepeatForever* Player::MovingRight() {
 	return ObjectParent::AnimationObjectRepeat(2, "Warrior_Run", AttackSpeed);
 }
 cocos2d::Animate* Player::AttackRight() {
-	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_1", AttackSpeed);
+	return ObjectParent::AnimationObjectOnce(6, "Warrior_Attack_2", AttackSpeed);
 }
 cocos2d::RepeatForever* Player::IdleRight() {
 	return ObjectParent::AnimationObjectRepeat(1, "Warrior_Idle", AttackSpeed);

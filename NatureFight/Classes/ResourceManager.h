@@ -3,9 +3,10 @@
 #include "cocos2d.h"
 #include<string>
 #include<map>
+#include<vector>
+#include<list>
 #include <ui\CocosGUI.h>
 USING_NS_CC;
-
 class ResourceManager
 {
 public:
@@ -15,7 +16,9 @@ public:
 	std::map<int, ui::Button*> m_buttons;
 	std::map<int, Label*> m_labels;
 	std::map<int, SpriteFrameCache*> m_framecache;
+	static int LevelPlayer;
 public:
+	void SetLevelPlayer(int);
 	Sprite* DuplicateSprite(Sprite* sprite);
 	ResourceManager();
 	~ResourceManager();

@@ -1,4 +1,5 @@
 #include "ResourceManager.h"
+int ResourceManager::LevelPlayer = 1;
 ResourceManager* ResourceManager::s_instance;
 ResourceManager::ResourceManager()
 {
@@ -30,7 +31,7 @@ void ResourceManager::Init(const std::string path)
 
 void ResourceManager::Load(std::string fileName)
 {
-	m_framecache.clear();
+	CCLOG("Load 1****************** %s: ", fileName.c_str());
 	int count = 0;
 	while (!m_dataFolderPath.empty()) {
 		std::string line = m_dataFolderPath.substr(0, m_dataFolderPath.find("\n"));
@@ -45,30 +46,42 @@ void ResourceManager::Load(std::string fileName)
 		}
 
 		if (count == 1) {
+			CCLOG("Load 2******************");
 			auto sprite = Sprite::create(text);
+			CCLOG("Load 3******************");
 			sprite->retain();
+			CCLOG("Load 4******************");
 			m_sprites.insert({ num,sprite });
+			CCLOG("Load 5******************");
 			continue;
 		}
 		if (count == 2) {
 			auto button = ui::Button::create(text, text2);
+			CCLOG("Load 6******************");
 			button->retain();
+			CCLOG("Load 7******************");
 			m_buttons.insert({ num,button });
 			continue;
 		}
 		if (count == 3) {
 			auto label = Label::createWithTTF("temp", text, 20);
+			CCLOG("Load 8******************");
 			label->retain();
+			CCLOG("Load 9******************");
 			m_labels.insert({ num,label });
-		}	
+		}
 		if (count == 4) {
 			auto spriteCache = SpriteFrameCache::getInstance();
 			spriteCache->addSpriteFramesWithFile(text);
+			CCLOG("Load 10******************");
 			spriteCache->retain();
+			CCLOG("Load 11******************");
 			m_framecache.insert({ num,spriteCache });
 			spriteCache->destroyInstance();
+			CCLOG("Load 12******************");
 		}
 	}
+	CCLOG("Load END******************");
 }
 
 Sprite* ResourceManager::GetSpriteById(int id)
@@ -93,7 +106,10 @@ SpriteFrameCache* ResourceManager::GetFrameById(int id)
 	auto frame = m_framecache.find(id)->second;
 	return frame;
 }
-
+void ResourceManager::SetLevelPlayer(int level)
+{
+	LevelPlayer = level;
+}
 Sprite* ResourceManager::DuplicateSprite(Sprite* sprite)
 {
 	Sprite* pRet = Sprite::createWithTexture(sprite->getTexture());
