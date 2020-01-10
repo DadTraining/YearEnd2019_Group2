@@ -127,7 +127,7 @@ void ItemLayer::showItemBlood(/*cocos2d::Sprite* sprite*/)
 	addChild(load, 2);
 	load->setDirection(ui::LoadingBar::Direction::LEFT);
 }
-void ItemLayer::getpercentBlood(int x)
+void ItemLayer::getpercentBlood(float x)
 {
 	load->setPercent(load->getPercent() + x);
 }

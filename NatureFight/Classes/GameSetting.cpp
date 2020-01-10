@@ -3,9 +3,9 @@
 GameSetting* GameSetting::sInstance = nullptr;
 
 GameSetting::GameSetting() :
-	mIsEnableMusic(true),
-	mIsEnableSound(true),
-	mVolume(100)
+	Music(true),
+	Sound(true),
+	Volume(100)
 {
 
 }
@@ -24,33 +24,33 @@ GameSetting* GameSetting::getInstance()
 	return sInstance;
 }
 
-void GameSetting::setEnableMusic(bool enable)
+void GameSetting::setMusic(bool enable)
 {
-	mIsEnableMusic = enable;
+	Music = enable;
 }
 
-bool GameSetting::isEnableMusic()
+bool GameSetting::isMusic()
 {
-	return mIsEnableMusic;
+	return Music;
 }
 
-void GameSetting::setEnableSound(bool enable)
+void GameSetting::setSound(bool enable)
 {
-	mIsEnableSound = enable;
+	Sound = enable;
 }
 
-bool GameSetting::isEnableSound()
+bool GameSetting::isSound()
 {
-	return mIsEnableSound;
+	return Sound;
 }
 
 void GameSetting::setVolume(int volume)
 {
-	mVolume = volume;
+	Volume = volume;
 }
 
 int GameSetting::getVolume()
 {
-	return mVolume;
+	return Volume;
 }
 

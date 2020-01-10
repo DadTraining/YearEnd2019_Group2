@@ -1,6 +1,7 @@
 #include "ui/CocosGUI.h"
 #include "MainMenuScene.h"
 #include "MapTutorialScene.h"
+#include "GameSetting.h"
 #include "SettingScene.h"
 
 #include "SimpleAudioEngine.h"
@@ -26,9 +27,12 @@ bool MainMenuScene::init()
 	{
 		return false;
 	}
-
-	auto audio = SimpleAudioEngine::getInstance();
-	audio->playBackgroundMusic("melodyloops.mp3", true);
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playBackgroundMusic("sounds/melodyloops.mp3", true);
+	}
 	auto titlelb= Label::createWithTTF("Nature \n \n Fight", "fonts/Blazed.ttf", 100);
 	titlelb->setPosition(420, 250);
 	titlelb->setColor(Color3B::RED);
@@ -43,6 +47,14 @@ bool MainMenuScene::init()
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
+		auto turn = GameSetting::getInstance()->isSound();
+		if (turn == true)
+		{
+			auto audio = SimpleAudioEngine::getInstance();
+			//log("asd");
+			audio->playEffect("sounds/212.mp3", false);
+			log("2");
+		}
 		if (type == ui::Widget::TouchEventType::ENDED) {
 			Director::getInstance()->replaceScene(MapTutorialScene::createScene());
 		}
@@ -54,7 +66,16 @@ bool MainMenuScene::init()
 	addChild(setting);
 	setting->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
+
 		if (type == ui::Widget::TouchEventType::ENDED) {
+			auto turn = GameSetting::getInstance()->isSound();
+			if (turn == true)
+			{
+				auto audio = SimpleAudioEngine::getInstance();
+				//log("asd");
+				audio->playEffect("sounds/212.mp3", false);
+				log("2");
+			}
 			Director::getInstance()->replaceScene(SettingScene::createScene());
 		}
 	});

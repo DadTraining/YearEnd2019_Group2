@@ -1,4 +1,4 @@
-#include"Defines.h"
+﻿#include"Defines.h"
 #include "LoadingScene.h"
 #include "MainMenuScene.h"
 #include "SimpleAudioEngine.h"
@@ -26,9 +26,18 @@ bool LoadingScene::init()
 		return false;
 	}
 	//load sound
-	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("melodyloops.mp3");
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-
+	auto audio = SimpleAudioEngine::getInstance();
+	// tải file âm thanh lưu vào thư mục cache
+	audio->preloadBackgroundMusic("sounds/melodyloops.mp3");
+	audio->preloadEffect("sounds/212.mp3");
+	audio->preloadEffect("sounds/dam.wav");
+	auto bgimg = Sprite::create("settings/bgmain.jpg");
+	bgimg->setScale(0.80);
+	bgimg->setOpacity(-200);
+	bgimg->setAnchorPoint(Vec2(0.5, 0.5));
+	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
+	addChild(bgimg);
 	auto loadingbar = Sprite::create("settings/loadingbg.png");
 	loadingbar->setPosition(visibleSize/2);
 	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));

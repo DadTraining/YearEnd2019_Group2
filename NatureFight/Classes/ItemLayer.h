@@ -18,7 +18,7 @@ public:
 	void showItemIce();
 	void showItemBlood(/*cocos2d::Sprite* sprite*/);
 	//
-	void getpercentBlood(int x);
+	void getpercentBlood(float x);
 	//da
 	void showFire();
 	void showIce();
