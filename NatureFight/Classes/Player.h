@@ -47,7 +47,7 @@ public:
 	void updateLevel();
 	void Init();
 	void Collision();
-	void SetFace();
+	void SetFace(Vec2);
 	void SetState(int);
 	void SetIdle(int);
 	void SetDie(int);

@@ -1,5 +1,7 @@
 #include "MapTutorialScene.h"
 
+
+
 using namespace std;
 float times = 0;
 
@@ -46,8 +48,7 @@ bool MapTutorialScene::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	CCLOG("LoadMapTutorial 5******************");
-
-	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc
@@ -66,6 +67,7 @@ bool MapTutorialScene::init()
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
 	CCLOG("LoadMapTutorial 8******************");
+
 	return true;
 }
 
@@ -75,12 +77,10 @@ void MapTutorialScene::update(float deltaTime)
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
+	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
 		ai[i]->Update(deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
 	}
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -139,21 +139,25 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			npcsolo->Collision();
 
 		}
-		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
 		{
 			npcYolo->Collision1();
 			menuLayer->setQuestYolo(1);
 		}
 		creepCollistionSkill(nodeA, nodeB);
+		if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
+			(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
+			if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+			{
+				boss->bulletHasCollision(nodeA->getPhysicsBody()->getGroup());
+			}
+			if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+			{
+				boss->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
+			}
+		}
+		bossCollistionSkill(nodeA, nodeB);
 		
-		//if (nodeA->getTag() == BOSSTAG & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSTAG & nodeA->getTag() == ATTACKTAG)
-		//{
-		//	bossLv1->SetState(BossLv1::ACTION_HURT);
-		//}
-		//if (nodeA->getTag() == BOSSTAG & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSTAG & nodeA->getTag() == ATTACK_ICE)
-		//{
-		//	bossLv1->SetState(BossLv1::ACTION_HURT_ICE);
-		//}
 	}
 	return true;
 
@@ -181,22 +185,128 @@ bool MapTutorialScene::onContactSeparate(const PhysicsContact& contact)
 	return true;
 }
 
-void MapTutorialScene::creepCollistionSkill( Node* nodeA, Node* nodeB)
+
+void MapTutorialScene::createPhysicMap()
 {
-	if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+	// set physics map
+	auto objects = mObjectGroup->getObjects();
+	CCLOG("LoadMapTutorial 31******************");
+	for (int i = 0; i < objects.size(); i++)
 	{
-		for (int i = 0; i < ai.size(); i++) {
-			CCLOG("KILL");
-			ai[i]->SetState(AiLv1::ACTION_HURT);
-			if (ai[i]->m_health <= 0) {
-				ai[i]->SetState(AiLv1::ACTION_DIE);
-				ai[i]->physicsBodyChar->setEnabled(false);
-				mainPlayer->Exp += 20;
-				countCreepDie = 1;
-				menuLayer->setD(countCreepDie);
-			}
+		auto object = objects.at(i);
+		CCLOG("LoadMapTutorial 32******************");
+		auto properties = object.asValueMap();
+		CCLOG("LoadMapTutorial 33******************");
+		float posX = properties.at("x").asFloat();
+		CCLOG("LoadMapTutorial 34******************");
+		float posY = properties.at("y").asFloat();
+		CCLOG("LoadMapTutorial 35******************");
+		int type = object.asValueMap().at("type").asInt();
+		CCLOG("LoadMapTutorial 36******************");
+		if (type == 1)
+		{
+
+			auto physics = PhysicsBody::createBox(Size(properties.at("width").asFloat(), properties.at("height").asFloat()), PhysicsMaterial(1.0f, 0.0f, 0));
+			CCLOG("LoadMapTutorial 37******************");
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			auto x = properties.at("width").asFloat() / 2 + posX;
+			CCLOG("LoadMapTutorial 38******************");
+			auto y = properties.at("height").asFloat() / 2 + posY;
+			CCLOG("LoadMapTutorial 3******************");
+			auto node = Node::create();
+			node->setPosition(Vec2(x, y));
+			this->addChild(node);
+			CCLOG("LoadMapTutorial 39******************");
+			node->setPhysicsBody(physics);
+		}
+		if (type == 2)
+		{
+
+			auto edgeBody = PhysicsBody::createEdgeBox(Size(properties.at("width").asFloat(), properties.at("height").asFloat()), PhysicsMaterial(1.0f, 0.0f, 0));
+			auto edgeNode = Node::create();
+			edgeNode->setPosition(Vec2(properties.at("width").asFloat() / 2 + posX, properties.at("height").asFloat() / 2 + posY));
+			addChild(edgeNode);
+			edgeNode->setPhysicsBody(edgeBody);
+			CCLOG("LoadMapTutorial 311******************");
 		}
 	}
+
+
+	// set position main
+	auto objects1 = mObjectGroup1->getObjects();
+	CCLOG("LoadMapTutorial 312******************");
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object1.asValueMap().at("type").asInt();
+		CCLOG("LoadMapTutorial 313******************");
+		if (type == 2)
+		{
+			//
+			mainPlayer = new Player(this);
+			CCLOG("LoadMapTutorial 316******************");
+			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
+			CCLOG("LoadMapTutorial 317******************");
+			boss = new BossLv1(this);
+			boss->m_sprite->setPosition(Vec2(posX-100, posY-100));
+		}
+		if (type == 3)
+		{
+			//npc zolo
+			npcsolo = new Npclv1(this);
+			CCLOG("LoadMapTutorial 318******************");
+			npcsolo->Init();
+			CCLOG("LoadMapTutorial 319******************");
+			npcsolo->m_sprite->setTag(NpcSolotag);
+			npcsolo->m_sprite->runAction(npcsolo->Communication());
+			CCLOG("LoadMapTutorial 320******************");
+			npcsolo->m_sprite->setPosition(Vec2(posX, posY));
+			CCLOG("LoadMapTutorial 321******************");
+		}
+		if (type == 4)
+		{
+			//
+			npcYolo = new Npclv1(this);
+			CCLOG("LoadMapTutorial 322******************");
+			npcYolo->Init();
+			CCLOG("LoadMapTutorial 323******************");
+			npcYolo->m_sprite->setTag(NpcYolotag);
+			npcYolo->m_sprite->runAction(npcYolo->CommunicationNPCYolo());
+			CCLOG("LoadMapTutorial 324******************");
+			npcYolo->m_sprite->setPosition(Vec2(posX, posY));
+			CCLOG("LoadMapTutorial 325******************");
+		}
+		if (type == 1)
+		{
+			AiLv1* ailv = new AiLv1(this);
+			ailv->m_sprite->setPosition(Vec2(posX, posY));
+			ailv->setIndex(ai.size());
+			ai.push_back(ailv);
+		}
+	}
+	CCLOG("LoadMapTutorial 3 END******************");
+}
+void MapTutorialScene::creepCollistionSkill(Node* nodeA, Node* nodeB)
+{
+	//if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+	//{
+	//	for (int i = 0; i < ai.size(); i++) {
+	//		CCLOG("KILL");
+	//		ai[i]->SetState(AiLv1::ACTION_HURT);
+	//		if (ai[i]->m_health <= 0) {
+	//			ai[i]->SetState(AiLv1::ACTION_DIE);
+	//			ai[i]->physicsBodyChar->setEnabled(false);
+	//			mainPlayer->Exp += 20;
+	//			countCreepDie = 1;
+	//			menuLayer->setD(countCreepDie);
+	//		}
+	//	}
+	//}
 	if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 	{
 		if (nodeA->getTag() == AILV1)
@@ -237,110 +347,41 @@ void MapTutorialScene::creepCollistionSkill( Node* nodeA, Node* nodeB)
 		}
 	}
 }
-
-
-void MapTutorialScene::createPhysicMap()
-{
-	// set physics map
-	auto objects = mObjectGroup->getObjects();
-	CCLOG("LoadMapTutorial 31******************");
-	for (int i = 0; i < objects.size(); i++)
+void MapTutorialScene::bossCollistionSkill(Node* nodeA, Node* nodeB) {
+	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACKTAG)
 	{
-		auto object = objects.at(i);
-		CCLOG("LoadMapTutorial 32******************");
-		auto properties = object.asValueMap();
-		CCLOG("LoadMapTutorial 33******************");
-		float posX = properties.at("x").asFloat();
-		CCLOG("LoadMapTutorial 34******************");
-		float posY = properties.at("y").asFloat();
-		CCLOG("LoadMapTutorial 35******************");
-		int type = object.asValueMap().at("type").asInt();
-		CCLOG("LoadMapTutorial 36******************");
-		if (type == 1)
+		if (nodeA->getTag() == BOSSLV1)
 		{
-
-			auto physics = PhysicsBody::createBox(Size(properties.at("width").asFloat(), properties.at("height").asFloat()), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-			CCLOG("LoadMapTutorial 37******************");
-			physics->setDynamic(false);
-			physics->setCollisionBitmask(Model::BITMASK_GROUND);
-			physics->setContactTestBitmask(true);
-			auto x = properties.at("width").asFloat() / 2 + posX;
-			CCLOG("LoadMapTutorial 38******************");
-			auto y = properties.at("height").asFloat() / 2 + posY;
-			CCLOG("LoadMapTutorial 3******************");
-			auto node = Node::create();
-			node->setPosition(Vec2(x, y));
-			this->addChild(node);
-			CCLOG("LoadMapTutorial 39******************");
-			node->setPhysicsBody(physics);
+			auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
+			currentGoblin->SetState(AiLv1::ACTION_HURT);
 		}
-		if (type == 2)
+		else
 		{
-
-			auto edgeBody = PhysicsBody::createEdgeBox(Size(properties.at("width").asFloat(), properties.at("height").asFloat()), PhysicsMaterial(1.0f, 0.0f, 1.0f));
-			auto edgeNode = Node::create();
-			edgeNode->setPosition(Vec2(properties.at("width").asFloat() / 2 + posX, properties.at("height").asFloat() / 2 + posY));
-			addChild(edgeNode);
-			edgeNode->setPhysicsBody(edgeBody);
-			CCLOG("LoadMapTutorial 311******************");
+			auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
+			currentGoblin->SetState(AiLv1::ACTION_HURT);
 		}
 	}
-
-	// set position main
-	auto objects1 = mObjectGroup1->getObjects();
-	CCLOG("LoadMapTutorial 312******************");
-	for (int i = 0; i < objects1.size(); i++)
+	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_ICE)
 	{
-		auto object1 = objects1.at(i);
-		auto properties = object1.asValueMap();
-		float posX = properties.at("x").asFloat();
-		float posY = properties.at("y").asFloat();
-		int type = object1.asValueMap().at("type").asInt();
-		CCLOG("LoadMapTutorial 313******************");
-		if (type == 2)
+		if (nodeA->getTag() == BOSSLV1)
 		{
-			//
-			mainPlayer = new Player(this);
-			CCLOG("LoadMapTutorial 316******************");
-			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
-			CCLOG("LoadMapTutorial 317******************");
+			boss->SetState(BossLv1::ACTION_HURT_ICE);
 		}
-		if (type == 3)
+		else
 		{
-			//npc zolo
-			npcsolo = new Npclv1(this);
-			CCLOG("LoadMapTutorial 318******************");
-			npcsolo->Init();
-			CCLOG("LoadMapTutorial 319******************");
-			npcsolo->m_sprite->setTag(NpcSolotag);
-			npcsolo->m_sprite->runAction(npcsolo->Communication());
-			CCLOG("LoadMapTutorial 320******************");
-			npcsolo->m_sprite->setPosition(Vec2(posX, posY));
-			CCLOG("LoadMapTutorial 321******************");
-		}
-		if (type == 4)
-		{
-			//
-			npcYolo = new Npclv1(this);
-			CCLOG("LoadMapTutorial 322******************");
-			npcYolo->Init();
-			CCLOG("LoadMapTutorial 323******************");
-			npcYolo->m_sprite->setTag(NpcYolotag);
-			npcYolo->m_sprite->runAction(npcYolo->CommunicationNPCYolo());
-			CCLOG("LoadMapTutorial 324******************");
-			npcYolo->m_sprite->setPosition(Vec2(posX, posY));
-			CCLOG("LoadMapTutorial 325******************");
-		}
-		if (type == 1)
-		{
-			AiLv1* ailv = new AiLv1(this);
-			ailv->m_sprite->setPosition(Vec2(posX, posY));
-			ailv->setIndex(ai.size());
-			ai.push_back(ailv);
+			boss->SetState(BossLv1::ACTION_HURT_ICE);
 		}
 	}
-	CCLOG("LoadMapTutorial 3 END******************");
+	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_FIRE)
+	{
+		if (nodeA->getTag() == BOSSLV1)
+		{
+			boss->SetState(BossLv1::ACTION_HURT_FIRE);
+		}
+		else
+		{
+			boss->SetState(BossLv1::ACTION_HURT_FIRE);
+		}
+	}
 }
-
-
 //end nhan

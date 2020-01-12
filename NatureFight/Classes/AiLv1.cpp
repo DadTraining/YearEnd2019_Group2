@@ -80,11 +80,15 @@ void AiLv1::Collision(Player* player, float deltaTime)
 {
 	timem += deltaTime;
 	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
-		if (timem > 1.0f) {
+		if (timem > 0.3f) {
 			SetState(AiLv1::ACTION_ATTACK);
+			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 			timem = 0;
 		}
 	}
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80)
+		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
+	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }
 
 void AiLv1::SetIdle(int state) {
@@ -193,7 +197,7 @@ void AiLv1::SetMove(int state)
 }
 void AiLv1::SetState(int state)
 {
-	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0))
+	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0)||state==ACTION_HURT_ICE|| state == ACTION_HURT_FIRE)
 	{
 		switch (state) {
 		case ACTION_IDLE:
@@ -240,11 +244,6 @@ void AiLv1::SetFace()
 	}
 }
 
-void AiLv1::setIndex(int index)
-{
-	this->m_sprite->getPhysicsBody()->setGroup(index);
-}
-
 cocos2d::RepeatForever* AiLv1::MovingRight() {
 	return ObjectParent::AnimationObjectRepeat(101, "Goblin_Running", AttackSpeed);
 }
@@ -275,7 +274,10 @@ cocos2d::RepeatForever* AiLv1::IdleDown() { return NULL; }
 cocos2d::Animate* AiLv1::AttackDownAngry() { return NULL; }
 cocos2d::Animate* AiLv1::HurtDown() { return NULL; }
 cocos2d::RepeatForever* AiLv1::DieDown() { return NULL; }
-
+void AiLv1::setIndex(int index)
+{
+	this->m_sprite->getPhysicsBody()->setGroup(index);
+}
 float AiLv1::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
 }

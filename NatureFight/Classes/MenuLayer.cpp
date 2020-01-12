@@ -31,6 +31,7 @@ bool MenuLayer::init() {
 float timeCount = 0;
 void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
+	mainPlayer->SetFace(leftJoystick->getVelocity());
 	timeCount += deltaTime;
 
 }

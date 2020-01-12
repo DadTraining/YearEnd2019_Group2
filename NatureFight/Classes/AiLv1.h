@@ -51,7 +51,6 @@ public:
 	void SetHurtAi(int state, int skill);
 	void SetMove(int state);
 	void SetTagAI(int);
-
 	void setIndex(int index);
 
 	cocos2d::RepeatForever* MovingRight();

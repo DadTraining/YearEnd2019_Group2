@@ -40,8 +40,12 @@ bool LoadingScene::init()
 	addChild(load, 0);
 	auto updateLoadingBar = CallFunc::create([]() {
 		if (load->getPercent() < 100)
-		{	
-			load->setPercent(load->getPercent() + 4);
+		{
+			load->setPercent(load->getPercent() + 25);
+			if(load->getPercent()==50) ResourceManager::GetInstance()->Init("DataCreep.bin");
+			/*i++;
+			std::string loaddata = "Data" + std::to_string(i) + ".bin";
+			if (i <= 4) ResourceManager::GetInstance()->Init(loaddata);*/
 		}
 
 	});

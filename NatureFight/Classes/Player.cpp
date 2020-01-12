@@ -43,7 +43,6 @@ void Player::Update(float deltaTime)
 		if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
 			edgeNode->setPosition(Vec2(1000, 1000));
 		}
-		SetFace();
 	}
 }
 
@@ -64,7 +63,8 @@ void Player::Init()
 	//physicsBody->setDynamic(false);
 	physicsBody->setRotationEnable(false);
 	physicsBody->setCollisionBitmask(Model::BITMASK_PLAYER);
-	physicsBody->setContactTestBitmask(true);
+	physicsBody->setContactTestBitmask(1);
+
 	this->m_sprite->setPhysicsBody(physicsBody);
 	this->m_sprite->setTag(playertag);
 	physicsBody->setGravityEnable(false);
@@ -238,7 +238,7 @@ void Player::SetSkill()
 void Player::SetSkillFire()
 {
 	if (edgeNode->getTag() != ATTACK_FIRE) {
-		auto edgeBody = PhysicsBody::createEdgeBox(Size(70, 70));
+		auto edgeBody = PhysicsBody::createEdgeBox(Size(70, 70)); 
 		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
 		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
@@ -344,9 +344,9 @@ void Player::SetState(int state)
 	}
 }
 
-void Player::SetFace()
+void Player::SetFace(Vec2 velocity)
 {
-	float radian = std::atan2f(physicsBody->getVelocity().y, physicsBody->getVelocity().x);
+	float radian = std::atan2f(velocity.y, velocity.x);
 	if (physicsBody->getVelocity().x == 0 && physicsBody->getVelocity().y == 0) {
 		SetState(Player::ACTION_IDLE);
 	}

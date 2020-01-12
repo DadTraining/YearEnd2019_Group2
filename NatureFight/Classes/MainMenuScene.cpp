@@ -30,7 +30,7 @@ bool MainMenuScene::init()
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->playBackgroundMusic("melodyloops.mp3", true);
 	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Blazed.ttf", 70);
-	titlelb->setPosition(Vec2(visibleSize.width/2,visibleSize.height-visibleSize.height/4));
+	titlelb->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - visibleSize.height / 4));
 	titlelb->setColor(Color3B::RED);
 	addChild(titlelb,1);
 	auto bgimg = Sprite::create("settings/bgmain.jpg");
@@ -39,7 +39,7 @@ bool MainMenuScene::init()
 	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
 	addChild(bgimg);
 	auto play = ui::Button::create("settings/playbtn.png");
-	play->setPosition(Vec2(visibleSize.width/2,visibleSize.height/3));
+	play->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 3));
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{

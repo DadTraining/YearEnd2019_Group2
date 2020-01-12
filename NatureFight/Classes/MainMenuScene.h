@@ -1,6 +1,7 @@
 #ifndef  _MENU_SCENE_H_
 #define  _MENU_SCENE_H_
 #include "cocos2d.h"
+#include <BossLv1.h>
 #include"ResourceManager.h"
 USING_NS_CC;
 

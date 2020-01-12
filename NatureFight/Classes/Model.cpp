@@ -30,6 +30,11 @@ int Model::getIndex()
 	return mPhysicsBody->getGroup();
 }
 
+cocos2d::PhysicsBody* Model::getPhysicBody()
+{
+	return mPhysicsBody;
+}
+
 bool Model::isMoveRight()
 {
 	return mIsRunLeftToRight;
