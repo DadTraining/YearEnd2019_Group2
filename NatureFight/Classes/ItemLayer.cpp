@@ -5,47 +5,38 @@ using namespace cocos2d;
 
 void ItemLayer::Init()
 {
-	//auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	auto table = Sprite::create("settings/table2.png");
-	table->setPosition(140, 400);
+	table->setPosition(Vec2(0,visibleSize.height));
+	table->setAnchorPoint(Vec2(0,1));
 	table->setScaleX(1.3);
 	table->setOpacity(-100);
-	table->setAnchorPoint(Vec2(0.5, 0.5));
 	this->addChild(table);
 	Ice = Sprite::create("Sprites/Item/Stone/DaBang.png");
-	Ice->setPosition(45,400);
+	Ice->setPosition(table->getPosition() + Vec2(30,-( table->getContentSize().height / 2)));
+	Ice->setScale(0.5);
 	this->addChild(Ice,1);
 	 fire = Sprite::create("Sprites/Item/Stone/DaLua.png");
-	fire->setPosition(105, 400);
+	fire->setPosition(Ice->getPosition() + Vec2(70,0) );
+	fire->setScale(0.5);
 	this->addChild(fire, 1);
 	 toxic = Sprite::create("Sprites/Item/Stone/DaDoc.png");
-	toxic->setPosition(165, 400);
+	toxic->setPosition(fire->getPosition() + Vec2(70, 0));
+	toxic->setScale(0.5);
 	this->addChild(toxic, 1);
 	 wood = Sprite::create("Sprites/Item/Stone/DaMoc.png");
-	wood->setPosition(225, 400);
+	wood->setPosition(toxic->getPosition() + Vec2(70, 0));
+	wood->setScale(0.5);
 	this->addChild(wood, 1);
 	icon_sword = ui::Button::create("Sprites/Item/icon-kiem.png");
-	icon_sword->setScale(0.3);
+	icon_sword->setScale(0.25);
 	icon_sword->setTouchEnabled(false);
 	icon_sword->setOpacity(-150);
-	icon_sword->setPosition(Vec2(760, 40));
+	icon_sword->setPosition(Vec2(visibleSize.width- 145,35));
 	icon_sword->setRotation(-60);
 	this->addChild(icon_sword);
-	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
-	icon_fire->setScale(0.3);
-	icon_fire->setOpacity(-150);
-	icon_fire->setTouchEnabled(false);
-	icon_fire->setRotation(-45);
-	icon_fire->setPosition(Vec2(800, 100));
-	this->addChild(icon_fire);
-	icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
-	icon_ice->setScale(0.3);
-	icon_ice->setOpacity(-150);
-	icon_ice->setRotation(-25);
-	icon_ice->setTouchEnabled(false);
-	icon_ice->setPosition(Vec2(870, 140));
-	this->addChild(icon_ice);
+
 }
 void ItemLayer::showIconSword()
 {
@@ -54,19 +45,6 @@ void ItemLayer::showIconSword()
 	icon_sword->runAction(fin);
 }
 
-void ItemLayer::showIconFire()
-{
-	auto fin = FadeIn::create(3.0f);
-	icon_fire->runAction(fin);
-	icon_fire->setTouchEnabled(true);
-}
-
-void ItemLayer::showIconIce()
-{
-	auto fin = FadeIn::create(3.0f);
-	icon_ice->setTouchEnabled(true);
-	icon_ice->runAction(fin);
-}
 
 void ItemLayer::showItemSword()
 {
@@ -115,8 +93,9 @@ void ItemLayer::showItemIce()
 
 void ItemLayer::showItemBlood(/*cocos2d::Sprite* sprite*/)
 {
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto loadingbar = Sprite::create("loadingbar_bg.png");
-	loadingbar->setPosition(/*sprite->getPosition()+*/Vec2(600,415));
+	loadingbar->setPosition(Vec2(visibleSize.width*2/3,visibleSize.height-20));
 	loadingbar->setScaleX(1.6f);
 	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
 	addChild(loadingbar, 1);

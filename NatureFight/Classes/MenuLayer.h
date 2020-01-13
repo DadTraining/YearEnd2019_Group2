@@ -7,6 +7,7 @@
 #include <vector>
 #include<ItemLayer.h>
 #include<MainMenuScene.h>
+#include<SettingScene.h>
 class MenuLayer : public cocos2d::Layer
 {
 public:
@@ -18,6 +19,8 @@ public:
     void createButtonLayer();
     void createJoyStickLayer();
     void createLabelLayer();
+	void createSkillIce();
+	void createSkillFire();
 	
 	void Quest(); // nhan
 	void setQuestSolo(int );// nhan

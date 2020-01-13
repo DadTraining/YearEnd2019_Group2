@@ -46,7 +46,8 @@ bool MapTutorialScene::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	CCLOG("LoadMapTutorial 5******************");
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+
+	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc
@@ -142,7 +143,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			npcYolo->Collision1();
 			menuLayer->setQuestYolo(1);
 		}
-		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+		/*if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
 		{
 			for (int i = 0; i < ai.size(); i++) {
 				CCLOG("KILL");
@@ -155,7 +156,54 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 					menuLayer->setD(countCreepDie);
 				}
 			}
+		}*/
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
+		{
+			if (nodeA->getTag() == AILV1)
+			{
+				auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
+				currentGoblin->SetState(AiLv1::ACTION_HURT);
+			}
+			else
+			{
+				auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
+				currentGoblin->SetState(AiLv1::ACTION_HURT);
+			}
 		}
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACK_ICE)
+		{
+			if (nodeA->getTag() == AILV1)
+			{
+				auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
+				currentGoblin->SetState(AiLv1::ACTION_HURT_ICE);
+			}
+			else
+			{
+				auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
+				currentGoblin->SetState(AiLv1::ACTION_HURT_ICE);
+			}
+		}
+		if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACK_FIRE)
+		{
+			if (nodeA->getTag() == AILV1)
+			{
+				auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
+				currentGoblin->SetState(AiLv1::ACTION_HURT_FIRE);
+			}
+			else
+			{
+				auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
+				currentGoblin->SetState(AiLv1::ACTION_HURT_FIRE);
+			}
+		}
+		//if (nodeA->getTag() == BOSSTAG & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSTAG & nodeA->getTag() == ATTACKTAG)
+		//{
+		//	bossLv1->SetState(BossLv1::ACTION_HURT);
+		//}
+		//if (nodeA->getTag() == BOSSTAG & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSTAG & nodeA->getTag() == ATTACK_ICE)
+		//{
+		//	bossLv1->SetState(BossLv1::ACTION_HURT_ICE);
+		//}
 	}
 	return true;
 
