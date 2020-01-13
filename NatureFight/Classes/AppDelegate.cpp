@@ -92,7 +92,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     // turn on display FPS
-    //director->setDisplayStats(true);
+    director->setDisplayStats(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
@@ -114,8 +114,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	//ResourceManager::GetInstance()->Init("DataCreep.bin");
     // create a scene. it's an autorelease object
 	//auto scene = MapTutorialScene::createScene();
-	auto scene = Map_2::createScene();
-	//auto scene = LoadingScene::createScene();
+	//auto scene = Map_2::createScene();
+	auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);
 

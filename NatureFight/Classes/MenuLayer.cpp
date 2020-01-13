@@ -425,7 +425,7 @@ void MenuLayer::setC(int x)
 void MenuLayer::showItemSword(Vec2 a)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto item_kiem = Sprite::create("./Sprites/Item/Sword.png");
+	auto item_kiem = Sprite::create("Sprites/Item/Sword.png");
 	item_kiem->setPosition(a);
 	addChild(item_kiem, 80);
 	item_kiem->setScale(0.2); item_kiem->setRotation(45);
