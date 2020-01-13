@@ -20,6 +20,7 @@ USING_NS_CC;
 #define NpcYolotag 12
 #define AILV1 13
 #define ATTACKTAG 8
+#define BoomEx 100
 class MapTutorialScene : public cocos2d::Scene
 {
 public:

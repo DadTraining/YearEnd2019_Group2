@@ -39,6 +39,7 @@ public:
 	float AttackSpeed;
 	Boom* mBooms[MAX_BULLET];
 	bool stateHeal;
+	bool stateAngry;
 public:
 	BossLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);

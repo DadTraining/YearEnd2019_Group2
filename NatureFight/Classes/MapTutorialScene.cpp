@@ -144,6 +144,11 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			npcYolo->Collision1();
 			menuLayer->setQuestYolo(1);
 		}
+		//explotion
+		if (nodeA->getTag() == playertag & nodeB->getTag() == BoomEx || nodeB->getTag() == playertag & nodeA->getTag() == BoomEx)
+		{
+			mainPlayer->SetState(Player::ACTION_HURT);
+		}
 		creepCollistionSkill(nodeA, nodeB);
 		if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
 			(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
@@ -253,7 +258,7 @@ void MapTutorialScene::createPhysicMap()
 			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 317******************");
 			boss = new BossLv1(this);
-			boss->m_sprite->setPosition(Vec2(posX-100, posY-100));
+			boss->m_sprite->setPosition(Vec2(posX-300, posY-300));
 		}
 		if (type == 3)
 		{

@@ -58,6 +58,13 @@ void BossLv1::Update(float deltaTime)
 			stateHeal = false;
 		}
 	}
+	if(m_health<=50){
+		stateAngry = true;
+	}
+	else
+	{
+		stateAngry = false;
+	}
 }
 
 
@@ -80,6 +87,7 @@ void BossLv1::Init()
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
+	stateAngry = false;
 	AttackSpeed = 1;
 	auto edgeBody = PhysicsBody::createEdgeBox(Size(40, 40));
 	edgeBody->setContactTestBitmask(Model::BITMASK_MONSTER);
@@ -96,27 +104,44 @@ void BossLv1::Collision(Player* player, float deltaTime)
 {
 	Update(deltaTime);
 	timeBoss += deltaTime;
-	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 200) {
-		if (timeBoss > 2.0f) {
-			SetState(BossLv1::ACTION_ATTACK);
-			for (int i = 0; i < MAX_BULLET; i++)
-			{
-				if (!mBooms[i]->isAlive()) {
-					mBooms[i]->setAlive(true);
-					mBooms[i]->setPosition(this->m_sprite->getPosition());
-					mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition())*2);
-					break;
+	if (stateAngry) {
+		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 200) {
+			if (timeBoss > 2.0f) {
+				SetState(BossLv1::ACTION_ATTACK);
+				for (int i = 0; i < MAX_BULLET; i++)
+				{
+					if (!mBooms[i]->isAlive()) {
+						mBooms[i]->setAlive(true);
+						mBooms[i]->setPosition(this->m_sprite->getPosition());
+						mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
+						break;
+					}
 				}
+				timeBoss = 0;
 			}
-			timeBoss = 0;
+		}
+		if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 300 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 200) {
+			this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
+
+		}
+		else {
+			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 		}
 	}
-	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 300 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 200) {
-		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
-
-	}
 	else {
-		this->physicsBodyChar->setVelocity(Vec2(0, 0));
+		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 70) {
+			if (timeBoss > 2.0f) {
+				SetState(BossLv1::ACTION_ATTACK);
+				timeBoss = 0;
+			}
+		}
+		if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 200 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 70) {
+			this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
+
+		}
+		else {
+			this->physicsBodyChar->setVelocity(Vec2(0, 0));
+		}
 	}
 	updateBullets(deltaTime);
 	//flip boss
@@ -150,54 +175,107 @@ void BossLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void BossLv1::SetAttack(int state) {
-	switch (m_CurrentFace)
-	{
-	case FACE_LEFT:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
-		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
-		}
-		break;
-	case FACE_RIGHT:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
+	if (!stateAngry) {
+		switch (m_CurrentFace)
+		{
+		case FACE_LEFT:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
+			}
+			break;
+		case FACE_RIGHT:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
 
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
+			}
+			break;
+		case FACE_UP:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+			}
+			break;
+		case FACE_DOWN:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRight());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+			}
+			break;
 		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
-		}
-		break;
-	case FACE_UP:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
-		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
-		}
-		break;
-	case FACE_DOWN:
-		if (state != m_CurrentState) {
-			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
-		}
-		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
-			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
-		}
-		break;
 	}
+	else {
+		switch (m_CurrentFace)
+		{
+		case FACE_LEFT:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
+			}
+			break;
+		case FACE_RIGHT:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
+
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
+			}
+			break;
+		case FACE_UP:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
+			}
+			break;
+		case FACE_DOWN:
+			if (state != m_CurrentState) {
+				m_sprite->stopAllActions();
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+			}
+			else if (m_sprite->getNumberOfRunningActions() == 0) {
+				m_sprite->runAction(AttackRightAngry());
+				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
+			}
+			break;
+		}
+	}
+	
 }
 void BossLv1::SetHurt(int state)
 {
@@ -291,7 +369,7 @@ cocos2d::RepeatForever* BossLv1::IdleRight() {
 	return ObjectParent::AnimationObjectRepeat(106, "Ogre_Idle", AttackSpeed);
 }
 cocos2d::Animate* BossLv1::AttackRightAngry() {
-	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking", AttackSpeed);
+	return ObjectParent::AnimationObjectOnce(112, "Ogre_Throwing", AttackSpeed);
 }
 cocos2d::RepeatForever* BossLv1::DieRight() {
 	return ObjectParent::AnimationObjectRepeat(109, "Ogre_Dying", AttackSpeed);
