@@ -121,7 +121,24 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
-	
+	if (nodeA && nodeB)
+	{
+		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcFroztag || nodeB->getTag() == playertag & nodeA->getTag() == NpcFroztag)
+		{
+			npcFroz->CollisionFroz();
+
+		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcIcetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcIcetag)
+		{
+			
+			npcIce->CollisionIce();
+		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcWilchtag || nodeB->getTag() == playertag & nodeA->getTag() == NpcWilchtag)
+		{
+			npcWilch->CollisionWilch();
+		}
+
+	}
 	return true;
 
 }

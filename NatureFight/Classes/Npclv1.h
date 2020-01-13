@@ -13,6 +13,9 @@ public:
 	void Init();
 	void Collision(/*Sprite main*/);
 	void Collision1(/*Sprite main*/);
+	void CollisionFroz();
+	void CollisionIce();
+	void CollisionWilch();
 	cocos2d::RepeatForever* Hello();
 	cocos2d::RepeatForever* Communication();
 	cocos2d::RepeatForever* CommunicationNPCYolo();
