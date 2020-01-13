@@ -1,0 +1,9 @@
+0SPRITE 2
+0BUTTON 5
+0FONTS 2
+0FrameCache 6
+10 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDieUp.plist
+11 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Attack_2/PlayerAttackUp.plist
+12 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Attack_1/PlayerAttackUp.plist
+13 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/PlayerIdleDown.plist
+14 Sprites/Main/Warrior_animations/Front/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunDown.plist

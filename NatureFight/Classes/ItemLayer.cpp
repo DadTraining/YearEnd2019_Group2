@@ -5,25 +5,25 @@ using namespace cocos2d;
 
 void ItemLayer::Init()
 {
-	//auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	auto table = Sprite::create("settings/table2.png");
-	table->setPosition(140, 400);
-	table->setScaleX(1.3);
+	table->setPosition(0, visibleSize.height);
+	table->setScaleX(1.2);
 	table->setOpacity(-100);
-	table->setAnchorPoint(Vec2(0.5, 0.5));
+	table->setAnchorPoint(Vec2(0, 1));
 	this->addChild(table);
 	Ice = Sprite::create("Sprites/Item/Stone/DaBang.png");
-	Ice->setPosition(45,400);
+	Ice->setPosition(table->getPosition() + Vec2(30,-30));
 	this->addChild(Ice,1);
 	 fire = Sprite::create("Sprites/Item/Stone/DaLua.png");
-	fire->setPosition(105, 400);
+	fire->setPosition(table->getPosition() + Vec2(95, -30));
 	this->addChild(fire, 1);
 	 toxic = Sprite::create("Sprites/Item/Stone/DaDoc.png");
-	toxic->setPosition(165, 400);
+	toxic->setPosition(table->getPosition() + Vec2(165, -30));
 	this->addChild(toxic, 1);
 	 wood = Sprite::create("Sprites/Item/Stone/DaMoc.png");
-	wood->setPosition(225, 400);
+	wood->setPosition(table->getPosition() + Vec2(235, -30));
 	this->addChild(wood, 1);
 	icon_sword = ui::Button::create("Sprites/Item/icon-kiem.png");
 	icon_sword->setScale(0.3);
@@ -32,20 +32,7 @@ void ItemLayer::Init()
 	icon_sword->setPosition(Vec2(760, 40));
 	icon_sword->setRotation(-60);
 	this->addChild(icon_sword);
-	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
-	icon_fire->setScale(0.3);
-	icon_fire->setOpacity(-150);
-	icon_fire->setTouchEnabled(false);
-	icon_fire->setRotation(-45);
-	icon_fire->setPosition(Vec2(800, 100));
-	this->addChild(icon_fire);
-	icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
-	icon_ice->setScale(0.3);
-	icon_ice->setOpacity(-150);
-	icon_ice->setRotation(-25);
-	icon_ice->setTouchEnabled(false);
-	icon_ice->setPosition(Vec2(870, 140));
-	this->addChild(icon_ice);
+
 }
 void ItemLayer::showIconSword()
 {
@@ -54,19 +41,6 @@ void ItemLayer::showIconSword()
 	icon_sword->runAction(fin);
 }
 
-void ItemLayer::showIconFire()
-{
-	auto fin = FadeIn::create(3.0f);
-	icon_fire->runAction(fin);
-	icon_fire->setTouchEnabled(true);
-}
-
-void ItemLayer::showIconIce()
-{
-	auto fin = FadeIn::create(3.0f);
-	icon_ice->setTouchEnabled(true);
-	icon_ice->runAction(fin);
-}
 
 void ItemLayer::showItemSword()
 {
@@ -127,7 +101,7 @@ void ItemLayer::showItemBlood(/*cocos2d::Sprite* sprite*/)
 	addChild(load, 2);
 	load->setDirection(ui::LoadingBar::Direction::LEFT);
 }
-void ItemLayer::getpercentBlood(float x)
+void ItemLayer::getpercentBlood(int x)
 {
 	load->setPercent(load->getPercent() + x);
 }

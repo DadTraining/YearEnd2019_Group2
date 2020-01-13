@@ -2,10 +2,13 @@
 #define  __MENU_LAYER__
 #include<ResourceManager.h>
 #include<Player.h>
-#include<ItemLayer.h>
-#include "ui/CocosGUI.h"
 #include<SneakyJoystick.h>
 #include<SneakyJoystickSkinnedBase.h>
+#include <vector>
+#include<ItemLayer.h>
+#include<MainMenuScene.h>
+#include <GameSetting.h>
+#include <SimpleAudioEngine.h>
 class MenuLayer : public cocos2d::Layer
 {
 public:
@@ -17,12 +20,34 @@ public:
     void createButtonLayer();
     void createJoyStickLayer();
     void createLabelLayer();
+	void createSkillIce();
+	void createSkillFire();
+	void createFlood();
 	
+	void Quest(); // nhan
+	void setQuestSolo(int );// nhan
+	void setQuestYolo(int);// nhan
+	void setD(int );//nhan
+	void setC(int);//nhan
+
 protected:
 private:
     Player* mainPlayer;
+	
+
+	cocos2d::ui::LoadingBar* loadhelth;
+	cocos2d::ui::LoadingBar* loaddame;
+
+	Sprite* quest; // nhan
+	Label* label1, *label2; // nhan
+	int QuestSolo=0 ;//nhan
+	int QuestYolo=0 ;//nhan
+	int d = 0, c = 0;//nhan
+
     SneakyJoystick* leftJoystick;
     cocos2d::Label* _messageLabel;
+
+
 	ItemLayer* item;
 };
 

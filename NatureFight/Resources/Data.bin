@@ -1,13 +1,6 @@
 0SPRITE 2
-1 Sprites/Man1/Goblin/PNG/PNG_Sequences/Running/0_Goblin_Running_000.png
-2 circle-icon-3.jpg
 0BUTTON 5
 5 Button/Button_Attack_Normal.png Button/Button_Attack_Selected.png
 0FONTS 2
 1 fonts/MarkerFelt.ttf
 2 fonts/arial.ttf
-0FrameCache 6
-1 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/PlayerIdleRight.plist
-2 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunRight.plist
-3 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Hurt/PlayerHurtRight.plist
-4 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDiedRight.plist

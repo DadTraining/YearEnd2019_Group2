@@ -1,10 +1,9 @@
-﻿#include"Defines.h"
+#include"Defines.h"
 #include "LoadingScene.h"
 #include "MainMenuScene.h"
 #include "SimpleAudioEngine.h"
 USING_NS_CC;
 using namespace CocosDenshion;
-int i = 1;
 Scene* LoadingScene::createScene()
 {
 	auto scene = Scene::create();
@@ -26,20 +25,11 @@ bool LoadingScene::init()
 		return false;
 	}
 	//load sound
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("melodyloops.mp3");
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto audio = SimpleAudioEngine::getInstance();
-	// tải file âm thanh lưu vào thư mục cache
-	audio->preloadBackgroundMusic("sounds/melodyloops.mp3");
-	audio->preloadEffect("sounds/212.mp3");
-	audio->preloadEffect("sounds/dam.wav");
-	auto bgimg = Sprite::create("settings/bgmain.jpg");
-	bgimg->setScale(0.80);
-	bgimg->setOpacity(-200);
-	bgimg->setAnchorPoint(Vec2(0.5, 0.5));
-	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
-	addChild(bgimg);
+
 	auto loadingbar = Sprite::create("settings/loadingbg.png");
-	loadingbar->setPosition(visibleSize/2);
+	loadingbar->setPosition(visibleSize / 2);
 	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
 	addChild(loadingbar, 1);
 	static auto load = ui::LoadingBar::create("settings/loadingbar.png");
@@ -50,11 +40,8 @@ bool LoadingScene::init()
 	addChild(load, 0);
 	auto updateLoadingBar = CallFunc::create([]() {
 		if (load->getPercent() < 100)
-		{
-			i++;
-			std::string loaddata = "Data" + std::to_string(i)+".bin";
+		{	
 			load->setPercent(load->getPercent() + 4);
-			if(i<=4) ResourceManager::GetInstance()->Init(loaddata);
 		}
 
 	});
@@ -73,8 +60,7 @@ void LoadingScene::update(float deltaTime)
 {
 	/*countT += deltaTime;
 	if (countT >= 4) {
-		auto scene = MainMenuScene::createScene();
-		Director::getInstance()->replaceScene(scene);
+	auto scene = MainMenuScene::createScene();
+	Director::getInstance()->replaceScene(scene);
 	}*/
 }
-

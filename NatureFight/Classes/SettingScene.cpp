@@ -63,7 +63,7 @@ bool SettingScene::init()
 	musiclb->setPosition(bg->getPosition() + Vec2(-105, 80));
 	musiclb->setColor(Color3B::BLACK);
 	addChild(musiclb, 2);
-	musicbtn = ui::CheckBox::create("settings/96.png","settings/95.png");
+	musicbtn = ui::CheckBox::create("settings/96.png", "settings/95.png");
 	musicbtn->setPosition(musiclb->getPosition() + Vec2(205, 0));
 	musicbtn->setScale(0.6f);
 	musicbtn->setSelected(!GameSetting::getInstance()->isMusic());
@@ -91,7 +91,7 @@ bool SettingScene::init()
 	soundbtn->setScale(0.6f);
 	soundbtn->setSelected(!GameSetting::getInstance()->isSound());
 	soundbtn->addClickEventListener([&](Ref* event) {
-		
+
 		if (soundbtn->isSelected())
 		{
 			GameSetting::getInstance()->setSound(true);
@@ -132,7 +132,7 @@ bool SettingScene::init()
 	auto closebtn = ui::Button::create("close.png");
 	closebtn->setPosition(bg->getPosition() + Vec2(200, 140));
 	closebtn->setScale(0.3);
-	addChild(closebtn,3);
+	addChild(closebtn, 3);
 	closebtn->addClickEventListener([&](Ref* event)
 	{
 		auto turn = GameSetting::getInstance()->isSound();
@@ -155,5 +155,4 @@ void SettingScene::update(float deltaTime)
 		Director::getInstance()->replaceScene(MapTutorialScene::createScene());
 	}
 }
-
 

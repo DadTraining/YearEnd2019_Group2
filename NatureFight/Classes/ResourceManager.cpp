@@ -78,8 +78,10 @@ void ResourceManager::Load(std::string fileName)
 			CCLOG("Load 11******************");
 			m_framecache.insert({ num,spriteCache });
 			spriteCache->destroyInstance();
+			CCLOG("Load 12******************");
 		}
 	}
+	CCLOG("Load END******************");
 }
 
 Sprite* ResourceManager::GetSpriteById(int id)

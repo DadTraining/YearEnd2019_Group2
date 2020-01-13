@@ -10,15 +10,13 @@ public:
 	void Init();
 	//
 	void showIconSword();
-	void showIconIce();
-	void showIconFire();
 	//
 	void showItemSword();
 	void showItemFire();
 	void showItemIce();
 	void showItemBlood(/*cocos2d::Sprite* sprite*/);
 	//
-	void getpercentBlood(float x);
+	void getpercentBlood(int x);
 	//da
 	void showFire();
 	void showIce();

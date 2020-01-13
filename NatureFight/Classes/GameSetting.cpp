@@ -17,7 +17,7 @@ GameSetting::~GameSetting()
 
 GameSetting* GameSetting::getInstance()
 {
-	if(sInstance == nullptr)
+	if (sInstance == nullptr)
 	{
 		sInstance = new GameSetting();
 	}
@@ -53,4 +53,3 @@ int GameSetting::getVolume()
 {
 	return Volume;
 }
-
