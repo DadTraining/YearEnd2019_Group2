@@ -13,32 +13,37 @@ void ItemLayer::Init()
 	table->setOpacity(-100);
 	table->setAnchorPoint(Vec2(0.5, 0.5));
 	this->addChild(table);
-	Ice = Sprite::create("Sprites/Item/Stone/DaBang.png");
-	Ice->setPosition(45,400);
+
+	Ice = ui::CheckBox::create("Sprites/Item/Stone/DaBang.png", "Sprites/Item/Stone/DaVanNang.png");
+	Ice->setPosition(Vec2(45, 400));
 	this->addChild(Ice,1);
-	 fire = Sprite::create("Sprites/Item/Stone/DaLua.png");
-	fire->setPosition(105, 400);
+
+	fire = ui::CheckBox::create("Sprites/Item/Stone/DaLua.png", "Sprites/Item/Stone/DaVanNang.png");
+	fire->setPosition(Vec2(105, 400));
 	this->addChild(fire, 1);
-	 toxic = Sprite::create("Sprites/Item/Stone/DaDoc.png");
-	toxic->setPosition(165, 400);
+
+	 toxic = ui::CheckBox::create("Sprites/Item/Stone/DaDoc.png", "Sprites/Item/Stone/DaVanNang.png");
+	toxic->setPosition(Vec2(165, 400));
 	this->addChild(toxic, 1);
-	 wood = Sprite::create("Sprites/Item/Stone/DaMoc.png");
-	wood->setPosition(225, 400);
+
+	wood = ui::CheckBox::create("Sprites/Item/Stone/DaMoc.png", "Sprites/Item/Stone/DaVanNang.png");
+	wood->setPosition(Vec2(225, 400));
 	this->addChild(wood, 1);
-	icon_sword = ui::Button::create("Sprites/Item/icon-kiem.png");
-	icon_sword->setScale(0.3);
-	icon_sword->setTouchEnabled(false);
-	icon_sword->setOpacity(-150);
-	icon_sword->setPosition(Vec2(760, 40));
-	icon_sword->setRotation(-60);
-	this->addChild(icon_sword);
+
+	icon_power = ui::Button::create("Sprites/Item/icon-kiem.png", "Sprites/Item/icon-kiem.png");
+	icon_power->setScale(0.3);
+	icon_power->setTouchEnabled(false);
+	icon_power->setOpacity(-150);
+	icon_power->setPosition(Vec2(760, 40));
+	icon_power->setRotation(-60);
+	this->addChild(icon_power);
 
 }
 void ItemLayer::showIconSword()
 {
 	auto fin = FadeIn::create(3.0f);
-	icon_sword->setTouchEnabled(true);
-	icon_sword->runAction(fin);
+	icon_power->setTouchEnabled(true);
+	icon_power->runAction(fin);
 }
 
 
@@ -114,7 +119,6 @@ void ItemLayer::showIce()
 	emitter->setScale(0.5f);
 	addChild(emitter);
 	Ice->runAction(RepeatForever::create(rotateBy));;
-
 }
 
 void ItemLayer::showFire()

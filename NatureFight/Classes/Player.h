@@ -19,8 +19,13 @@ public:
 	static const int SKILL_FIRE = 1;
 	static const int SKILL_ICE = 2;
 
-	static const int STONE_CBN = 1;
-	static const int STONE_FIRE = 2;
+	static const int STONE_CBN = 2;
+	static const int STONE_FIRE = 3;
+	static const int STONE_ICE = 5;
+	static const int STONE_TOXIC = 7;
+	static const int STONE_FIRE_ICE = STONE_FIRE + STONE_ICE;
+	static const int STONE_FIRE_TOXIC = STONE_FIRE + STONE_TOXIC;
+	static const int STONE_ICE_TOXIC = STONE_ICE + STONE_TOXIC;
 
 public:
 	PhysicsBody* physicsBody;
@@ -39,9 +44,10 @@ public:
 
 	bool haveMask;
 
-private:
+public:
 	cocos2d::Scene* sceneGame;
 	static int m_CurrentStone;
+	ParticleSystemQuad* particleMove;
 public:
 	Player(cocos2d::Scene* scene);
 	void Update(float deltaTime);
@@ -86,5 +92,6 @@ public:
 	cocos2d::RepeatForever* DieDown();
 
 	cocos2d::ParticleSystemQuad* ParticleAttack(std::string name);
+	void SetParticleMove();
 
 };

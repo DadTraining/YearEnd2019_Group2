@@ -41,6 +41,7 @@ void MenuLayer::update(float deltaTime) {
 }
 
 cocos2d::Sprite* mPauseLayer;
+int countSelect = 0;
 void MenuLayer::createButtonLayer()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -54,6 +55,84 @@ void MenuLayer::createButtonLayer()
 		item->showFire();
 		item->showItemBlood();
 		this->addChild(item);
+
+		item->Ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+			switch (type)
+			{
+			case ui::Widget::TouchEventType::BEGAN:
+				if (item->Ice->isSelected()==0) {
+					if (countSelect >= 2) {
+						item->fire->setSelected(false);
+						item->toxic->setSelected(false);
+						mainPlayer->m_CurrentStone = 0;
+						countSelect = 0;
+					}
+					countSelect++;
+					mainPlayer->m_CurrentStone += Player::STONE_ICE;
+				}
+				else {
+					countSelect--;
+					mainPlayer->m_CurrentStone -= Player::STONE_ICE;
+				}
+					mainPlayer->SetParticleMove();
+			}
+		});
+
+		item->fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+			switch (type)
+			{
+			case ui::Widget::TouchEventType::BEGAN:
+				if (item->fire->isSelected() == 0) {
+					if (countSelect >= 2) {
+						item->Ice->setSelected(false);
+						item->toxic->setSelected(false);
+						mainPlayer->m_CurrentStone = 0;
+						countSelect = 0;
+					}
+					countSelect++;
+					mainPlayer->m_CurrentStone += Player::STONE_FIRE;
+				}
+				else {
+					countSelect--;
+					mainPlayer->m_CurrentStone -= Player::STONE_FIRE;
+				}
+					mainPlayer->SetParticleMove();
+			}
+		});
+
+		item->toxic->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+			switch (type)
+			{
+			case ui::Widget::TouchEventType::BEGAN:
+				if (item->toxic->isSelected() == 0) {
+					if (countSelect >= 2) {
+						item->fire->setSelected(false);
+						item->Ice->setSelected(false);
+						mainPlayer->m_CurrentStone = 0;
+						countSelect = 0;
+					}
+					countSelect++;
+					mainPlayer->m_CurrentStone += mainPlayer->STONE_TOXIC;
+				}
+				else {
+					countSelect--;
+					mainPlayer->m_CurrentStone -= mainPlayer->STONE_TOXIC;
+				}
+					mainPlayer->SetParticleMove();
+			}
+		});
+
+		item->icon_power->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+			switch (type)
+			{
+			case ui::Widget::TouchEventType::BEGAN:
+				if (timeCount >= 10) {
+					mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
+					mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+					timeCount = 0;
+				}
+			}
+		});
 		//pause
 		auto btnPause = ui::Button::create("settings/pause.png");
 		btnPause->setPosition(Vec2(visibleSize));
@@ -159,13 +238,6 @@ void MenuLayer::createJoyStickLayer()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-	auto particleSystem = ParticleSystemQuad::create("Particles/move2.plist");
-	particleSystem->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height / 2 - 20));
-	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
-	particleSystem->setScale(0.3f);
-	addChild(particleSystem, 10);
 
 	Rect joystickBaseDimensions;
 	joystickBaseDimensions = Rect(0, 0, 160.0f, 160.0f);

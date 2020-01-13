@@ -286,7 +286,7 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
-	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
+	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL)
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
 		m_health -= 10;

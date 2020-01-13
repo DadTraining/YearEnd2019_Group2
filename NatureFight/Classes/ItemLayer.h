@@ -24,15 +24,16 @@ public:
 	void showWood();
 
 
-private:
+public:
 	cocos2d::ui::LoadingBar* load;
 	cocos2d::ui::Button* item_blood;
-	cocos2d::ui::Button* icon_sword;
+	cocos2d::ui::Button* icon_power;
 	cocos2d::ui::Button* icon_fire;
 	cocos2d::ui::Button* icon_ice;
-	cocos2d::Sprite* Ice;
-	cocos2d::Sprite* fire;
-	cocos2d::Sprite* wood;
-	cocos2d::Sprite* toxic;
+
+	cocos2d::ui::CheckBox* Ice;
+	cocos2d::ui::CheckBox* fire;
+	cocos2d::ui::CheckBox* wood;
+	cocos2d::ui::CheckBox* toxic;
 };
 #endif

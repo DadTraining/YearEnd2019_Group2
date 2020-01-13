@@ -1,8 +1,8 @@
 #include <Player.h>
 #include "SimpleAudioEngine.h"
 using namespace CocosDenshion;
-int Player::Level;
-int Player::Exp;
+int Player::Level = 1;
+int Player::Exp = 0;
 int Player::MaxExp;
 int Player::m_CurrentStone;
 Player::Player(cocos2d::Scene* scene)
@@ -19,10 +19,12 @@ void Player::Update(float deltaTime)
 		SetState(ACTION_DIE);
 		if (timeDie >= 5) {
 			timeDie = 0;
-			m_sprite->setPosition(10, 10);
+			m_sprite->setPosition(100, 100);
 			updateLevel();
+			m_health = MaxHealth;
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
+			SetFace(Vec2(0,0));
 			edgeNode->setPosition(Vec2(1000, 1000));
 			physicsBody->setEnabled(true);
 		}
@@ -45,6 +47,7 @@ void Player::Update(float deltaTime)
 			edgeNode->setPosition(Vec2(1000, 1000));
 		}
 	}
+	particleMove->setPosition(m_sprite->getPosition() - Vec2(0, 20));
 }
 
 void Player::Init()
@@ -52,8 +55,6 @@ void Player::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	Level = 1;
-	Exp = 0;
 	updateLevel();
 	m_health = MaxHealth;
 
@@ -76,6 +77,9 @@ void Player::Init()
 
 	edgeNode = Node::create();
 	sceneGame->addChild(edgeNode);
+
+	particleMove = ParticleSystemQuad::create("Particles/move_fire.plist");
+	SetParticleMove();
 
 }
 
@@ -128,6 +132,7 @@ void Player::SetIdle(int state) {
 }
 void Player::SetDie(int state)
 {
+	if(state != m_CurrentState)
 	switch (m_CurrentFace) {
 	case FACE_RIGHT:
 	case FACE_LEFT:
@@ -203,6 +208,7 @@ void Player::SetAttack(int state) {
 	if (Level >= 1) SetSkill();
 }
 void Player::SetHurt(int state) {
+	if (state != m_CurrentState)
 	switch (m_CurrentFace) {
 	case FACE_LEFT:
 	case FACE_RIGHT:
@@ -256,9 +262,10 @@ void Player::SetSkillFire()
 }
 void Player::SetSkillIce()
 {
-	if (edgeNode->getTag() != ATTACK_ICE) {
-		auto edgeBody = PhysicsBody::createEdgeBox(Size(30, 70));
-		if(m_CurrentFace==FACE_DOWN || m_CurrentFace == FACE_UP) edgeBody = PhysicsBody::createEdgeBox(Size(70, 30));
+ 	if (edgeNode->getTag() != ATTACK_ICE) {
+		PhysicsBody* edgeBody;
+		if (edgeNode->getRotation() == 0) edgeBody = PhysicsBody::createEdgeBox(Size(30, 70));
+		else edgeBody = PhysicsBody::createEdgeBox(Size(70, 30));
 		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
 		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
@@ -276,15 +283,15 @@ void Player::SetSkillIce()
 		break;
 	case FACE_UP:
 		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, 60) + physicsBody->getVelocity() / 3));
-		particleSystem->runAction(MoveBy::create(0.3f, Vec2(0, 60) + physicsBody->getVelocity() / 3));
+		particleSystem->runAction(MoveBy::create(0.3f, Vec2(0, 60) + physicsBody->getVelocity() / 2));
 		break;
 	case FACE_DOWN:
 		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, -60) + physicsBody->getVelocity() / 3));
-		particleSystem->runAction(MoveBy::create(0.3f, Vec2(0, -60) + physicsBody->getVelocity() / 3));
+		particleSystem->runAction(MoveBy::create(0.3f, Vec2(0, -60) + physicsBody->getVelocity() / 2));
 		break;
 	case FACE_LEFT:
 		edgeNode->runAction(MoveBy::create(0.3f, Vec2(-60, 0) + physicsBody->getVelocity() / 3));
-		particleSystem->runAction(MoveBy::create(0.3f, Vec2(-60, 0) + physicsBody->getVelocity() / 3));
+		particleSystem->runAction(MoveBy::create(0.3f, Vec2(-60, 0) + physicsBody->getVelocity() / 2));
 		break;
 	}
 }
@@ -307,6 +314,7 @@ void Player::UseStone(int stone)
 }
 void Player::SetState(int state)
 {
+	if(m_CurrentState != ACTION_DIE)
 	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0))
 	{
 		switch (state) {
@@ -479,4 +487,40 @@ cocos2d::ParticleSystemQuad* Player::ParticleAttack(std::string name)
 		break;
 	}
 	return particleSystem;
+}
+void Player::SetParticleMove() {
+	CCLOG("%d", m_CurrentStone);
+	std::string name;
+	switch (m_CurrentStone)
+	{
+	case STONE_FIRE:
+		name = "Particles/move_fire.plist";
+		break;
+	case STONE_ICE:
+		name = "Particles/move_ice.plist";
+		break;
+	case STONE_TOXIC:
+		name = "Particles/move_toxic.plist";
+		break;
+	case STONE_FIRE_ICE:
+		name = "Particles/move_fire_ice.plist";
+		break;
+	case STONE_FIRE_TOXIC:
+		name = "Particles/move_fire_ice.plist";
+		break;
+	case STONE_ICE_TOXIC:
+		name = "Particles/move_fire_ice.plist";
+		break;
+	default:
+		name = "Particles/move_fire.plist";
+		break;
+	}
+	particleMove->removeFromParentAndCleanup(true);
+	particleMove = ParticleSystemQuad::create(name);
+	particleMove->setScale(0.3f);
+	particleMove->setSpeed(100);
+	particleMove->setAngle(90);
+	particleMove->setPosition(m_sprite->getPosition()-Vec2(0,20));
+	particleMove->setDuration(ParticleSystem::DURATION_INFINITY);
+	sceneGame->addChild(particleMove);
 }

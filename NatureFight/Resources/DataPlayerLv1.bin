@@ -5,7 +5,7 @@
 1 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/PlayerIdleRight.plist
 2 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunRight.plist
 3 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Hurt/PlayerHurtRight.plist
-4 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDiedRight.plist
+4 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Died/PlayerDieRight.plist
 5 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_2/PlayerAttackRight.plist
 6 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_1/PlayerAttackRight.plist
 7 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Idle/PlayerIdleUp.plist

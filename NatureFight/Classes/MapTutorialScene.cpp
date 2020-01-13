@@ -145,6 +145,9 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			npcYolo->Collision1();
 			menuLayer->setQuestYolo(1);
 		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK || nodeB->getTag() == playertag & nodeA->getTag() == CREEPATTACK) {
+			mainPlayer->SetState(Player::ACTION_HURT);
+		}
 		
 	}
 	return true;
