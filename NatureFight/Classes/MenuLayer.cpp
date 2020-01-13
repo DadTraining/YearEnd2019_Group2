@@ -13,6 +13,7 @@ bool MenuLayer::init() {
 		return false;
 	}
 	createButtonLayer();
+	createUpLevelLayer();
 	createSkillFire();
 	createSkillIce();
 
@@ -33,6 +34,9 @@ void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
 	mainPlayer->SetFace(leftJoystick->getVelocity());
 	timeCount += deltaTime;
+	if (mainPlayer->Exp >= mainPlayer->MaxExp) {
+		ButtonUpLevel->setVisible(true);
+	}
 
 }
 
@@ -123,6 +127,33 @@ void MenuLayer::createButtonLayer()
 	});
 	ButtonAttack->removeFromParent();
 	addChild(ButtonAttack, 1);
+}
+void MenuLayer::createUpLevelLayer()
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	ButtonUpLevel = ResourceManager::GetInstance()->GetButtonById(6);
+	ButtonUpLevel->setPosition(Vec2(visibleSize.width/2, visibleSize.height / 2));
+	ButtonUpLevel->setAnchorPoint(Vec2(1, 0));
+	ButtonUpLevel->setScale(0.3f);
+	ButtonUpLevel->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+			mainPlayer->Level++;
+			mainPlayer->updateLevel();
+			ButtonUpLevel->setVisible(false);
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+	});
+	ButtonUpLevel->removeFromParent();
+	addChild(ButtonUpLevel, 1);
+	ButtonUpLevel->setVisible(false);
 }
 void MenuLayer::createJoyStickLayer()
 {

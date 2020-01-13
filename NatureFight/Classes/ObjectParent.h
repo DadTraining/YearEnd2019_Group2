@@ -30,6 +30,7 @@ public:
 	float AttackSpeed;
 	float MoveSpeed;
 	int m_health;
+	int MaxHealth;
 	int m_dame;
 public:
 	ObjectParent();

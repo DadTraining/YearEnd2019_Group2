@@ -31,6 +31,7 @@ void ResourceManager::Init(const std::string path)
 
 void ResourceManager::Load(std::string fileName)
 {
+	m_framecachePlayer.clear();
 	CCLOG("Load 1****************** %s: ", fileName.c_str());
 	int count = 0;
 	while (!m_dataFolderPath.empty()) {
@@ -76,7 +77,17 @@ void ResourceManager::Load(std::string fileName)
 			CCLOG("Load 10******************");
 			spriteCache->retain();
 			CCLOG("Load 11******************");
-			m_framecache.insert({ num,spriteCache });
+			m_framecachePlayer.insert({ num,spriteCache });
+			spriteCache->destroyInstance();
+			CCLOG("Load 12******************");
+		}
+		if (count == 5) {
+			auto spriteCache = SpriteFrameCache::getInstance();
+			spriteCache->addSpriteFramesWithFile(text);
+			CCLOG("Load 10******************");
+			spriteCache->retain();
+			CCLOG("Load 11******************");
+			m_framecacheAI.insert({ num,spriteCache });
 			spriteCache->destroyInstance();
 			CCLOG("Load 12******************");
 		}
@@ -101,9 +112,14 @@ Label* ResourceManager::GetLabelById(int id)
 	auto label = m_labels.find(id)->second;
 	return label;
 }
-SpriteFrameCache* ResourceManager::GetFrameById(int id)
+SpriteFrameCache* ResourceManager::GetFramePlayerById(int id)
 {
-	auto frame = m_framecache.find(id)->second;
+	auto frame = m_framecachePlayer.find(id)->second;
+	return frame;
+}
+SpriteFrameCache* ResourceManager::GetFrameAIById(int id)
+{
+	auto frame = m_framecacheAI.find(id)->second;
 	return frame;
 }
 void ResourceManager::SetLevelPlayer(int level)

@@ -25,15 +25,17 @@ public:
 	Player* mainPlayer;
 	AiLv1* ailv1;
 	AiLv1* ailv2;
-	ui::Button* ButtonAttack;
-	SneakyJoystick* leftJoystick;
-//	SneakyJoystickSkinnedBase* joystickBase;
+
 	Npclv1* npcsolo, *npcYolo;
 	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
+
+	ui::Button* ButtonAttack;
+	SneakyJoystick* leftJoystick;
+
 	int countCreepDie=0;
 public:
     static cocos2d::Scene* createScene();

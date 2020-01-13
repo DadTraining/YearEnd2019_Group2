@@ -60,7 +60,8 @@ bool MapTutorialScene::init()
 	//end va cham npc
 	CCLOG("LoadMapTutorial 7******************");
 	
-
+	//boss = new BossLv1(this);
+	//boss->m_sprite->setPosition(mainPlayer->m_sprite->getPosition()-Vec2(100,100));
 	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
@@ -74,11 +75,13 @@ void MapTutorialScene::update(float deltaTime)
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
+//	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
 		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
 			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
 		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
+
 	}
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -266,7 +269,7 @@ void MapTutorialScene::createPhysicMap()
 		if (type == 1)
 		{
 			AiLv1* ailv = new AiLv1(this);
-			ailv->m_sprite->setTag(AILV1);
+			ailv->m_sprite->setTag(AILV1+i);
 			ailv->m_sprite->setPosition(Vec2(posX, posY));
 			ai.push_back(ailv);
 		}

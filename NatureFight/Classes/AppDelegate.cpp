@@ -102,7 +102,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     ResourceManager::GetInstance()->Init("Data.bin");
-    ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
+    ResourceManager::GetInstance()->Init("DataCreep.bin");
 	
 	//ResourceManager::GetInstance()->Init("DataCreep.bin");
     // create a scene. it's an autorelease object

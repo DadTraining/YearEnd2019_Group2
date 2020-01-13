@@ -42,7 +42,7 @@ bool LoadingScene::init()
 		if (load->getPercent() < 100)
 		{
 			load->setPercent(load->getPercent() + 25);
-			if(load->getPercent()==50) ResourceManager::GetInstance()->Init("DataCreep.bin");
+			if(load->getPercent()==50) ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
 			/*i++;
 			std::string loaddata = "Data" + std::to_string(i) + ".bin";
 			if (i <= 4) ResourceManager::GetInstance()->Init(loaddata);*/

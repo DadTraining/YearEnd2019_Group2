@@ -1,6 +1,7 @@
 0SPRITE 2
 0BUTTON 5
 5 Button/Button_Attack_Normal.png Button/Button_Attack_Selected.png
+6 Button/close_2.png Button/close_2_selected.png
 0FONTS 2
 1 fonts/MarkerFelt.ttf
 2 fonts/arial.ttf

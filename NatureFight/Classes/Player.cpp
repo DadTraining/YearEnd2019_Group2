@@ -3,6 +3,7 @@
 using namespace CocosDenshion;
 int Player::Level;
 int Player::Exp;
+int Player::MaxExp;
 int Player::m_CurrentStone;
 Player::Player(cocos2d::Scene* scene)
 {
@@ -54,9 +55,10 @@ void Player::Init()
 	Level = 1;
 	Exp = 0;
 	updateLevel();
+	m_health = MaxHealth;
 
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
-	this->m_sprite->setPosition(10, 10);
+	this->m_sprite->setPosition(50, 50);
 	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2);
@@ -83,9 +85,12 @@ void Player::Collision()
 
 void Player::updateLevel()
 {
-	AttackSpeed = 1.0f + (Level - 1)*0.5;
+	if(Level==2) ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+	if(Level==3) ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+	MaxExp += Level * 50;
+	AttackSpeed = 1.0f + (Level - 1) * 0.2;
 	MoveSpeed = 1.0f;
-	m_health = Level * 300;
+	MaxHealth = Level * 300;
 	m_dame = Level * 10;
 }
 void Player::SetIdle(int state) {
@@ -253,39 +258,44 @@ void Player::SetSkillIce()
 {
 	if (edgeNode->getTag() != ATTACK_ICE) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(30, 70));
+		if(m_CurrentFace==FACE_DOWN || m_CurrentFace == FACE_UP) edgeBody = PhysicsBody::createEdgeBox(Size(70, 30));
 		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
 		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setPosition(m_sprite->getPosition());
 		edgeNode->setTag(ATTACK_ICE);
 	}
-	switch (m_CurrentFace)
-	{
-	case FACE_RIGHT:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(60, 0)));
-		break;
-	case FACE_UP:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, 60)));
-		break;
-	case FACE_DOWN:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, -60)));
-		break;
-	case FACE_LEFT:
-		edgeNode->runAction(MoveBy::create(0.3f, Vec2(-60, 0)));
-		break;
-	}
 	auto particleSystem = ParticleAttack("Particles/skill_ice.plist");
 	particleSystem->setPosition(edgeNode->getPosition());
 	sceneGame->addChild(particleSystem);
+	switch (m_CurrentFace)
+	{
+	case FACE_RIGHT:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(60, 0)+physicsBody->getVelocity()/3));
+		particleSystem->runAction(MoveBy::create(0.3f, Vec2(60, 0)+physicsBody->getVelocity()/2));
+		break;
+	case FACE_UP:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, 60) + physicsBody->getVelocity() / 3));
+		particleSystem->runAction(MoveBy::create(0.3f, Vec2(0, 60) + physicsBody->getVelocity() / 3));
+		break;
+	case FACE_DOWN:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(0, -60) + physicsBody->getVelocity() / 3));
+		particleSystem->runAction(MoveBy::create(0.3f, Vec2(0, -60) + physicsBody->getVelocity() / 3));
+		break;
+	case FACE_LEFT:
+		edgeNode->runAction(MoveBy::create(0.3f, Vec2(-60, 0) + physicsBody->getVelocity() / 3));
+		particleSystem->runAction(MoveBy::create(0.3f, Vec2(-60, 0) + physicsBody->getVelocity() / 3));
+		break;
+	}
 }
 void Player::SetSkillDefault()
 {
-	if (edgeNode->getTag() != ATTACKTAG) {
+	if (edgeNode->getTag() != NORMALSKILL) {
 		auto edgeBody = PhysicsBody::createEdgeBox(Size(25, 55));
 		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
 		edgeBody->setCollisionBitmask(false);
 		edgeNode->setPhysicsBody(edgeBody);
-		edgeNode->setTag(ATTACKTAG);
+		edgeNode->setTag(NORMALSKILL);
 	}
 	auto particleSystem = ParticleAttack("Particles/PlayerAttack.plist");
 	particleSystem->setPosition(edgeNode->getPosition());

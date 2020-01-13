@@ -20,6 +20,7 @@ public:
     void createLabelLayer();
 	void createSkillIce();
 	void createSkillFire();
+	void createUpLevelLayer();
 	
 	void Quest(); // nhan
 	void setQuestSolo(int );// nhan
@@ -40,7 +41,7 @@ private:
     SneakyJoystick* leftJoystick;
     cocos2d::Label* _messageLabel;
 
-
+	ui::Button* ButtonUpLevel;
 	ItemLayer* item;
 };
 
