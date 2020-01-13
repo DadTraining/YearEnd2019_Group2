@@ -19,7 +19,7 @@ void Npclv1::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man1/NPC(Solo)/PNG/Front/PNG_Sequences/Greeting/0_Citizen_Greeting_000.png");
-	this->m_sprite->setScale(0.1);
+	this->m_sprite->setScale(1.1);
 	this->m_sprite->setAnchorPoint(Vec2(0.5, 0.5));
 	this->m_sprite->setPosition(Point(visibleSize.width / 2 +50, visibleSize.height / 2 - 50));
 	this->sceneGame->addChild(this->m_sprite,2);
@@ -159,10 +159,8 @@ cocos2d::RepeatForever * Npclv1::Communication()
 
 cocos2d::RepeatForever * Npclv1::CommunicationNPCYolo()
 {
-	CCLOG("NPC YOLO 0******************");
 	auto spriteCache = SpriteFrameCache::getInstance();
 	spriteCache->addSpriteFramesWithFile("Sprites/Man1/NPC(Yolo)/PNG/PNG_Sequences/Communication/Communication.plist");
-	CCLOG("NPC YOLO 01******************");
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	std::string name;
 	for (int i = 0; i < 30; i++) {
@@ -170,23 +168,91 @@ cocos2d::RepeatForever * Npclv1::CommunicationNPCYolo()
 		{
 
 			name = "0_Blacksmith_Communication_00" + std::to_string(i) + ".png";
-			CCLOG("NPC YOLO 02******************");
 		}
 		else {
 			name = "0_Blacksmith_Communication_0" + std::to_string(i) + ".png";
-			CCLOG("NPC YOLO 03******************");
 		}
 
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
-		CCLOG("NPC YOLO 04******************");
 	}
 	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
-	CCLOG("NPC YOLO 05******************");
 	auto animate = cocos2d::Animate::create(animation);
-	CCLOG("NPC YOLO 06******************");
 	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
-	CCLOG("NPC YOLO END******************");
 
+	return repeat;
+}
+
+cocos2d::RepeatForever * Npclv1::CommunicationNPCFroz()
+{
+	auto spriteCache = SpriteFrameCache::getInstance();
+	spriteCache->addSpriteFramesWithFile("Sprites/Man2/NPC(Froz)/PNG/PNG_Sequences/Communication/Communication.plist");
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	std::string name;
+	for (int i = 0; i < 30; i++) {
+		if (i<10)
+		{
+
+			name = "0_Blacksmith_Communication_00" + std::to_string(i) + ".png";
+		}
+		else {
+			name = "0_Blacksmith_Communication_0" + std::to_string(i) + ".png";
+		}
+
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	auto animate = cocos2d::Animate::create(animation);
+	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
+
+	return repeat;
+}
+
+cocos2d::RepeatForever * Npclv1::CommunicationNPCIce()
+{
+	auto spriteCache = SpriteFrameCache::getInstance();
+	spriteCache->addSpriteFramesWithFile("Sprites/Man2/NPC(Ice)/PNG/PNG_Sequences/Communication/Communication.plist");
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	std::string name;
+	for (int i = 0; i < 30; i++) {
+		if (i<10)
+		{
+
+			name = "0_Hunter_Communication_00" + std::to_string(i) + ".png";
+		}
+		else {
+			name = "0_Hunter_Communication_0" + std::to_string(i) + ".png";
+		}
+
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	auto animate = cocos2d::Animate::create(animation);
+	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
+
+	return repeat;
+}
+
+cocos2d::RepeatForever * Npclv1::CommunicationNPCWilch()
+{
+	auto spriteCache = SpriteFrameCache::getInstance();
+	spriteCache->addSpriteFramesWithFile("Sprites/Man2/NPC(Wilch)/PNG/PNG Sequences/Communication/Communication.plist");
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	std::string name;
+	for (int i = 0; i < 30; i++) {
+		if (i<10)
+		{
+
+			name = "0_Herbalist_Communication_00" + std::to_string(i) + ".png";
+		}
+		else {
+			name = "0_Herbalist_Communication_0" + std::to_string(i) + ".png";
+		}
+
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	auto animate = cocos2d::Animate::create(animation);
+	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
 
 	return repeat;
 }

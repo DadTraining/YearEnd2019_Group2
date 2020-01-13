@@ -16,6 +16,10 @@ public:
 	cocos2d::RepeatForever* Hello();
 	cocos2d::RepeatForever* Communication();
 	cocos2d::RepeatForever* CommunicationNPCYolo();
+	cocos2d::RepeatForever* CommunicationNPCFroz();
+	cocos2d::RepeatForever* CommunicationNPCIce();
+	cocos2d::RepeatForever* CommunicationNPCWilch();
+
 	~Npclv1();
 private:
 	float count=0;

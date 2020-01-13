@@ -345,10 +345,11 @@ void MenuLayer::Quest()
 						{
 							if(i==0) vlabel1[i]->setVisible(true);
 							else {
-								if (d <= 3) {
+								if (i <= 3) {
 									vlabel1[i - 1]->setVisible(false);
 									vlabel1[i]->setVisible(true);
 								}
+								
 								
 							}
 						}
@@ -364,10 +365,11 @@ void MenuLayer::Quest()
 						{
 							if (i == 0) vlabel2[i]->setVisible(true);
 							else {
-								if (c <= 6) {
+								if (i <= 6) {
 									vlabel2[i - 1]->setVisible(false);
 									vlabel2[i]->setVisible(true);
 								}
+								
 							}
 						}
 					}
