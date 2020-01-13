@@ -11,9 +11,6 @@
 #define CREEPATTACK 111
 #define CREEPTAG 11
 #define CREEPATTACK 111
-#define SKILLICE 1
-#define SKILLFIRE 2
-#define NORMALSKILL 0
 #define AILV1 13
 USING_NS_CC;
 class AiLv1 :
@@ -51,6 +48,7 @@ public:
 	void SetHurtAi(int state, int skill);
 	void SetMove(int state);
 	void SetTagAI(int);
+	void setIndex(int index);
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();

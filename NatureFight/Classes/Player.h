@@ -6,7 +6,7 @@
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
-#define ATTACKTAG 8
+#define NORMALSKILL 8
 #define ATTACK_FIRE 9
 #define ATTACK_ICE 10
 #define NpcSolotag 11
@@ -26,9 +26,11 @@ public:
 	PhysicsBody* physicsBody;
 	Node* edgeNode;
 	int m_CurrentSkill;
+	int CountCreep=0;
 
 	static int Level;
 	static int Exp;
+	static int MaxExp;
 
 	bool haveSword;
 	bool haveMagicSword;
@@ -47,7 +49,7 @@ public:
 	void updateLevel();
 	void Init();
 	void Collision();
-	void SetFace();
+	void SetFace(Vec2);
 	void SetState(int);
 	void SetIdle(int);
 	void SetDie(int);

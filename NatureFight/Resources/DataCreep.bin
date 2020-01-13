@@ -1,7 +1,8 @@
 0SPRITE 2
 0BUTTON 5
 0FONTS 2
-0FrameCache 6
+0FrameCachePlayer 6
+0FrameCacheAI 6
 100 Sprites/Man1/Goblin/PNG/PNG_Sequences/Idle/spritesGoblin.plist
 101 Sprites/Man1/Goblin/PNG/PNG_Sequences/Running/spritesGoblin.plist
 102 Sprites/Man1/Goblin/PNG/PNG_Sequences/Slashing/sprites.plist
