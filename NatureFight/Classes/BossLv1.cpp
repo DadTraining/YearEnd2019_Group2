@@ -12,7 +12,7 @@ BossLv1::BossLv1(cocos2d::Scene* scene)
 		mBooms[i]->setIndex(i);
 	}
 }
-float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0,timeDelayHeal=0;
+float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0, timeDelayHeal = 0;
 bool checkAttackBoss = false;
 void BossLv1::Update(float deltaTime)
 {
@@ -54,11 +54,12 @@ void BossLv1::Update(float deltaTime)
 		if (timeDelayHeal > 3) {
 			setSkillHeal(true);
 			timeDelayHeal = 0;
-		}else {
+		}
+		else {
 			stateHeal = false;
 		}
 	}
-	if(m_health<=50){
+	if (m_health <= 50) {
 		stateAngry = true;
 	}
 	else
@@ -97,6 +98,9 @@ void BossLv1::Init()
 	sceneGame->addChild(edgeNode);
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(BOSSATTACK);
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(BossLv1::onContactBegin, this);
+	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 }
 
 float timeBoss = 0;
@@ -114,7 +118,7 @@ void BossLv1::Collision(Player* player, float deltaTime)
 						mBooms[i]->setAlive(true);
 						mBooms[i]->setPosition(this->m_sprite->getPosition());
 						mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
-						
+
 						break;
 					}
 				}
@@ -276,7 +280,7 @@ void BossLv1::SetAttack(int state) {
 			break;
 		}
 	}
-	
+
 }
 void BossLv1::SetHurt(int state)
 {
@@ -358,6 +362,61 @@ void BossLv1::SetFace()
 		else m_sprite->setFlipX(true);
 		SetState(BossLv1::ACTION_MOVE);
 	}
+}
+bool BossLv1::onContactBegin(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACKTAG)
+	{
+		if (nodeA->getTag() == BOSSLV1)
+		{
+			this->SetState(BossLv1::ACTION_HURT);
+		}
+		else
+		{
+			this->SetState(BossLv1::ACTION_HURT);
+		}
+	}
+	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_ICE)
+	{
+		if (nodeA->getTag() == BOSSLV1)
+		{
+			this->SetState(BossLv1::ACTION_HURT_ICE);
+		}
+		else
+		{
+			this->SetState(BossLv1::ACTION_HURT_ICE);
+		}
+	}
+	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_FIRE)
+	{
+		if (nodeA->getTag() == BOSSLV1)
+		{
+			this->SetState(BossLv1::ACTION_HURT_FIRE);
+		}
+		else
+		{
+			this->SetState(BossLv1::ACTION_HURT_FIRE);
+		}
+	}
+	if (nodeA->getTag() == playertag & nodeB->getTag() == BoomEx || nodeB->getTag() == playertag & nodeA->getTag() == BoomEx)
+	{
+		//mainPlayer->SetState(Player::ACTION_HURT);
+	}
+	//creepCollistionSkill(nodeA, nodeB);
+	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
+		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
+		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+		{
+			this->bulletHasCollision(nodeA->getPhysicsBody()->getGroup());
+		}
+		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+		{
+			this->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
+		}
+	}
+	return true;
 }
 
 cocos2d::RepeatForever* BossLv1::MovingRight() {

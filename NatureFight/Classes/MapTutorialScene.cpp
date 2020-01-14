@@ -173,24 +173,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			}
 
 		}
-		if (nodeA->getTag() == playertag & nodeB->getTag() == BoomEx || nodeB->getTag() == playertag & nodeA->getTag() == BoomEx)
-		{
-			//mainPlayer->SetState(Player::ACTION_HURT);
-		}
-		//creepCollistionSkill(nodeA, nodeB);
-		if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
-			(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
-			if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
-			{
-				boss->bulletHasCollision(nodeA->getPhysicsBody()->getGroup());
-			}
-			if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
-			{
-				boss->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
-			}
-		}
-		bossCollistionSkill(nodeA, nodeB);
-
+		
 		
 	}
 
@@ -330,40 +313,3 @@ void MapTutorialScene::createPhysicMap()
 
 //end nhan
 
-void MapTutorialScene::bossCollistionSkill(Node* nodeA, Node* nodeB) {
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACKTAG)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT);
-		}
-		else
-		{
-			auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_ICE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			boss->SetState(BossLv1::ACTION_HURT_ICE);
-		}
-		else
-		{
-			boss->SetState(BossLv1::ACTION_HURT_ICE);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_FIRE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			boss->SetState(BossLv1::ACTION_HURT_FIRE);
-		}
-		else
-		{
-			boss->SetState(BossLv1::ACTION_HURT_FIRE);
-		}
-	}
-}
