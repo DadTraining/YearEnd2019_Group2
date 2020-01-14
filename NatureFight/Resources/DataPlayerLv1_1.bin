@@ -1,9 +1,0 @@
-0SPRITE 2
-0BUTTON 5
-0FONTS 2
-0FrameCache 6
-5 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_2/PlayerAttackRight.plist
-6 Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Attack_1/PlayerAttackRight.plist
-7 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Idle/PlayerIdleUp.plist
-8 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Run/PlayerRunUp.plist
-9 Sprites/Main/Warrior_animations/Back/PNG_Sequences/Warrior_clothes_empty/Hurt/PlayerHurtUp.plist

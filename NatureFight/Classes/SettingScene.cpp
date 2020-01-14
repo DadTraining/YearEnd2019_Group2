@@ -31,65 +31,81 @@ bool SettingScene::init()
 	{
 		return false;
 	}
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		log("asd");
+		audio->playBackgroundMusic("melodyloops.mp3", true);
+		log("2");
+	}
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto bgimg = Sprite::create("settings/bgmain.jpg");
 	bgimg->setScale(0.80);
 	bgimg->setOpacity(-150);
 	bgimg->setAnchorPoint(Vec2(0.5, 0.5));
-	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
+	bgimg->setPosition(visibleSize / 2);
 	addChild(bgimg);
 	auto bg = Sprite::create("settings/bg.png");
 	bg->setPosition(Director::getInstance()->getVisibleSize() / 2);
-	bg->setScale(0.3);
+	bg->setScale(0.45);
 	addChild(bg, 1);
 	auto bglb = Sprite::create("settings/92.png");
 	bglb->setPosition(Vec2(450, 370));
-	bglb->setScale(0.45f);
+	bglb->setScale(0.3f);
 	addChild(bglb, 3);
 	auto table = Sprite::create("settings/table.png");
 	table->setPosition(bg->getPosition());
 	table->setScale(0.45);
 	addChild(table, 2);
 	auto musiclb = Label::create("MUSIC", "Arial", 24);
-	musiclb->setPosition(bg->getPosition() + Vec2(-105, 80));
+	musiclb->setPosition(bg->getPosition() + Vec2(-105, 10));
 	musiclb->setColor(Color3B::BLACK);
 	addChild(musiclb, 2);
 	musicbtn = ui::CheckBox::create("settings/96.png", "settings/95.png");
 	musicbtn->setPosition(musiclb->getPosition() + Vec2(205, 0));
 	musicbtn->setScale(0.6f);
+	musicbtn->setSelected(!GameSetting::getInstance()->isMusic());
 	musicbtn->addClickEventListener([&](Ref* event) {
-		GameSetting::getInstance()->setEnableMusic(musicbtn->isSelected());
-		if (!musicbtn->isSelected() && !soundbtn->isSelected())
+
+		if (musicbtn->isSelected())
 		{
-			slvolume->setEnabled(false);
+			GameSetting::getInstance()->setMusic(true);
+			SimpleAudioEngine::getInstance()->playBackgroundMusic("melodyloops.mp3", true);
 		}
 		else
 		{
-			slvolume->setEnabled(true);
+			GameSetting::getInstance()->setMusic(false);
+			SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 		}
 	});
 	addChild(musicbtn, 3);
 
 	auto soundlb = Label::create("SOUND", "Arial", 24);
-	soundlb->setPosition(bg->getPosition() + Vec2(-100, 30));
+	soundlb->setPosition(bg->getPosition() + Vec2(-100, -50));
 	soundlb->setColor(Color3B::BLACK);
 	addChild(soundlb, 2);
 	soundbtn = ui::CheckBox::create("settings/96.png", "settings/95.png");
 	soundbtn->setPosition(soundlb->getPosition() + Vec2(200, 0));
 	soundbtn->setScale(0.6f);
+	soundbtn->setSelected(!GameSetting::getInstance()->isSound());
 	soundbtn->addClickEventListener([&](Ref* event) {
-		GameSetting::getInstance()->setEnableSound(soundbtn->isSelected());
-		if (!musicbtn->isSelected() && !soundbtn->isSelected())
+
+		if (soundbtn->isSelected())
 		{
-			slvolume->setEnabled(false);
+			GameSetting::getInstance()->setSound(true);
 		}
 		else
 		{
-			slvolume->setEnabled(true);
+			GameSetting::getInstance()->setSound(false);
+			SimpleAudioEngine::getInstance()->stopAllEffects();
+
 		}
 	});
 	addChild(soundbtn, 3);
 	auto volumlb = Label::create("VOLUME", "Arial", 24);
-	volumlb->setPosition(bg->getPosition() + Vec2(0, -40));
+	volumlb->setPosition(bg->getPosition() + Vec2(0, -110));
 	volumlb->setColor(Color3B::BLACK);
 	addChild(volumlb, 2);
 
@@ -99,15 +115,12 @@ bool SettingScene::init()
 	slvolume->loadProgressBarTexture("slider_bar_pressed.png");
 	slvolume->setPercent(50);
 	slvolume->setColor(Color3B::ORANGE);
-	slvolume->setPosition(volumlb->getPosition() + Vec2(0, -50));
+	slvolume->setPosition(volumlb->getPosition() + Vec2(0, -30));
 	slvolume->addTouchEventListener([](Ref* sender, ui::Widget::TouchEventType type)
 	{
 		switch (type)
 		{
 		case ui::Widget::TouchEventType::ENDED:
-			GameSetting::getInstance()->setVolume(slvolume->getPercent());
-			SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(GameSetting::getInstance()->getVolume());
-			SimpleAudioEngine::getInstance()->setEffectsVolume(GameSetting::getInstance()->getVolume());
 			break;
 		}
 	});
@@ -117,12 +130,18 @@ bool SettingScene::init()
 	}
 	addChild(slvolume, 2);
 	auto closebtn = ui::Button::create("close.png");
-	closebtn->setPosition(Vec2(50, 370));
-	closebtn->setScale(0.5);
-	addChild(closebtn);
-	closebtn->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
+	closebtn->setPosition(bg->getPosition() + Vec2(200, 140));
+	closebtn->setScale(0.3);
+	addChild(closebtn, 3);
+	closebtn->addClickEventListener([&](Ref* event)
 	{
-		Director::getInstance()->replaceScene(MainMenuScene::createScene());
+		auto turn = GameSetting::getInstance()->isSound();
+		if (turn == true)
+		{
+			auto audio = SimpleAudioEngine::getInstance();
+			audio->playEffect("sounds/212.mp3", false);
+		}
+		Director::getInstance()->replaceScene(MainMenuScene::create());
 	});
 	//scheduleUpdate();
 	return true;
