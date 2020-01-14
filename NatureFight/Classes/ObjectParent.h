@@ -30,6 +30,7 @@ public:
 	float AttackSpeed;
 	float MoveSpeed;
 	int m_health;
+	int MaxHealth;
 	int m_dame;
 public:
 	ObjectParent();
@@ -37,7 +38,6 @@ public:
 	virtual void Init() = 0; //	handles all game objects logic
 	virtual void Update(float deltaTime) = 0; // setup initial values for object
 
-	virtual void SetFace() = 0;
 	virtual void SetState(int) = 0;
 	virtual void SetIdle(int) = 0;
 	virtual void SetDie(int) = 0;

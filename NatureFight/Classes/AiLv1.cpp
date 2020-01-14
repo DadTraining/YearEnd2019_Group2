@@ -1,8 +1,6 @@
 #include "AiLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
-#include"SimpleAudioEngine.h"
-
 using namespace CocosDenshion;
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
@@ -13,6 +11,12 @@ float timeAttackAI = 0, timeDieAI = 0, timeColor = 0;
 bool checkAttackAI = false;
 void AiLv1::Update(float deltaTime)
 {
+
+	loadingbar->setPosition(Vec2(m_sprite->getPosition()+Vec2(0, 30)));
+	load->setPosition(loadingbar->getPosition());
+	load->setPercent(setHealth());
+
+
 	if (m_health <= 0) {
 		timeDieAI += deltaTime;
 		SetState(ACTION_DIE);
@@ -40,14 +44,11 @@ void AiLv1::Update(float deltaTime)
 	}
 	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
 		timeColor += deltaTime;
-		if (timeColor >= 2) {
+		if (timeColor >= 1) {
 			m_sprite->setColor(ccc3(255, 255, 255));
 			timeColor = 0;
 		}
 	}
-
-
-	load->setPercent(setFlood());
 }
 
 
@@ -55,31 +56,29 @@ void AiLv1::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
+	//m_health = 30;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
 
-	auto loadingbar = Sprite::create("loadingbar_bg.png");
-	loadingbar->setPosition(/*sprite->getPosition()+*/Vec2(600, 415));
-	loadingbar->setScaleX(1.6f);
-	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
+	//loaddinghealth
+	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
+	loadingbar->setScale(0.2);
+	loadingbar->setPercent(100);
 	this->sceneGame->addChild(loadingbar, 1);
 	load = ui::LoadingBar::create("progress.png");
-	load->setScaleX(1.65);
-	load->setPosition(loadingbar->getPosition());
+	load->setScale(0.21);
 	this->sceneGame->addChild(load, 2);
 	load->setDirection(ui::LoadingBar::Direction::LEFT);
 
 
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
-	//physicsBodyChar->setDynamic(false);
+	physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
 	physicsBodyChar->setCollisionBitmask(Model::BITMASK_MONSTER);
 	physicsBodyChar->setContactTestBitmask(1);
 	this->m_sprite->setPhysicsBody(physicsBodyChar);
-	this->m_sprite->setTag(CREEPTAG);
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
@@ -92,19 +91,28 @@ void AiLv1::Init()
 	sceneGame->addChild(edgeNode);
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(CREEPATTACK);
+
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(AiLv1::onContactBegin, this);
+	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 }
 
 float timem = 0;
 void AiLv1::Collision(Player* player, float deltaTime)
 {
+	this->player = player;
 	Update(deltaTime);
 	timem += deltaTime;
 	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
-		if (timem > 1.0f) {
+		if (timem > 0.3f) {
 			SetState(AiLv1::ACTION_ATTACK);
+			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 			timem = 0;
 		}
 	}
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80)
+		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
+	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }
 
 void AiLv1::SetIdle(int state) {
@@ -129,16 +137,17 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isSound();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("sounds/chem.wav", false);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
 		if (state != m_CurrentState) {
-			auto turn = GameSetting::getInstance()->isSound();
-			if (turn == true)
-			{
-				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/chem.wav", false);
-			}
+			
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
@@ -149,13 +158,8 @@ void AiLv1::SetAttack(int state) {
 		}
 		break;
 	case FACE_RIGHT:
+		
 		if (state != m_CurrentState) {
-			auto turn = GameSetting::getInstance()->isSound();
-			if (turn == true)
-			{
-				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/chem.wav", false);
-			}
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
@@ -167,14 +171,8 @@ void AiLv1::SetAttack(int state) {
 		}
 		break;
 	case FACE_UP:
-
+		
 		if (state != m_CurrentState) {
-			auto turn = GameSetting::getInstance()->isSound();
-			if (turn == true)
-			{
-				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/chem.wav", false);
-			}
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
@@ -185,13 +183,8 @@ void AiLv1::SetAttack(int state) {
 		}
 		break;
 	case FACE_DOWN:
+		
 		if (state != m_CurrentState) {
-			auto turn = GameSetting::getInstance()->isSound();
-			if (turn == true)
-			{
-				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/chem.wav", false);
-			}
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
@@ -206,23 +199,21 @@ void AiLv1::SetAttack(int state) {
 void AiLv1::SetHurt(int state)
 {
 }
-void AiLv1::SetHurtAi(int state,int skill) {
+void AiLv1::SetHurtAi(int state, int skill) {
 	if (state != m_CurrentState) {
 		m_sprite->stopAllActions();
-		m_health -= 10;
 		if (skill == NORMALSKILL) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
-		else if (skill == SKILLICE) {
+		else if (skill == ATTACK_ICE) {
 			m_sprite->setColor(ccc3(0, 0, 255));
 		}
-		else if (skill == SKILLFIRE) {
+		else if (skill == ATTACK_FIRE) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
 	}
 	else if (m_sprite->getNumberOfRunningActions() == 0) {
 		m_sprite->runAction(HurtRight());
-		m_health -= 10;
 	}
 	CCLOG("%d", m_health);
 }
@@ -236,13 +227,10 @@ void AiLv1::SetMove(int state)
 		m_sprite->runAction(MovingRight());
 	}
 }
-float AiLv1::setFlood()
-{
-	return m_health;
-}
+
 void AiLv1::SetState(int state)
 {
-	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0))
+	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0) || state == ACTION_HURT_ICE || state == ACTION_HURT_FIRE)
 	{
 		switch (state) {
 		case ACTION_IDLE:
@@ -261,10 +249,10 @@ void AiLv1::SetState(int state)
 			SetDie(state);
 			break;
 		case ACTION_HURT_ICE:
-			SetHurtAi(state, SKILLICE);
+			SetHurtAi(state, ATTACK_ICE);
 			break;
 		case ACTION_HURT_FIRE:
-			SetHurtAi(state, SKILLFIRE);
+			SetHurtAi(state, ATTACK_FIRE);
 			break;
 		}
 
@@ -287,6 +275,11 @@ void AiLv1::SetFace()
 		else m_sprite->setFlipX(true);
 		SetState(AiLv1::ACTION_MOVE);
 	}
+}
+
+float AiLv1::setHealth()
+{
+	return m_health;
 }
 
 cocos2d::RepeatForever* AiLv1::MovingRight() {
@@ -322,4 +315,25 @@ cocos2d::RepeatForever* AiLv1::DieDown() { return NULL; }
 
 float AiLv1::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
+}
+bool AiLv1::onContactBegin(const PhysicsContact& contact)
+{
+	auto nodeA = contact.getShapeA()->getBody()->getNode();
+	auto nodeB = contact.getShapeB()->getBody()->getNode();
+	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
+		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
+	{
+		m_health -= 10;
+		if (player->edgeNode->getTag() == NORMALSKILL)	SetState(ACTION_HURT);
+		else if (player->edgeNode->getTag() == ATTACK_ICE) SetState(ACTION_HURT_ICE);
+		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetState(ACTION_HURT_FIRE);
+		if (m_health == 0) {
+			m_sprite->runAction(DieRight());
+			physicsBodyChar->setEnabled(false);
+			player->Exp += 20;
+			player->CountCreep += 1;
+			CCLOG("exp: %d", player->Exp);
+		}
+	}
+	return true;
 }

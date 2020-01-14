@@ -2,7 +2,6 @@
 #include "MainMenuScene.h"
 #include "MapTutorialScene.h"
 #include "SettingScene.h"
-#include"GameSetting.h"
 
 #include "SimpleAudioEngine.h"
 Scene* MainMenuScene::createScene()
@@ -34,8 +33,8 @@ bool MainMenuScene::init()
 		auto audio = SimpleAudioEngine::getInstance();
 		audio->playBackgroundMusic("sounds/melodyloops.mp3", true);
 	}
-	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Polo Bubble.ttf", 70);
-	titlelb->setPosition(Vec2(visibleSize.width/2,visibleSize.height*0.7));
+	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Polo Bubble.ttf", 80);
+	titlelb->setPosition(Vec2(visibleSize.width/2,visibleSize.height-visibleSize.height/4));
 	titlelb->setColor(Color3B::RED);
 	addChild(titlelb,1);
 	auto bgimg = Sprite::create("settings/bgmain.jpg");
@@ -73,7 +72,9 @@ bool MainMenuScene::init()
 		if (turn == true)
 		{
 			auto audio = SimpleAudioEngine::getInstance();
+			//log("asd");
 			audio->playEffect("sounds/212.mp3", false);
+			log("2");
 		}
 		if (type == ui::Widget::TouchEventType::ENDED) {
 			Director::getInstance()->replaceScene(SettingScene::createScene());

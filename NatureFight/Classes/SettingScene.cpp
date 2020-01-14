@@ -31,21 +31,21 @@ bool SettingScene::init()
 	{
 		return false;
 	}
-	//auto turn = GameSetting::getInstance()->isMusic();
-	//if (turn == true)
-	//{
-	//	auto audio = SimpleAudioEngine::getInstance();
-	//	log("asd");
-	//	audio->playBackgroundMusic("melodyloops.mp3", true);
-	//	log("2");
-	//}
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		log("asd");
+		audio->playBackgroundMusic("melodyloops.mp3", true);
+		log("2");
+	}
 
-
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto bgimg = Sprite::create("settings/bgmain.jpg");
 	bgimg->setScale(0.80);
 	bgimg->setOpacity(-150);
 	bgimg->setAnchorPoint(Vec2(0.5, 0.5));
-	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
+	bgimg->setPosition(visibleSize / 2);
 	addChild(bgimg);
 	auto bg = Sprite::create("settings/bg.png");
 	bg->setPosition(Director::getInstance()->getVisibleSize() / 2);
@@ -53,14 +53,14 @@ bool SettingScene::init()
 	addChild(bg, 1);
 	auto bglb = Sprite::create("settings/92.png");
 	bglb->setPosition(Vec2(450, 370));
-	bglb->setScale(0.45f);
+	bglb->setScale(0.3f);
 	addChild(bglb, 3);
 	auto table = Sprite::create("settings/table.png");
 	table->setPosition(bg->getPosition());
 	table->setScale(0.45);
 	addChild(table, 2);
 	auto musiclb = Label::create("MUSIC", "Arial", 24);
-	musiclb->setPosition(bg->getPosition() + Vec2(-105, 80));
+	musiclb->setPosition(bg->getPosition() + Vec2(-105, 10));
 	musiclb->setColor(Color3B::BLACK);
 	addChild(musiclb, 2);
 	musicbtn = ui::CheckBox::create("settings/96.png", "settings/95.png");
@@ -83,7 +83,7 @@ bool SettingScene::init()
 	addChild(musicbtn, 3);
 
 	auto soundlb = Label::create("SOUND", "Arial", 24);
-	soundlb->setPosition(bg->getPosition() + Vec2(-100, 30));
+	soundlb->setPosition(bg->getPosition() + Vec2(-100, -50));
 	soundlb->setColor(Color3B::BLACK);
 	addChild(soundlb, 2);
 	soundbtn = ui::CheckBox::create("settings/96.png", "settings/95.png");
@@ -105,7 +105,7 @@ bool SettingScene::init()
 	});
 	addChild(soundbtn, 3);
 	auto volumlb = Label::create("VOLUME", "Arial", 24);
-	volumlb->setPosition(bg->getPosition() + Vec2(0, -40));
+	volumlb->setPosition(bg->getPosition() + Vec2(0, -110));
 	volumlb->setColor(Color3B::BLACK);
 	addChild(volumlb, 2);
 
@@ -115,7 +115,7 @@ bool SettingScene::init()
 	slvolume->loadProgressBarTexture("slider_bar_pressed.png");
 	slvolume->setPercent(50);
 	slvolume->setColor(Color3B::ORANGE);
-	slvolume->setPosition(volumlb->getPosition() + Vec2(0, -50));
+	slvolume->setPosition(volumlb->getPosition() + Vec2(0, -30));
 	slvolume->addTouchEventListener([](Ref* sender, ui::Widget::TouchEventType type)
 	{
 		switch (type)
@@ -139,9 +139,7 @@ bool SettingScene::init()
 		if (turn == true)
 		{
 			auto audio = SimpleAudioEngine::getInstance();
-			//log("asd");
 			audio->playEffect("sounds/212.mp3", false);
-			log("2");
 		}
 		Director::getInstance()->replaceScene(MainMenuScene::create());
 	});
@@ -155,4 +153,3 @@ void SettingScene::update(float deltaTime)
 		Director::getInstance()->replaceScene(MapTutorialScene::createScene());
 	}
 }
-

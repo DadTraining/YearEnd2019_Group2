@@ -2,7 +2,6 @@
 
 ObjectParent::ObjectParent()
 {
-
 }
 
 ObjectParent::~ObjectParent()
@@ -11,7 +10,11 @@ ObjectParent::~ObjectParent()
 
 cocos2d::RepeatForever* ObjectParent::AnimationObjectRepeat(int id, std::string name, float speed)
 {
-	auto spriteCache = ResourceManager::GetInstance()->GetFrameById(id);
+	cocos2d::SpriteFrameCache* spriteCache;
+	if (id >= 100) {
+		spriteCache = ResourceManager::GetInstance()->GetFrameAIById(id);
+	}
+	else spriteCache = ResourceManager::GetInstance()->GetFramePlayerById(id);
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	int i = 0;
 	std::string link;
@@ -30,7 +33,11 @@ cocos2d::RepeatForever* ObjectParent::AnimationObjectRepeat(int id, std::string 
 
 cocos2d::Animate* ObjectParent::AnimationObjectOnce(int id, std::string name, float speed)
 {
-	auto spriteCache = ResourceManager::GetInstance()->GetFrameById(id);
+	cocos2d::SpriteFrameCache* spriteCache;
+	if (id >= 100) {
+		spriteCache = ResourceManager::GetInstance()->GetFrameAIById(id);
+	}
+	else spriteCache = ResourceManager::GetInstance()->GetFramePlayerById(id);
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	int i = 0;
 	std::string link;

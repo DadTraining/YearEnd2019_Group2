@@ -7,8 +7,7 @@
 #include <vector>
 #include<ItemLayer.h>
 #include<MainMenuScene.h>
-#include <GameSetting.h>
-#include <SimpleAudioEngine.h>
+#include <SettingScene.h>
 class MenuLayer : public cocos2d::Layer
 {
 public:
@@ -22,6 +21,9 @@ public:
     void createLabelLayer();
 	void createSkillIce();
 	void createSkillFire();
+	void createUpLevelLayer();
+
+
 	void createFlood();
 	
 	void Quest(); // nhan
@@ -29,12 +31,11 @@ public:
 	void setQuestYolo(int);// nhan
 	void setD(int );//nhan
 	void setC(int);//nhan
+	void showItemSword(Vec2);
 
 protected:
 private:
     Player* mainPlayer;
-	
-
 	cocos2d::ui::LoadingBar* loadhelth;
 	cocos2d::ui::LoadingBar* loaddame;
 
@@ -47,7 +48,7 @@ private:
     SneakyJoystick* leftJoystick;
     cocos2d::Label* _messageLabel;
 
-
+	ui::Button* ButtonUpLevel;
 	ItemLayer* item;
 };
 

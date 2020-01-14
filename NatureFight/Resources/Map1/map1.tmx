@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="143" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="71">
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="143" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="73">
  <tileset firstgid="1" source="main_land.tsx"/>
  <tileset firstgid="257" source="road.tsx"/>
  <tileset firstgid="513" source="land1_2.tsx"/>
@@ -282,5 +282,6 @@
   <object id="55" name="npc2" type="4" x="1063.5" y="823"/>
   <object id="69" name="event" type="1" x="224" y="572" width="44" height="69.3333"/>
   <object id="70" name="event" type="1" x="1921.33" y="986.667" width="48" height="72"/>
+  <object id="71" name="event" type="1" x="1957.58" y="18.1818" width="48.4848" height="69.697"/>
  </objectgroup>
 </map>

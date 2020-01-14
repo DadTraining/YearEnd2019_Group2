@@ -7,14 +7,12 @@
 #include "cocos2d.h"
 #include "Model.h"
 #include <Player.h>
-#include "GameSetting.h"
+#include <GameSetting.h>
+#include <SimpleAudioEngine.h>
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
 #define CREEPATTACK 111
-#define SKILLICE 1
-#define SKILLFIRE 2
-#define NORMALSKILL 0
 #define AILV1 13
 USING_NS_CC;
 class AiLv1 :
@@ -52,7 +50,10 @@ public:
 	void SetHurtAi(int state, int skill);
 	void SetMove(int state);
 	void SetTagAI(int);
-	float setFlood();
+	void setIndex(int index);
+
+
+	float setHealth();
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
@@ -74,11 +75,12 @@ public:
 	cocos2d::Animate* AttackDownAngry();
 	cocos2d::Animate* HurtDown();
 	cocos2d::RepeatForever* DieDown();
-
-	cocos2d::ui::LoadingBar* load;
 	~AiLv1();
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
+	//
+	cocos2d::ui::LoadingBar* loadingbar;
+	cocos2d::ui::LoadingBar* load;
 };
 #endif // _HERO_SCENE_H_

@@ -11,7 +11,6 @@ public:
 	//
 	void showIconSword();
 	//
-	void showItemSword();
 	void showItemFire();
 	void showItemIce();
 	void showItemBlood(/*cocos2d::Sprite* sprite*/);
