@@ -1,10 +1,8 @@
 #include "MapTutorialScene.h"
 
-
-
 using namespace std;
 float times = 0;
-
+int x = 1;//nhan
 
 
 Scene* MapTutorialScene::createScene()
@@ -48,7 +46,7 @@ bool MapTutorialScene::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	CCLOG("LoadMapTutorial 5******************");
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc
@@ -62,12 +60,12 @@ bool MapTutorialScene::init()
 	//end va cham npc
 	CCLOG("LoadMapTutorial 7******************");
 	
-
+	//boss = new BossLv1(this);
+	//boss->m_sprite->setPosition(mainPlayer->m_sprite->getPosition()-Vec2(100,100));
 	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
 	CCLOG("LoadMapTutorial 8******************");
-
 	return true;
 }
 
@@ -80,7 +78,17 @@ void MapTutorialScene::update(float deltaTime)
 	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		ai[i]->Update(deltaTime);
+		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
+			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
+		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
+
+	}
+	if (x == 2) {
+		menuLayer->setD(mainPlayer->CountCreep);
+	}
+	if (x == 4) {
+		
+		menuLayer->setC(mainPlayer->CountCreep);
 	}
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -135,35 +143,41 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 	{
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcSolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcSolotag)
 		{
-			menuLayer->setQuestSolo(2);
-			npcsolo->Collision();
-
+			if (x == 3) {
+				menuLayer->setQuestSolo(2);
+				npcsolo->Collision();
+				x += 1;
+			}
+			if (x == 4) {
+				if (mainPlayer->CountCreep >= 6) {
+					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
+					mainPlayer->CountCreep = 0;
+				}
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
 		{
-			npcYolo->Collision1();
-			menuLayer->setQuestYolo(1);
-		}
-		//explotion
-		if (nodeA->getTag() == playertag & nodeB->getTag() == BoomEx || nodeB->getTag() == playertag & nodeA->getTag() == BoomEx)
-		{
-			mainPlayer->SetState(Player::ACTION_HURT);
-		}
-		creepCollistionSkill(nodeA, nodeB);
-		if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
-			(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
-			if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
-			{
-				boss->bulletHasCollision(nodeA->getPhysicsBody()->getGroup());
+			if (x == 1) {
+				npcYolo->Collision1();
+				menuLayer->setQuestYolo(1);
+				mainPlayer->CountCreep = 0;
+				x += 1;
 			}
-			if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
-			{
-				boss->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
+			if (x == 2) {
+				if (mainPlayer->CountCreep >= 3) {
+					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
+					menuLayer->setD(4);
+					mainPlayer->CountCreep = 0;
+					x += 1;
+				}
 			}
+
 		}
-		bossCollistionSkill(nodeA, nodeB);
+
+
 		
 	}
+
 	return true;
 
 }
@@ -238,7 +252,6 @@ void MapTutorialScene::createPhysicMap()
 		}
 	}
 
-
 	// set position main
 	auto objects1 = mObjectGroup1->getObjects();
 	CCLOG("LoadMapTutorial 312******************");
@@ -257,8 +270,9 @@ void MapTutorialScene::createPhysicMap()
 			CCLOG("LoadMapTutorial 316******************");
 			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 317******************");
+
 			boss = new BossLv1(this);
-			boss->m_sprite->setPosition(Vec2(posX-300, posY-300));
+			boss->m_sprite->setPosition(Vec2(posX - 300, posY - 300));
 		}
 		if (type == 3)
 		{
@@ -289,104 +303,13 @@ void MapTutorialScene::createPhysicMap()
 		if (type == 1)
 		{
 			AiLv1* ailv = new AiLv1(this);
+			ailv->m_sprite->setTag(AILV1+i);
 			ailv->m_sprite->setPosition(Vec2(posX, posY));
-			ailv->setIndex(ai.size());
 			ai.push_back(ailv);
 		}
 	}
 	CCLOG("LoadMapTutorial 3 END******************");
 }
-void MapTutorialScene::creepCollistionSkill(Node* nodeA, Node* nodeB)
-{
-	//if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
-	//{
-	//	for (int i = 0; i < ai.size(); i++) {
-	//		CCLOG("KILL");
-	//		ai[i]->SetState(AiLv1::ACTION_HURT);
-	//		if (ai[i]->m_health <= 0) {
-	//			ai[i]->SetState(AiLv1::ACTION_DIE);
-	//			ai[i]->physicsBodyChar->setEnabled(false);
-	//			mainPlayer->Exp += 20;
-	//			countCreepDie = 1;
-	//			menuLayer->setD(countCreepDie);
-	//		}
-	//	}
-	//}
-	if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACKTAG)
-	{
-		if (nodeA->getTag() == AILV1)
-		{
-			auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT);
-		}
-		else
-		{
-			auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT);
-		}
-	}
-	if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACK_ICE)
-	{
-		if (nodeA->getTag() == AILV1)
-		{
-			auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT_ICE);
-		}
-		else
-		{
-			auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT_ICE);
-		}
-	}
-	if (nodeA->getTag() == AILV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == AILV1 & nodeA->getTag() == ATTACK_FIRE)
-	{
-		if (nodeA->getTag() == AILV1)
-		{
-			auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT_FIRE);
-		}
-		else
-		{
-			auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT_FIRE);
-		}
-	}
-}
-void MapTutorialScene::bossCollistionSkill(Node* nodeA, Node* nodeB) {
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACKTAG)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			auto currentGoblin = ai.at(nodeA->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT);
-		}
-		else
-		{
-			auto currentGoblin = ai.at(nodeB->getPhysicsBody()->getGroup());
-			currentGoblin->SetState(AiLv1::ACTION_HURT);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_ICE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			boss->SetState(BossLv1::ACTION_HURT_ICE);
-		}
-		else
-		{
-			boss->SetState(BossLv1::ACTION_HURT_ICE);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_FIRE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			boss->SetState(BossLv1::ACTION_HURT_FIRE);
-		}
-		else
-		{
-			boss->SetState(BossLv1::ACTION_HURT_FIRE);
-		}
-	}
-}
+
+
 //end nhan

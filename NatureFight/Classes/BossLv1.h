@@ -17,6 +17,7 @@
 #define NORMALSKILL 0
 #define AILV1 13
 #define BOSSLV1 14
+#define ATTACKTAG 8
 USING_NS_CC;
 class BossLv1 :
 	public ObjectParent
@@ -49,7 +50,6 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	void bulletHasCollision(int bulletIndex);
 	void updateBullets(float deltaTime);
-
 	void SetFace();
 	void SetState(int);
 	void SetIdle(int);

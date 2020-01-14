@@ -7,6 +7,7 @@
 #include <vector>
 #include<ItemLayer.h>
 #include<MainMenuScene.h>
+#include <SettingScene.h>
 class MenuLayer : public cocos2d::Layer
 {
 public:
@@ -20,12 +21,14 @@ public:
     void createLabelLayer();
 	void createSkillIce();
 	void createSkillFire();
+	void createUpLevelLayer();
 	
 	void Quest(); // nhan
 	void setQuestSolo(int );// nhan
 	void setQuestYolo(int);// nhan
 	void setD(int );//nhan
 	void setC(int);//nhan
+	void showItemSword(Vec2);
 
 protected:
 private:
@@ -40,7 +43,7 @@ private:
     SneakyJoystick* leftJoystick;
     cocos2d::Label* _messageLabel;
 
-
+	ui::Button* ButtonUpLevel;
 	ItemLayer* item;
 };
 

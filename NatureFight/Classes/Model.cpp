@@ -8,6 +8,11 @@ Model::~Model()
 {	
 }
 
+cocos2d::PhysicsBody* Model::getPhysicBody()
+{
+	return mPhysicsBody;
+}
+
 void Model::setAlive(bool alive)
 {
 	mIsALive = alive;
@@ -28,11 +33,6 @@ void Model::setIndex(int index)
 int Model::getIndex()
 {
 	return mPhysicsBody->getGroup();
-}
-
-cocos2d::PhysicsBody* Model::getPhysicBody()
-{
-	return mPhysicsBody;
 }
 
 bool Model::isMoveRight()

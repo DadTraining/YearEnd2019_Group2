@@ -15,7 +15,8 @@ public:
 	std::map<int, Sprite*> m_sprites;
 	std::map<int, ui::Button*> m_buttons;
 	std::map<int, Label*> m_labels;
-	std::map<int, SpriteFrameCache*> m_framecache;
+	std::map<int, SpriteFrameCache*> m_framecachePlayer;
+	std::map<int, SpriteFrameCache*> m_framecacheAI;
 	static int LevelPlayer;
 public:
 	void SetLevelPlayer(int);
@@ -28,7 +29,9 @@ public:
 	Sprite* GetSpriteById(int id);
 	ui::Button* GetButtonById(int id);
 	Label* GetLabelById(int id);
-	SpriteFrameCache* GetFrameById(int id);
+	SpriteFrameCache* GetFramePlayerById(int id);
+	SpriteFrameCache* GetFrameAIById(int id);
+
 };
 #endif
 

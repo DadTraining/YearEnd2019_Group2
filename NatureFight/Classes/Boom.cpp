@@ -65,7 +65,7 @@ cocos2d::Animate* Boom::Explosion() {
 }
 cocos2d::Animate* Boom::AnimationObjectOnce(int id, std::string name, float speed)
 {
-	auto spriteCache = ResourceManager::GetInstance()->GetFrameById(id);
+	auto spriteCache = ResourceManager::GetInstance()->GetFrameAIById(id);
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	int i = 0;
 	std::string link;
@@ -82,7 +82,7 @@ cocos2d::Animate* Boom::AnimationObjectOnce(int id, std::string name, float spee
 }
 cocos2d::Animate* Boom::defautBombAction(int id, float speed)
 {
-	auto spriteCache = ResourceManager::GetInstance()->GetFrameById(id);
+	auto spriteCache = ResourceManager::GetInstance()->GetFrameAIById(id);
 	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
 	std::string name = "boom";
 	int i = 0;

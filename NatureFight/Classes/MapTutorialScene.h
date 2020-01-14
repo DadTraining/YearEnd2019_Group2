@@ -12,6 +12,7 @@
 #include <MenuLayer.h>
 #include<AiLv1.h>
 #include <BossLv1.h>
+#include <Boom.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -20,21 +21,21 @@ USING_NS_CC;
 #define NpcYolotag 12
 #define AILV1 13
 #define ATTACKTAG 8
-#define BoomEx 100
 class MapTutorialScene : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
 	BossLv1* boss;
-	ui::Button* ButtonAttack;
-	SneakyJoystick* leftJoystick;
-//	SneakyJoystickSkinnedBase* joystickBase;
 	Npclv1* npcsolo, *npcYolo;
 	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
+
+	ui::Button* ButtonAttack;
+	SneakyJoystick* leftJoystick;
+
 	int countCreepDie=0;
 public:
     static cocos2d::Scene* createScene();
@@ -53,7 +54,7 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
-	void creepCollistionSkill(Node* nodeA, Node* nodeB);
+
 	void bossCollistionSkill(Node* nodeA, Node* nodeB);
 };
 #endif // __MAPTUTORIAL_SCENE_H__

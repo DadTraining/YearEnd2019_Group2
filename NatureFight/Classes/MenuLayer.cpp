@@ -1,5 +1,6 @@
 #include<MenuLayer.h>
-
+#include<SimpleAudioEngine.h>
+using namespace CocosDenshion;
 MenuLayer::MenuLayer(Player* mainPlayer) {
 	this->mainPlayer = mainPlayer;
 	init();
@@ -13,6 +14,7 @@ bool MenuLayer::init() {
 		return false;
 	}
 	createButtonLayer();
+	createUpLevelLayer();
 	createSkillFire();
 	createSkillIce();
 
@@ -33,6 +35,9 @@ void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
 	mainPlayer->SetFace(leftJoystick->getVelocity());
 	timeCount += deltaTime;
+	if (mainPlayer->Exp >= mainPlayer->MaxExp) {
+		ButtonUpLevel->setVisible(true);
+	}
 
 }
 
@@ -51,12 +56,14 @@ void MenuLayer::createButtonLayer()
 		item->showItemBlood();
 		this->addChild(item);
 		//pause
+		//pause
 		auto btnPause = ui::Button::create("settings/pause.png");
 		btnPause->setPosition(Vec2(visibleSize));
-		btnPause->setAnchorPoint(Vec2(1,1));
+		btnPause->setAnchorPoint(Vec2(1, 1));
 		btnPause->setOpacity(-50);
 		btnPause->setScale(0.2);
 		btnPause->addClickEventListener([](Ref* event) {
+
 			Director::getInstance()->pause();
 			mPauseLayer->setVisible(true);
 		});
@@ -64,38 +71,56 @@ void MenuLayer::createButtonLayer()
 		mPauseLayer = Sprite::create("settings/bg.png");
 		//mPauseLayer->setAnchorPoint(Vec2(0.5, 0.5));
 		//mPauseLayer->setOpacity(-125);
-		mPauseLayer->setScale(0.3);
-		mPauseLayer->setPosition(Vec2(visibleSize/2));
+		mPauseLayer->setScale(0.4);
+		mPauseLayer->setPosition(visibleSize / 2);
 		mPauseLayer->setVisible(false);
-		addChild(mPauseLayer, 10);
+		addChild(mPauseLayer, 50);
 		auto paulb = Sprite::create("settings/header.png");
 		//paulb->setAnchorPoint(Vec2(0.5, 0.5));
-		paulb->setScale(0.8);
-		paulb->setPosition(mPauseLayer->getPosition() + Vec2(250,380));
+		paulb->setScale(0.6);
+		paulb->setPosition(mPauseLayer->getPosition() + Vec2(200, 380));
 		mPauseLayer->addChild(paulb, 1);
 		auto paubg = Sprite::create("settings/tablepause.png");
 		//paubg->setAnchorPoint(Vec2(0.5, 0.5));
 		paubg->setScale(1.4);
-		paubg->setPosition(Vec2(visibleSize/2) + Vec2(170,270));
+		paubg->setPosition(Vec2(visibleSize / 2) + Vec2(170, 230));
 		mPauseLayer->addChild(paubg);
 
 		auto btnHome = ui::Button::create("settings/menu.png");
-		btnHome->setPosition(mPauseLayer->getPosition() + Vec2(100, 150));
+		btnHome->setPosition(mPauseLayer->getPosition() + Vec2(150, 50));
 		//btnHome->setScale(0.5);
 		btnHome->addClickEventListener([](Ref* event) {
+
 			Director::getInstance()->resume();
 			Director::getInstance()->replaceScene(MainMenuScene::createScene());
 		});
 		mPauseLayer->addChild(btnHome);
 
 		auto btnResume = ui::Button::create("settings/restart.png");
-		btnResume->setPosition(mPauseLayer->getPosition() + Vec2(350, 150));
+		btnResume->setPosition(mPauseLayer->getPosition() + Vec2(mPauseLayer->getContentSize().width * 1 / 3 + 50, 50));
 		//btnResume->setScale(0.5);
 		btnResume->addClickEventListener([](Ref* event) {
+
 			Director::getInstance()->resume();
 			mPauseLayer->setVisible(false);
 		});
 		mPauseLayer->addChild(btnResume);
+
+		auto btnSetting = ui::Button::create("settings/settings.png");
+		btnSetting->setPosition(mPauseLayer->getPosition() + Vec2(-210, 50));
+		//btnSetting->setScale(0.5);
+		btnSetting->addClickEventListener([](Ref* event) {
+			auto turn = GameSetting::getInstance()->isSound();
+			if (turn == true)
+			{
+				auto audio = SimpleAudioEngine::getInstance();
+				//log("asd");
+				audio->playEffect("sounds/212.mp3", false);
+				log("2");
+			}
+			Director::getInstance()->replaceScene(SettingScene::createScene());
+		});
+		mPauseLayer->addChild(btnSetting);
 ////////
 
 	auto ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
@@ -123,6 +148,33 @@ void MenuLayer::createButtonLayer()
 	});
 	ButtonAttack->removeFromParent();
 	addChild(ButtonAttack, 1);
+}
+void MenuLayer::createUpLevelLayer()
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+
+	ButtonUpLevel = ResourceManager::GetInstance()->GetButtonById(6);
+	ButtonUpLevel->setPosition(Vec2(visibleSize.width/2, visibleSize.height / 2));
+	ButtonUpLevel->setAnchorPoint(Vec2(1, 0));
+	ButtonUpLevel->setScale(0.3f);
+	ButtonUpLevel->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+			mainPlayer->Level++;
+			mainPlayer->updateLevel();
+			ButtonUpLevel->setVisible(false);
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+	});
+	ButtonUpLevel->removeFromParent();
+	addChild(ButtonUpLevel, 1);
+	ButtonUpLevel->setVisible(false);
 }
 void MenuLayer::createJoyStickLayer()
 {
@@ -161,12 +213,14 @@ void MenuLayer::createJoyStickLayer()
 
 void MenuLayer::createSkillIce()
 {
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
-	icon_ice->setScale(0.3);
+	icon_ice->setScale(0.25);
 	icon_ice->setOpacity(-150);
 	icon_ice->setRotation(-25);
 	icon_ice->setTouchEnabled(false);
-	icon_ice->setPosition(Vec2(870, 140));
+	icon_ice->setAnchorPoint(Vec2(1, 0));
+	icon_ice->setPosition(Vec2(visibleSize.width + 30, 100));
 	this->addChild(icon_ice);
 	icon_ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
@@ -191,12 +245,15 @@ void MenuLayer::createSkillIce()
 	icon_ice->runAction(fin);
 }
 void MenuLayer::createSkillFire() {
+
+	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
-	icon_fire->setScale(0.3);
+	icon_fire->setScale(0.25);
 	icon_fire->setOpacity(-150);
 	icon_fire->setTouchEnabled(false);
 	icon_fire->setRotation(-45);
-	icon_fire->setPosition(Vec2(800, 100));
+	icon_fire->setAnchorPoint(Vec2(1, 0));
+	icon_fire->setPosition(Vec2(visibleSize.width - 40, 90));
 	this->addChild(icon_fire); 
 	icon_fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
@@ -282,14 +339,17 @@ void MenuLayer::Quest()
 
 				quest->runAction(fadeIn);
 				if (QuestYolo == 1) {
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i <= 3; i++)
 					{
 						if (d == i)
 						{
 							if(i==0) vlabel1[i]->setVisible(true);
 							else {
-								vlabel1[i - 1]->setVisible(false);
-								vlabel1[i]->setVisible(true);
+								if (i <= 3) {
+									vlabel1[i - 1]->setVisible(false);
+									vlabel1[i]->setVisible(true);
+								}
+								
 								
 							}
 						}
@@ -305,9 +365,11 @@ void MenuLayer::Quest()
 						{
 							if (i == 0) vlabel2[i]->setVisible(true);
 							else {
-								vlabel2[i - 1]->setVisible(false);
-								vlabel2[i]->setVisible(true);
-
+								if (i <= 6) {
+									vlabel2[i - 1]->setVisible(false);
+									vlabel2[i]->setVisible(true);
+								}
+								
 							}
 						}
 					}
@@ -360,3 +422,17 @@ void MenuLayer::setC(int x)
 }
 
 //end nhan
+void MenuLayer::showItemSword(Vec2 a)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto item_kiem = Sprite::create("Sprites/Item/Sword.png");
+	item_kiem->setPosition(a);
+	addChild(item_kiem, 80);
+	item_kiem->setScale(0.2); item_kiem->setRotation(45);
+	auto moveby = MoveBy::create(0.5, Vec2(20, 20));
+	auto move_ease_out = EaseBackOut::create(moveby->clone());
+	auto move = MoveBy::create(0.5, Vec2(20, -60));
+	auto move_ease_in = EaseBounceOut::create(move->clone());
+	auto sequence = Sequence::create(move_ease_out, move_ease_in, nullptr);
+	item_kiem->runAction(sequence);
+}
