@@ -1,6 +1,9 @@
 #include "AiLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
+#include"SimpleAudioEngine.h"
+
+using namespace CocosDenshion;
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -42,6 +45,9 @@ void AiLv1::Update(float deltaTime)
 			timeColor = 0;
 		}
 	}
+
+
+	load->setPercent(setFlood());
 }
 
 
@@ -54,6 +60,19 @@ void AiLv1::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
+
+	auto loadingbar = Sprite::create("loadingbar_bg.png");
+	loadingbar->setPosition(/*sprite->getPosition()+*/Vec2(600, 415));
+	loadingbar->setScaleX(1.6f);
+	loadingbar->setAnchorPoint(Vec2(0.5, 0.5));
+	this->sceneGame->addChild(loadingbar, 1);
+	load = ui::LoadingBar::create("progress.png");
+	load->setScaleX(1.65);
+	load->setPosition(loadingbar->getPosition());
+	this->sceneGame->addChild(load, 2);
+	load->setDirection(ui::LoadingBar::Direction::LEFT);
+
+
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	//physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
@@ -114,6 +133,12 @@ void AiLv1::SetAttack(int state) {
 	{
 	case FACE_LEFT:
 		if (state != m_CurrentState) {
+			auto turn = GameSetting::getInstance()->isSound();
+			if (turn == true)
+			{
+				auto audio = SimpleAudioEngine::getInstance();
+				audio->playEffect("sounds/chem.wav", false);
+			}
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
@@ -125,6 +150,12 @@ void AiLv1::SetAttack(int state) {
 		break;
 	case FACE_RIGHT:
 		if (state != m_CurrentState) {
+			auto turn = GameSetting::getInstance()->isSound();
+			if (turn == true)
+			{
+				auto audio = SimpleAudioEngine::getInstance();
+				audio->playEffect("sounds/chem.wav", false);
+			}
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(20, 0));
@@ -136,7 +167,14 @@ void AiLv1::SetAttack(int state) {
 		}
 		break;
 	case FACE_UP:
+
 		if (state != m_CurrentState) {
+			auto turn = GameSetting::getInstance()->isSound();
+			if (turn == true)
+			{
+				auto audio = SimpleAudioEngine::getInstance();
+				audio->playEffect("sounds/chem.wav", false);
+			}
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
@@ -148,6 +186,12 @@ void AiLv1::SetAttack(int state) {
 		break;
 	case FACE_DOWN:
 		if (state != m_CurrentState) {
+			auto turn = GameSetting::getInstance()->isSound();
+			if (turn == true)
+			{
+				auto audio = SimpleAudioEngine::getInstance();
+				audio->playEffect("sounds/chem.wav", false);
+			}
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
@@ -191,6 +235,10 @@ void AiLv1::SetMove(int state)
 	else if (m_sprite->getNumberOfRunningActions() == 0) {
 		m_sprite->runAction(MovingRight());
 	}
+}
+float AiLv1::setFlood()
+{
+	return m_health;
 }
 void AiLv1::SetState(int state)
 {

@@ -7,6 +7,7 @@
 #include "cocos2d.h"
 #include "Model.h"
 #include <Player.h>
+#include "GameSetting.h"
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
@@ -51,6 +52,7 @@ public:
 	void SetHurtAi(int state, int skill);
 	void SetMove(int state);
 	void SetTagAI(int);
+	float setFlood();
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
@@ -72,6 +74,8 @@ public:
 	cocos2d::Animate* AttackDownAngry();
 	cocos2d::Animate* HurtDown();
 	cocos2d::RepeatForever* DieDown();
+
+	cocos2d::ui::LoadingBar* load;
 	~AiLv1();
 private:
 	cocos2d::Scene* sceneGame;
