@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _BOSS_SCENE_H_
-#define _BOSS_SCENE_H_
+#ifndef _BOSSLv1_SCENE_H_
+#define _BOSSLv1_SCENE_H_
 #include "ObjectParent.h"
 #include <list>
 #include <vector> 
@@ -8,8 +8,7 @@
 #include "Model.h"
 #include <Player.h>
 #include <Boom.h>
-#include <GameSetting.h>
-#include <SimpleAudioEngine.h>
+#include <Bullet.h>
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
@@ -43,6 +42,7 @@ public:
 	Boom* mBooms[MAX_BULLET];
 	bool stateHeal;
 	bool stateAngry;
+	Bullet* mBullet;
 public:
 	BossLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
@@ -52,6 +52,7 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	void bulletHasCollision(int bulletIndex);
 	void updateBullets(float deltaTime);
+	void fireBallHasCollision();
 	void SetFace();
 	void SetState(int);
 	void SetIdle(int);
@@ -63,14 +64,15 @@ public:
 	void SetTagAI(int);
 	void setIndex(int index);
 	void setSkillHeal(bool sHeal);
-	float setHealth();//suong
+
+	float setHealth();
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
-	cocos2d::RepeatForever* DieRight();
+	cocos2d::Animate* DieRight();
 
 	cocos2d::RepeatForever* MovingUp();
 	cocos2d::Animate* AttackUp();
@@ -86,16 +88,14 @@ public:
 	cocos2d::Animate* HurtDown();
 	cocos2d::RepeatForever* DieDown();
 
-	cocos2d::Sprite* loadingbar;
-	cocos2d::ui::LoadingBar* load;
-
-
-
 	cocos2d::ParticleSystemQuad* ParticleHeal(std::string name);
 	~BossLv1();
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
+
+	cocos2d::ui::LoadingBar* loadingbar;
+	cocos2d::ui::LoadingBar* load;
 };
 
 #endif // _BOSS_SCENE_H_

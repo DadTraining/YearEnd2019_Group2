@@ -62,18 +62,8 @@ void Map_3::update(float deltaTime)
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
 	}
-	if (x3 == 2) {
-		menuLayer->setD(mainPlayer->CountCreep);
-	}
-	if (x3 == 4) {
-		
-		menuLayer->setC(mainPlayer->CountCreep);
-	}
+	bosslv3->Collision(mainPlayer, deltaTime);
 }
 bool Map_3::onTouchBegan(Touch* touch, Event* event)
 {
@@ -259,6 +249,11 @@ void Map_3::createPhysicMap()
 			ailv->m_sprite->setTag(AILV1+i);
 			ailv->m_sprite->setPosition(Vec2(posx3, posY));
 			ai.push_back(ailv);
+		}
+		if (type == 5)
+		{
+			bosslv3 = new BossLv3(this);
+			bosslv3->m_sprite->setPosition(Vec2(posx3, posY));
 		}
 	}
 }

@@ -74,7 +74,7 @@ public:
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
-	cocos2d::RepeatForever* DieRight();
+	cocos2d::Animate* DieRight();
 
 	cocos2d::RepeatForever* MovingUp();
 	cocos2d::Animate* AttackUp();

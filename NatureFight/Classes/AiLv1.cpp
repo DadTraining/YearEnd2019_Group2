@@ -1,7 +1,6 @@
 #include "AiLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
-using namespace CocosDenshion;
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -11,11 +10,9 @@ float timeAttackAI = 0, timeDieAI = 0, timeColor = 0;
 bool checkAttackAI = false;
 void AiLv1::Update(float deltaTime)
 {
-
 	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 30)));
 	load->setPosition(loadingbar->getPosition());
 	load->setPercent(setHealth());
-
 
 	if (m_health <= 0) {
 		timeDieAI += deltaTime;
@@ -61,18 +58,6 @@ void AiLv1::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
-
-	//loaddinghealth
-	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
-	loadingbar->setScale(0.2);
-	loadingbar->setPercent(100);
-	this->sceneGame->addChild(loadingbar, 1);
-	load = ui::LoadingBar::create("progress.png");
-	load->setScale(0.21);
-	this->sceneGame->addChild(load, 2);
-	load->setDirection(ui::LoadingBar::Direction::LEFT);
-
-
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3, PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
@@ -92,6 +77,16 @@ void AiLv1::Init()
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(CREEPATTACK);
 
+	//loaddinghealth
+	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
+	loadingbar->setScale(0.2);
+	loadingbar->setPercent(100);
+	this->sceneGame->addChild(loadingbar, 1);
+	load = ui::LoadingBar::create("progress.png");
+	load->setScale(0.21);
+	this->sceneGame->addChild(load, 2);
+	load->setDirection(ui::LoadingBar::Direction::LEFT);
+
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(AiLv1::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
@@ -103,14 +98,14 @@ void AiLv1::Collision(Player* player, float deltaTime)
 	this->player = player;
 	Update(deltaTime);
 	timem += deltaTime;
-	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 50) {
+	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
 		if (timem > 0.3f) {
 			SetState(AiLv1::ACTION_ATTACK);
 			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 			timem = 0;
 		}
 	}
-	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80)
 		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }
@@ -137,17 +132,10 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
-	auto turn = GameSetting::getInstance()->isSound();
-	if (turn == true)
-	{
-		auto audio = SimpleAudioEngine::getInstance();
-		audio->playEffect("sounds/chem.wav", false);
-	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
 		if (state != m_CurrentState) {
-
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
 			edgeNode->setPosition(m_sprite->getPosition() + Vec2(-20, 0));
@@ -158,7 +146,6 @@ void AiLv1::SetAttack(int state) {
 		}
 		break;
 	case FACE_RIGHT:
-
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
@@ -171,7 +158,6 @@ void AiLv1::SetAttack(int state) {
 		}
 		break;
 	case FACE_UP:
-
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
@@ -183,7 +169,6 @@ void AiLv1::SetAttack(int state) {
 		}
 		break;
 	case FACE_DOWN:
-
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
 			m_sprite->runAction(AttackRight());
@@ -277,11 +262,6 @@ void AiLv1::SetFace()
 	}
 }
 
-float AiLv1::setHealth()
-{
-	return m_health;
-}
-
 cocos2d::RepeatForever* AiLv1::MovingRight() {
 	return ObjectParent::AnimationObjectRepeat(101, "Goblin_Running", AttackSpeed);
 }
@@ -294,8 +274,8 @@ cocos2d::RepeatForever* AiLv1::IdleRight() {
 cocos2d::Animate* AiLv1::AttackRightAngry() {
 	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking", AttackSpeed);
 }
-cocos2d::RepeatForever* AiLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(104, "Goblin_Dying", AttackSpeed);
+cocos2d::Animate* AiLv1::DieRight() {
+	return ObjectParent::AnimationObjectOnce(104, "Goblin_Dying", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::HurtRight() {
 	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt", AttackSpeed);
@@ -320,7 +300,7 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
-	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL)
+	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
 		m_health -= 10;
@@ -336,4 +316,8 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 		}
 	}
 	return true;
+}
+float AiLv1::setHealth()
+{
+	return m_health;
 }

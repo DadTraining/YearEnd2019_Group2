@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="143" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="106">
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="143" height="68" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="107">
  <tileset firstgid="1" source="tiled.tsx"/>
  <layer id="1" name="Tile Layer 1" width="143" height="68" visible="0">
   <data encoding="csv">
@@ -361,14 +361,10 @@
   <object id="67" name="main" type="2" x="32" y="930" width="45" height="57"/>
   <object id="68" name="npc" type="3" x="172" y="95" width="27" height="45"/>
   <object id="69" name="npc" type="4" x="2045" y="357" width="28" height="33"/>
-  <object id="70" type="1" x="437.333" y="949.333" width="22.6667" height="36"/>
   <object id="71" type="1" x="270.667" y="890.667" width="25.3333" height="34.6667"/>
   <object id="73" type="1" x="152" y="652" width="34.6667" height="41.3333"/>
-  <object id="74" type="1" x="150.667" y="496" width="37.3333" height="37.3333"/>
   <object id="76" type="1" x="272" y="256" width="29.3333" height="44"/>
-  <object id="77" type="1" x="448" y="96" width="38.6667" height="37.3333"/>
   <object id="78" type="1" x="896" y="150.667" width="40" height="38.6667"/>
-  <object id="79" type="1" x="880" y="289.333" width="57.3333" height="38.6667"/>
   <object id="82" type="1" x="1208" y="333.333" width="37.3333" height="16"/>
   <object id="83" type="1" x="1566.67" y="188" width="26.6667" height="20"/>
   <object id="85" type="1" x="1737.33" y="217.333" width="25.3333" height="26.6667"/>
@@ -376,16 +372,9 @@
   <object id="87" type="1" x="1557.33" y="821.333" width="33.3333" height="21.3333"/>
   <object id="89" type="1" x="1454.67" y="944" width="36" height="32"/>
   <object id="92" type="1" x="1862.67" y="877.333" width="25.3333" height="25.3333"/>
-  <object id="93" type="1" x="1993.33" y="956" width="22.6667" height="22.6667"/>
   <object id="94" type="1" x="2178.67" y="574.667" width="30.6667" height="38.6667"/>
-  <object id="96" type="1" x="965.333" y="972" width="41.3333" height="34.6667"/>
-  <object id="97" type="1" x="1165.33" y="1044" width="33.3333" height="22.6667"/>
-  <object id="98" type="1" x="1110.67" y="788" width="54.6667" height="66.6667"/>
   <object id="99" type="1" x="750.667" y="554.667" width="36" height="26.6667"/>
-  <object id="100" type="1" x="1326.67" y="584" width="48" height="41.3333"/>
-  <object id="101" type="1" x="1264" y="105.333" width="34.6667" height="33.3333"/>
-  <object id="102" type="1" x="1968" y="80" width="26.6667" height="33.3333"/>
   <object id="103" type="1" x="2178.67" y="46.6667" width="25.3333" height="22.6667"/>
-  <object id="104" type="1" x="628" y="237.333" width="13.3333" height="25.3333"/>
+  <object id="106" type="5" x="954.545" y="427.273"/>
  </objectgroup>
 </map>

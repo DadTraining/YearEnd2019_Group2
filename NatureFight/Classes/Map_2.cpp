@@ -218,6 +218,7 @@ void Map_2::createPhysicMap()
 			//
 			mainPlayer = new Player(this);
 			mainPlayer->m_sprite->setPosition(Vec2(posx2, posY));
+
 		}
 		if (type == 3)
 		{

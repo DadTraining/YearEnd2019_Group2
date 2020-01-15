@@ -1,7 +1,6 @@
 #include "BossLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
-using namespace CocosDenshion;
 BossLv1::BossLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -12,16 +11,19 @@ BossLv1::BossLv1(cocos2d::Scene* scene)
 		mBooms[i] = new Boom(scene, sprite, Model::BITMASK_MONSTER_BULLET);
 		mBooms[i]->setIndex(i);
 	}
+	Sprite* sprite = Sprite::create("FireBall/0_FireBall_000.png");
+	sprite->setScale(0.7f);
+	mBullet = new Bullet(sceneGame, sprite, Model::BITMASK_MONSTER_BULLET_FIREBALL, "FireBall", 116, true);
+	mBullet->setScale(0.5f);
+	mBullet->setAlive(false);
 }
-float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0, timeDelayHeal = 0;
+float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0,timeDelayHeal=0;
 bool checkAttackBoss = false;
 void BossLv1::Update(float deltaTime)
 {
-	//loadinghealth
-	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 50)));
+	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 30)));
 	load->setPosition(loadingbar->getPosition());
 	load->setPercent(setHealth());
-
 
 	if (m_health <= 0) {
 		timeDieBoss += deltaTime;
@@ -61,12 +63,11 @@ void BossLv1::Update(float deltaTime)
 		if (timeDelayHeal > 3) {
 			setSkillHeal(true);
 			timeDelayHeal = 0;
-		}
-		else {
+		}else {
 			stateHeal = false;
 		}
 	}
-	if (m_health <= 50) {
+	if(m_health<=50){
 		stateAngry = true;
 	}
 	else
@@ -85,16 +86,6 @@ void BossLv1::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(2);
 	this->sceneGame->addChild(this->m_sprite);
-
-	//loaddinghealth
-	loadingbar = cocos2d::Sprite::create("loadingbar_bg.png");
-	loadingbar->setScale(0.3);
-	this->sceneGame->addChild(loadingbar, 1);
-	load = ui::LoadingBar::create("progress.png");
-	load->setScale(0.32);
-	this->sceneGame->addChild(load, 2);
-	load->setDirection(ui::LoadingBar::Direction::LEFT);
-
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2, PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	//physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
@@ -115,12 +106,24 @@ void BossLv1::Init()
 	sceneGame->addChild(edgeNode);
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(BOSSATTACK);
+
+	//loaddinghealth
+	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
+	loadingbar->setScale(0.2);
+	loadingbar->setPercent(100);
+	this->sceneGame->addChild(loadingbar, 1);
+	load = ui::LoadingBar::create("progress.png");
+	load->setScale(0.21);
+	this->sceneGame->addChild(load, 2);
+	load->setDirection(ui::LoadingBar::Direction::LEFT);
+
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(BossLv1::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 }
 
 float timeBoss = 0;
+int countBoom = 0;
 void BossLv1::Collision(Player* player, float deltaTime)
 {
 	Update(deltaTime);
@@ -129,21 +132,27 @@ void BossLv1::Collision(Player* player, float deltaTime)
 		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 200) {
 			if (timeBoss > 2.0f) {
 				SetState(BossLv1::ACTION_ATTACK);
-				for (int i = 0; i < MAX_BULLET; i++)
-				{
-					if (!mBooms[i]->isAlive()) {
-						mBooms[i]->setAlive(true);
-						mBooms[i]->setPosition(this->m_sprite->getPosition());
-						mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
-						auto turn = GameSetting::getInstance()->isSound();
-						if (turn == true)
-						{
-							auto audio = SimpleAudioEngine::getInstance();
-							audio->playEffect("sounds/bom.wav", false);
-						}
-						break;
+				if (countBoom == 3) {
+					countBoom = 0;
+					if (!mBullet->isAlive()) {
+						mBullet->setAlive(true);
+						mBullet->setPosition(this->m_sprite->getPosition());
+						mBullet->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBullet->getPosition()) * 2);
 					}
 				}
+				else {
+					for (int i = 0; i < MAX_BULLET; i++)
+					{
+						if (!mBooms[i]->isAlive()) {
+							mBooms[i]->setAlive(true);
+							mBooms[i]->setPosition(this->m_sprite->getPosition());
+							mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
+							countBoom++;
+							break;
+						}
+					}
+				}
+
 				timeBoss = 0;
 			}
 		}
@@ -171,6 +180,7 @@ void BossLv1::Collision(Player* player, float deltaTime)
 		}
 	}
 	updateBullets(deltaTime);
+	mBullet->update(deltaTime, player);
 	//flip boss
 	if ((player->m_sprite->getPosition() - this->m_sprite->getPosition()).x>0) {
 		m_sprite->setFlipX(false);
@@ -202,12 +212,6 @@ void BossLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void BossLv1::SetAttack(int state) {
-	auto turn = GameSetting::getInstance()->isSound();
-	if (turn == true)
-	{
-		auto audio = SimpleAudioEngine::getInstance();
-		audio->playEffect("sounds/chem.wav", false);
-	}
 	if (!stateAngry) {
 		switch (m_CurrentFace)
 		{
@@ -308,7 +312,7 @@ void BossLv1::SetAttack(int state) {
 			break;
 		}
 	}
-
+	
 }
 void BossLv1::SetHurt(int state)
 {
@@ -342,6 +346,9 @@ void BossLv1::SetMove(int state)
 	else if (m_sprite->getNumberOfRunningActions() == 0) {
 		m_sprite->runAction(MovingRight());
 	}
+}
+void BossLv1::SetTagAI(int)
+{
 }
 void BossLv1::SetState(int state)
 {
@@ -444,6 +451,17 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 			this->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
 		}
 	}
+	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL && nodeB->getTag() == playertag) ||
+		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)) {
+		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
+		{
+			this->fireBallHasCollision();
+		}
+		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
+		{
+			this->fireBallHasCollision();
+		}
+	}
 	return true;
 }
 
@@ -459,8 +477,8 @@ cocos2d::RepeatForever* BossLv1::IdleRight() {
 cocos2d::Animate* BossLv1::AttackRightAngry() {
 	return ObjectParent::AnimationObjectOnce(112, "Ogre_Throwing", AttackSpeed);
 }
-cocos2d::RepeatForever* BossLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(109, "Ogre_Dying", AttackSpeed);
+cocos2d::Animate* BossLv1::DieRight() {
+	return ObjectParent::AnimationObjectOnce(109, "Ogre_Dying", AttackSpeed);
 }
 cocos2d::Animate* BossLv1::HurtRight() {
 	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt", AttackSpeed);
@@ -477,10 +495,6 @@ cocos2d::RepeatForever* BossLv1::IdleDown() { return NULL; }
 cocos2d::Animate* BossLv1::AttackDownAngry() { return NULL; }
 cocos2d::Animate* BossLv1::HurtDown() { return NULL; }
 cocos2d::RepeatForever* BossLv1::DieDown() { return NULL; }
-float BossLv1::setHealth()
-{
-	return m_health;
-}
 void BossLv1::setIndex(int index)
 {
 	this->m_sprite->getPhysicsBody()->setGroup(index);
@@ -500,6 +514,11 @@ void BossLv1::bulletHasCollision(int bulletIndex)
 	//mBullets[bulletIndex]->setAlive(false);
 	mBooms[bulletIndex]->SetExplo(true);
 }
+void BossLv1::fireBallHasCollision()
+{
+	//mBullets[bulletIndex]->setAlive(false);
+	this->mBullet->setAlive(false);
+}
 void BossLv1::setSkillHeal(bool sHeal) {
 	if (sHeal != stateHeal) {
 		auto particleSystem = ParticleHeal("Particles/BossHealler.plist");
@@ -515,4 +534,8 @@ cocos2d::ParticleSystemQuad* BossLv1::ParticleHeal(std::string name)
 	particleSystem->setScale(1.0f);
 	particleSystem->setDuration(0.15f);
 	return particleSystem;
+}
+float BossLv1::setHealth()
+{
+	return m_health;
 }
