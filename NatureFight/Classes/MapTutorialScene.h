@@ -56,6 +56,8 @@ public:
 	bool onContactSeparate(const PhysicsContact& contact);
 	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 
+	void createMoveScene();
+
 	void bossCollistionSkill(Node* nodeA, Node* nodeB);
 };
 #endif // __MAPTUTORIAL_SCENE_H__

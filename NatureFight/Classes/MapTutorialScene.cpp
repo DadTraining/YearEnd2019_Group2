@@ -36,7 +36,8 @@ bool MapTutorialScene::init()
 	//create Physics 
 	createPhysicMap();
 	CCLOG("LoadMapTutorial 3******************");
-	
+	//moveScene
+	//createMoveScene();
 	
 	CCLOG("LoadMapTutorial 400******************");
 	auto listener = EventListenerTouchOneByOne::create();
@@ -321,15 +322,7 @@ void MapTutorialScene::createPhysicMap()
 			ailv->m_sprite->setPosition(Vec2(posX, posY));
 			ai.push_back(ailv);
 		}
-		if (type == 5) {
-			auto particleSystem = Particletele("Particles/partic.plist");
-			particleSystem->setPosition(Vec2(posX, posY));
-			this->addChild(particleSystem);
-			auto emitter = ParticleGalaxy::create();
-			emitter->setPosition(Vec2(posX, posY));
-			emitter->setScale(0.7f);
-			this->addChild(emitter);
-		}
+		
 	}
 	CCLOG("LoadMapTutorial 3 END******************");
 }
@@ -339,6 +332,29 @@ cocos2d::ParticleSystemQuad* MapTutorialScene::Particletele(std::string name)
 	particleSystem->setScale(0.6f);
 	//particleSystem->setDuration(10.0f);
 	return particleSystem;
+}
+
+void MapTutorialScene::createMoveScene()
+{
+	auto objects1 = mObjectGroup1->getObjects();
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		CCLOG("LoadMapTutorial 313******************");
+		if (object1.asValueMap().at("type").asInt() == 5)
+		{
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
+		}
+	}
 }
 
 
