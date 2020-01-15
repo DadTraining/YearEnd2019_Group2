@@ -3,11 +3,11 @@
 
 class GameSetting
 {
-private:
+public:
 	static GameSetting* sInstance;
-	bool mIsEnableMusic;
-	bool mIsEnableSound;
-	int mVolume;
+	bool Music;
+	bool Sound;
+	int Volume;
 private:
 	GameSetting();
 
@@ -16,13 +16,13 @@ public:
 
 	static GameSetting* getInstance();
 
-	void setEnableMusic(bool enable);
+	void setMusic(bool enable);
 
-	bool isEnableMusic();
+	bool isMusic();
 
-	void setEnableSound(bool enable);
+	void setSound(bool enable);
 
-	bool isEnableSound();
+	bool isSound();
 
 	void setVolume(int volume);
 

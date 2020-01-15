@@ -29,19 +29,21 @@ bool MenuLayer::init() {
 
 	return true;
 }
-float timeCount = 0;
+float timeCount = 0, timeSkillFire = 0, timeSkillFire2 = 0, timeSkillIce = 0, timeSkillIce2 = 0;
 void MenuLayer::update(float deltaTime) {
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
 	mainPlayer->SetFace(leftJoystick->getVelocity());
 	timeCount += deltaTime;
+	timeSkillFire += deltaTime;
+	timeSkillFire2 += deltaTime;
+	timeSkillIce += deltaTime;
+	timeSkillIce2 += deltaTime;
 	if (mainPlayer->Exp >= mainPlayer->MaxExp) {
 		ButtonUpLevel->setVisible(true);
 	}
-
 }
 
 cocos2d::Sprite* mPauseLayer;
-int countSelect = 0;
 void MenuLayer::createButtonLayer()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -55,26 +57,31 @@ void MenuLayer::createButtonLayer()
 		item->showFire();
 		item->showItemBlood();
 		this->addChild(item);
-
 		item->Ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 			switch (type)
 			{
 			case ui::Widget::TouchEventType::BEGAN:
-				if (item->Ice->isSelected()==0) {
-					if (countSelect >= 2) {
-						item->fire->setSelected(false);
-						item->toxic->setSelected(false);
-						mainPlayer->m_CurrentStone = 0;
-						countSelect = 0;
+				if (item->Ice->isSelected()) {
+					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
+						icon_fire->setVisible(true);
+						icon_fire2->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_fire->setVisible(true);
+						if (mainPlayer->haveFirePet) icon_fire2->setVisible(true);
 					}
-					countSelect++;
-					mainPlayer->m_CurrentStone += Player::STONE_ICE;
-				}
-				else {
-					countSelect--;
+					icon_ice->setVisible(false);
+					icon_ice2->setVisible(false);
 					mainPlayer->m_CurrentStone -= Player::STONE_ICE;
 				}
+				else {
+					mainPlayer->m_CurrentStone += Player::STONE_ICE;
+					icon_fire->setVisible(false);
+					icon_fire2->setVisible(false);
+					icon_ice->setVisible(true);
+					icon_ice2->setVisible(true);
+					if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
+					if (mainPlayer->haveIceShield) icon_ice2->setTouchEnabled(true);
 					mainPlayer->SetParticleMove();
+				}
 			}
 		});
 
@@ -82,43 +89,27 @@ void MenuLayer::createButtonLayer()
 			switch (type)
 			{
 			case ui::Widget::TouchEventType::BEGAN:
-				if (item->fire->isSelected() == 0) {
-					if (countSelect >= 2) {
-						item->Ice->setSelected(false);
-						item->toxic->setSelected(false);
-						mainPlayer->m_CurrentStone = 0;
-						countSelect = 0;
+				if (item->fire->isSelected()) {
+					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
+						icon_ice->setVisible(true);
+						icon_ice2->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_ice->setVisible(true);
+						if (mainPlayer->haveFirePet) icon_ice2->setVisible(true);
 					}
-					countSelect++;
-					mainPlayer->m_CurrentStone += Player::STONE_FIRE;
-				}
-				else {
-					countSelect--;
+					icon_fire->setVisible(false);
+					icon_fire2->setVisible(false);
 					mainPlayer->m_CurrentStone -= Player::STONE_FIRE;
 				}
-					mainPlayer->SetParticleMove();
-			}
-		});
-
-		item->toxic->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-			switch (type)
-			{
-			case ui::Widget::TouchEventType::BEGAN:
-				if (item->toxic->isSelected() == 0) {
-					if (countSelect >= 2) {
-						item->fire->setSelected(false);
-						item->Ice->setSelected(false);
-						mainPlayer->m_CurrentStone = 0;
-						countSelect = 0;
-					}
-					countSelect++;
-					mainPlayer->m_CurrentStone += mainPlayer->STONE_TOXIC;
-				}
 				else {
-					countSelect--;
-					mainPlayer->m_CurrentStone -= mainPlayer->STONE_TOXIC;
-				}
+					mainPlayer->m_CurrentStone += Player::STONE_FIRE;
+					icon_ice->setVisible(false);
+					icon_ice2->setVisible(false);
+					icon_fire->setVisible(true);
+					icon_fire2->setVisible(true);
+					if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
+					if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
 					mainPlayer->SetParticleMove();
+				}
 			}
 		});
 
@@ -221,6 +212,10 @@ void MenuLayer::createUpLevelLayer()
 		case ui::Widget::TouchEventType::BEGAN:
 			mainPlayer->Level++;
 			mainPlayer->updateLevel();
+			mainPlayer->haveFirePet = true;
+			mainPlayer->haveIceShield = true;
+			mainPlayer->haveSwordFire = true;
+			mainPlayer->haveSwordIce = true;
 			ButtonUpLevel->setVisible(false);
 			break;
 		case ui::Widget::TouchEventType::ENDED:
@@ -264,7 +259,7 @@ void MenuLayer::createJoyStickLayer()
 
 void MenuLayer::createSkillIce()
 {
-	auto icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
+	icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
 	icon_ice->setScale(0.3);
 	icon_ice->setOpacity(-150);
 	icon_ice->setRotation(-25);
@@ -276,10 +271,10 @@ void MenuLayer::createSkillIce()
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
-			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
+			if (timeSkillIce > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-				timeCount = 0;
+				timeSkillIce = 0;
 			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
@@ -292,9 +287,41 @@ void MenuLayer::createSkillIce()
 	auto fin = FadeIn::create(3.0f);
 	icon_ice->setTouchEnabled(true);
 	icon_ice->runAction(fin);
+
+	icon_ice2 = ui::Button::create("Sprites/Item/skill_khienbang.png");
+	icon_ice2->setScale(0.3);
+	icon_ice2->setOpacity(-150);
+	icon_ice2->setTouchEnabled(false);
+	icon_ice2->setRotation(-45);
+	icon_ice2->setPosition(Vec2(800, 100));
+	this->addChild(icon_ice2);
+	icon_ice2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+		case ui::Widget::TouchEventType::MOVED:
+			if (timeSkillIce2 > 20.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE_2;
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeSkillIce2 = 0;
+			}
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+	});
+
+	icon_ice->setVisible(false);
+	icon_ice2->setVisible(false);
+
+	icon_ice->setTouchEnabled(false);
+	icon_ice2->setTouchEnabled(false);
 }
 void MenuLayer::createSkillFire() {
-	auto icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
+	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
 	icon_fire->setScale(0.3);
 	icon_fire->setOpacity(-150);
 	icon_fire->setTouchEnabled(false);
@@ -306,10 +333,10 @@ void MenuLayer::createSkillFire() {
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
-			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
+			if (timeSkillFire > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-				timeCount = 0;
+				timeSkillFire = 0;
 			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
@@ -322,7 +349,40 @@ void MenuLayer::createSkillFire() {
 	auto fin = FadeIn::create(3.0f);
 	icon_fire->runAction(fin);
 	icon_fire->setTouchEnabled(true);
+
+	icon_fire2 = ui::Button::create("Sprites/Item/skill_pet.png");
+	icon_fire2->setScale(0.3);
+	icon_fire2->setOpacity(-150);
+	icon_fire2->setRotation(-25);
+	icon_fire2->setTouchEnabled(false);
+	icon_fire2->setPosition(Vec2(870, 140));
+	this->addChild(icon_fire2);
+	icon_fire2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+		case ui::Widget::TouchEventType::MOVED:
+			if (timeSkillFire2 > 20.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE_2;
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeSkillFire2 = 0;
+			}
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+	});
+
+	icon_fire->setVisible(false);
+	icon_fire2->setVisible(false);
+
+	icon_fire->setTouchEnabled(false);
+	icon_fire2->setTouchEnabled(false);
 }
+
 /////////////////////////begin nhan
 std::vector<Label*> vlabel1,vlabel2;
 int count1 = 0;//nhan

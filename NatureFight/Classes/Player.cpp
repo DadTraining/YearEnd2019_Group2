@@ -10,42 +10,18 @@ Player::Player(cocos2d::Scene* scene)
 	sceneGame = scene;
 	Init();
 }
-float timeAttack = 0, timeDie = 0;
+float timeAttack = 0, timeDie = 0, timeShield = 0;
 bool checkAttack = false;
 void Player::Update(float deltaTime)
 {
+	CheckDragon(deltaTime);
+	CheckShield(deltaTime);
 	if (m_health <= 0) {
 		timeDie += deltaTime;
 		SetState(ACTION_DIE);
-		if (timeDie >= 5) {
-			timeDie = 0;
-			m_sprite->setPosition(100, 100);
-			updateLevel();
-			m_health = MaxHealth;
-			m_CurrentState = ACTION_DEFAULT;
-			m_CurrentFace = FACE_DEFAULT;
-			SetFace(Vec2(0,0));
-			edgeNode->setPosition(Vec2(1000, 1000));
-			physicsBody->setEnabled(true);
-		}
 	}
 	else {
-		if (m_CurrentState == ACTION_ATTACK) checkAttack = true;
-		if (checkAttack) timeAttack += deltaTime;
-		if (timeAttack > 2.0f - AttackSpeed) {
-			m_CurrentState = ACTION_DEFAULT;
-			timeAttack = 0;
-			checkAttack = false;
-		}
-		if (timeAttack > deltaTime && m_CurrentSkill == SKILL_DEFAULT) {
-			edgeNode->setPosition(Vec2(1000, 1000));
-		}
-		if (timeAttack > 0.15 && m_CurrentSkill == SKILL_FIRE) {
-			edgeNode->setPosition(Vec2(1000, 1000));
-		}
-		if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
-			edgeNode->setPosition(Vec2(1000, 1000));
-		}
+		CheckAttackAndSkill(deltaTime);
 	}
 	particleMove->setPosition(m_sprite->getPosition() - Vec2(0, 20));
 }
@@ -57,7 +33,6 @@ void Player::Init()
 
 	updateLevel();
 	m_health = MaxHealth;
-
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(50, 50);
 	this->m_sprite->setScale(1.5);
@@ -81,6 +56,8 @@ void Player::Init()
 	particleMove = ParticleSystemQuad::create("Particles/move_fire.plist");
 	SetParticleMove();
 
+	dragon = new DragonSkill(sceneGame);
+
 }
 
 void Player::Collision()
@@ -96,6 +73,7 @@ void Player::updateLevel()
 	MoveSpeed = 1.0f;
 	MaxHealth = Level * 300;
 	m_dame = Level * 10;
+	Armor = Level * 5;
 }
 void Player::SetIdle(int state) {
 	switch (m_CurrentFace) {
@@ -238,8 +216,17 @@ void Player::SetSkill()
 	case SKILL_FIRE:
 		SetSkillFire();
 		break;
+	case SKILL_FIRE_2:
+   		onDragon = true;
+		dragon->physicsBody->setEnabled(true);
+		dragon->m_dragon->setPosition(m_sprite->getPosition() + Vec2(-20, 30));
+		break;
 	case SKILL_ICE:
 		SetSkillIce();
+		break;
+	case SKILL_ICE_2:
+		onShield = true;
+		Armor += Level * 30;
 		break;
 	default:
 		SetSkillDefault();
@@ -258,6 +245,13 @@ void Player::SetSkillFire()
 	}
 	auto particleSystem = ParticleAttack("Particles/skill_fire.plist");
 	particleSystem->setPosition(edgeNode->getPosition());
+	sceneGame->addChild(particleSystem);
+}
+void Player::SetSkillIce2()
+{
+	auto particleSystem = ParticleAttack("Particles/skill_fire.plist");
+	particleSystem->setPosition(m_sprite->getPosition());
+	particleSystem->setDuration(ParticleSystemQuad::DURATION_INFINITY);
 	sceneGame->addChild(particleSystem);
 }
 void Player::SetSkillIce()
@@ -304,10 +298,13 @@ void Player::SetSkillDefault()
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setTag(NORMALSKILL);
 	}
-	auto particleSystem = ParticleAttack("Particles/PlayerAttack.plist");
-	particleSystem->setPosition(edgeNode->getPosition());
-	sceneGame->addChild(particleSystem);
+	if (Level >= 2) {
+		auto particleSystem = ParticleAttack("Particles/PlayerAttack.plist");
+		particleSystem->setPosition(edgeNode->getPosition());
+		sceneGame->addChild(particleSystem);
+	}
 }
+
 void Player::UseStone(int stone)
 {
 	m_CurrentStone = stone;
@@ -359,6 +356,17 @@ void Player::SetState(int state)
 			SetDie(state);
 		}
 		m_CurrentState = state;
+	}
+	if (timeDie >= 5) {
+		timeDie = 0;
+		m_sprite->setPosition(100, 100);
+		updateLevel();
+		m_health = MaxHealth;
+		m_CurrentState = ACTION_DEFAULT;
+		m_CurrentFace = FACE_DEFAULT;
+		SetFace(Vec2(0, 0));
+		edgeNode->setPosition(Vec2(1000, 1000));
+		physicsBody->setEnabled(true);
 	}
 }
 
@@ -499,16 +507,7 @@ void Player::SetParticleMove() {
 	case STONE_ICE:
 		name = "Particles/move_ice.plist";
 		break;
-	case STONE_TOXIC:
-		name = "Particles/move_toxic.plist";
-		break;
 	case STONE_FIRE_ICE:
-		name = "Particles/move_fire_ice.plist";
-		break;
-	case STONE_FIRE_TOXIC:
-		name = "Particles/move_fire_ice.plist";
-		break;
-	case STONE_ICE_TOXIC:
 		name = "Particles/move_fire_ice.plist";
 		break;
 	default:
@@ -523,4 +522,50 @@ void Player::SetParticleMove() {
 	particleMove->setPosition(m_sprite->getPosition()-Vec2(0,20));
 	particleMove->setDuration(ParticleSystem::DURATION_INFINITY);
 	sceneGame->addChild(particleMove);
+}
+
+void Player::CheckShield(float deltaTime)
+{
+	if (onShield) {
+		timeShield += deltaTime * 2;
+		if ((int)timeShield % 2 == 0) {
+			m_health += Level * 50;
+			auto particleSystem = ParticleAttack("Particles/up_heal.plist");
+			particleSystem->setPosition(m_sprite->getPosition());
+			sceneGame->addChild(particleSystem);
+		}
+		if (timeShield >= 10) {
+			timeShield = 0;
+			onShield = false;
+		}
+	}
+}
+
+void Player::CheckDragon(float deltaTime)
+{
+	if (onDragon) {
+		dragon->Update(deltaTime);
+		if (dragon->countTimeExis > 30) onDragon = false;
+	}
+
+}
+
+void Player::CheckAttackAndSkill(float deltaTime)
+{
+	if (m_CurrentState == ACTION_ATTACK) checkAttack = true;
+	if (checkAttack) timeAttack += deltaTime;
+	if (timeAttack > 2.0f - AttackSpeed) {
+		m_CurrentState = ACTION_DEFAULT;
+		timeAttack = 0;
+		checkAttack = false;
+	}
+	if (timeAttack > deltaTime&& m_CurrentSkill == SKILL_DEFAULT) {
+		edgeNode->setPosition(Vec2(1000, 1000));
+	}
+	if (timeAttack > 0.15 && m_CurrentSkill == SKILL_FIRE) {
+		edgeNode->setPosition(Vec2(1000, 1000));
+	}
+	if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
+		edgeNode->setPosition(Vec2(1000, 1000));
+	}
 }

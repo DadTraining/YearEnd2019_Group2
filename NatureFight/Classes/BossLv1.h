@@ -1,45 +1,55 @@
 #pragma once
-#ifndef _HERO_SCENE_H_
-#define _HERO_SCENE_H_
+#ifndef _BOSS_SCENE_H_
+#define _BOSS_SCENE_H_
 #include "ObjectParent.h"
 #include <list>
 #include <vector> 
-#include <ctime>
 #include "cocos2d.h"
 #include "Model.h"
 #include <Player.h>
+#include <Boom.h>
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
-#define CREEPATTACK 111
+#define BOSSATTACK 112
+#define SKILLICE 1
+#define SKILLFIRE 2
+#define NORMALSKILL 0
 #define AILV1 13
+#define BOSSLV1 14
+#define ATTACKTAG 8
 USING_NS_CC;
-class AiLv1 :
+class BossLv1 :
 	public ObjectParent
 {
 public:
 	static const int GOBIN_TAG = 1;
 	static const int ACTION_HURT_ICE = 11;
 	static const int ACTION_HURT_FIRE = 12;
+	static const int MAX_BULLET = 10;
 private:
 	int tagAI;
 
 public:
 	PhysicsBody* physicsBodyChar;
+	int maxHealth = 100;
 	int m_health = 100;
 	Node* edgeNode;
 	int m_CurrentFace;
 	int m_CurrentState;
 	float AttackSpeed;
-
+	Boom* mBooms[MAX_BULLET];
+	bool stateHeal;
+	bool stateAngry;
 public:
-	AiLv1(cocos2d::Scene* scene);
+	BossLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
 	void Init();
 	void Collision(Player* player, float deltaTime);
 	float Distance(Vec2 A, Vec2 C);
 	bool onContactBegin(const PhysicsContact& contact);
-
+	void bulletHasCollision(int bulletIndex);
+	void updateBullets(float deltaTime);
 	void SetFace();
 	void SetState(int);
 	void SetIdle(int);
@@ -50,6 +60,7 @@ public:
 	void SetMove(int state);
 	void SetTagAI(int);
 	void setIndex(int index);
+	void setSkillHeal(bool sHeal);
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
@@ -71,9 +82,12 @@ public:
 	cocos2d::Animate* AttackDownAngry();
 	cocos2d::Animate* HurtDown();
 	cocos2d::RepeatForever* DieDown();
-	~AiLv1();
+
+	cocos2d::ParticleSystemQuad* ParticleHeal(std::string name);
+	~BossLv1();
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
 };
-#endif // _HERO_SCENE_H_
+
+#endif // _BOSS_SCENE_H_

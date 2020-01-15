@@ -43,6 +43,12 @@ private:
 
 	ui::Button* ButtonUpLevel;
 	ItemLayer* item;
+
+	ui::Button* icon_fire;
+	ui::Button* icon_fire2;
+	ui::Button* icon_ice;
+	ui::Button* icon_ice2;
+
 };
 
 #endif // __MENU_LAYER__

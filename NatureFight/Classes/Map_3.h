@@ -1,5 +1,5 @@
-#ifndef __MAPTUTORIAL_SCENE_H__
-#define __MAPTUTORIAL_SCENE_H__
+#ifndef __Map3_SCENE_H__
+#define __Map3_SCENE_H__
 
 #include "cocos2d.h"
 #include<ObjectParent.h>
@@ -19,12 +19,10 @@ USING_NS_CC;
 #define NpcYolotag 12
 #define AILV1 13
 #define ATTACKTAG 8
-class MapTutorialScene : public cocos2d::Scene
+class Map_3 : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
-	AiLv1* isAI;
-
 	Npclv1* npcsolo, *npcYolo;
 	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
@@ -41,17 +39,15 @@ public:
 	void addMap();
     virtual bool init();
     void update(float deltaTime);
-    CREATE_FUNC(MapTutorialScene);
+    CREATE_FUNC(Map_3);
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
-	void UpdateDragon();
-	void Quest(); // Button display quest
 	void createPhysicMap();
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
 };
-#endif // __MAPTUTORIAL_SCENE_H__
+#endif // __Map2_SCENE_H__

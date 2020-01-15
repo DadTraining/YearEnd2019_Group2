@@ -27,10 +27,14 @@ bool MainMenuScene::init()
 		return false;
 	}
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto audio = SimpleAudioEngine::getInstance();
-	audio->playBackgroundMusic("melodyloops.mp3", true);
-	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Blazed.ttf", 70);
-	titlelb->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - visibleSize.height / 4));
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playBackgroundMusic("sounds/melodyloops.mp3", true);
+	}
+	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Polo Bubble.ttf", 80);
+	titlelb->setPosition(Vec2(visibleSize.width/2,visibleSize.height-visibleSize.height/4));
 	titlelb->setColor(Color3B::RED);
 	addChild(titlelb,1);
 	auto bgimg = Sprite::create("settings/bgmain.jpg");
@@ -39,10 +43,18 @@ bool MainMenuScene::init()
 	bgimg->setPosition(Director::getInstance()->getVisibleSize() / 2);
 	addChild(bgimg);
 	auto play = ui::Button::create("settings/playbtn.png");
-	play->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 3));
+	play->setPosition(Vec2(visibleSize.width/2,visibleSize.height/3));
 	play->setScale(0.5);
 	play->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
+		auto turn = GameSetting::getInstance()->isSound();
+		if (turn == true)
+		{
+			auto audio = SimpleAudioEngine::getInstance();
+			//log("asd");
+			audio->playEffect("sounds/212.mp3", false);
+			log("2");
+		}
 		if (type == ui::Widget::TouchEventType::ENDED) {
 			Director::getInstance()->replaceScene(MapTutorialScene::createScene());
 		}
@@ -56,6 +68,14 @@ bool MainMenuScene::init()
 	addChild(setting);
 	setting->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type)
 	{
+		auto turn = GameSetting::getInstance()->isSound();
+		if (turn == true)
+		{
+			auto audio = SimpleAudioEngine::getInstance();
+			//log("asd");
+			audio->playEffect("sounds/212.mp3", false);
+			log("2");
+		}
 		if (type == ui::Widget::TouchEventType::ENDED) {
 			Director::getInstance()->replaceScene(SettingScene::createScene());
 		}

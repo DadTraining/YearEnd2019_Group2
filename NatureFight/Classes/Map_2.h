@@ -1,5 +1,5 @@
-#ifndef __MAPTUTORIAL_SCENE_H__
-#define __MAPTUTORIAL_SCENE_H__
+#ifndef __Map2_SCENE_H__
+#define __Map2_SCENE_H__
 
 #include "cocos2d.h"
 #include<ObjectParent.h>
@@ -17,15 +17,17 @@ USING_NS_CC;
 #define playertag 1000
 #define NpcSolotag 11
 #define NpcYolotag 12
+#define NpcFroztag 21
+#define NpcIcetag 22
+#define NpcWilchtag 23
 #define AILV1 13
 #define ATTACKTAG 8
-class MapTutorialScene : public cocos2d::Scene
+
+class Map_2 : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
-	AiLv1* isAI;
-
-	Npclv1* npcsolo, *npcYolo;
+	Npclv1* npcFroz, *npcIce , *npcWilch;
 	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
@@ -41,17 +43,15 @@ public:
 	void addMap();
     virtual bool init();
     void update(float deltaTime);
-    CREATE_FUNC(MapTutorialScene);
+    CREATE_FUNC(Map_2);
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
 	virtual void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 	float Distance(Vec2 A, Vec2 C);
-	void UpdateDragon();
-	void Quest(); // Button display quest
 	void createPhysicMap();
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
 };
-#endif // __MAPTUTORIAL_SCENE_H__
+#endif // __Map2_SCENE_H__
