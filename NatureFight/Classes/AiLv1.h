@@ -7,6 +7,7 @@
 #include "cocos2d.h"
 #include "Model.h"
 #include <Player.h>
+#include <ctime>
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11

@@ -42,8 +42,14 @@ bool MenuLayer::init() {
 
 	return true;
 }
-float timeCount = 0;
+float timeCount = 0, timeSkillFire = 0, timeSkillFire2 = 0, timeSkillIce = 0, timeSkillIce2 = 0;
 void MenuLayer::update(float deltaTime) {
+
+	timeSkillFire += deltaTime;
+	timeSkillFire2 += deltaTime;
+	timeSkillIce += deltaTime;
+	timeSkillIce2 += deltaTime;
+
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
 	mainPlayer->SetFace(leftJoystick->getVelocity());
 	timeCount += deltaTime;
@@ -51,8 +57,8 @@ void MenuLayer::update(float deltaTime) {
 		ButtonUpLevel->setVisible(true);
 	}
 
-	loadhelth->setPercent(mainPlayer->setHealth());
-	loaddame->setPercent(mainPlayer->setDame());
+	loadhelth->setPercent(mainPlayer->m_health*100 / mainPlayer->MaxHealth);
+	loaddame->setPercent(mainPlayer->Exp*100 / mainPlayer->MaxExp);
 }
 
 cocos2d::Sprite* mPauseLayer;
@@ -69,6 +75,74 @@ void MenuLayer::createButtonLayer()
 		item->showFire();
 		//item->showItemBlood();
 		this->addChild(item);
+		
+		item->Ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+			switch (type)
+			{
+			case ui::Widget::TouchEventType::BEGAN:
+				if (item->Ice->isSelected()) {
+					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
+						icon_fire->setVisible(true);
+						icon_fire2->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_fire->setVisible(true);
+						if (mainPlayer->haveFirePet) icon_fire2->setVisible(true);
+					}
+					icon_ice->setVisible(false);
+					icon_ice2->setVisible(false);
+					mainPlayer->m_CurrentStone -= Player::STONE_ICE;
+				}
+				else {
+					mainPlayer->m_CurrentStone += Player::STONE_ICE;
+					icon_fire->setVisible(false);
+					icon_fire2->setVisible(false);
+					icon_ice->setVisible(true);
+					icon_ice2->setVisible(true);
+					if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
+					if (mainPlayer->haveIceShield) icon_ice2->setTouchEnabled(true);
+					mainPlayer->SetParticleMove();
+				}
+			}
+			});
+
+		item->fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+			switch (type)
+			{
+			case ui::Widget::TouchEventType::BEGAN:
+				if (item->fire->isSelected()) {
+					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
+						icon_ice->setVisible(true);
+						icon_ice2->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_ice->setVisible(true);
+						if (mainPlayer->haveFirePet) icon_ice2->setVisible(true);
+					}
+					icon_fire->setVisible(false);
+					icon_fire2->setVisible(false);
+					mainPlayer->m_CurrentStone -= Player::STONE_FIRE;
+				}
+				else {
+					mainPlayer->m_CurrentStone += Player::STONE_FIRE;
+					icon_ice->setVisible(false);
+					icon_ice2->setVisible(false);
+					icon_fire->setVisible(true);
+					icon_fire2->setVisible(true);
+					if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
+					if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
+					mainPlayer->SetParticleMove();
+				}
+			}
+			});
+
+		item->icon_power->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+			switch (type)
+			{
+			case ui::Widget::TouchEventType::BEGAN:
+				if (timeCount >= 10) {
+					mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
+					mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+					timeCount = 0;
+				}
+			}
+			});
 		//pause
 		//pause
 		auto btnPause = ui::Button::create("settings/pause.png");
@@ -301,30 +375,22 @@ void MenuLayer::createJoyStickLayer()
 
 void MenuLayer::createSkillIce()
 {
-	auto visibleSize = Director::getInstance()->getVisibleSize();
 	icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
-	icon_ice->setScale(0.25);
-	//icon_ice->setOpacity(-150);
+	icon_ice->setScale(0.3);
+	icon_ice->setOpacity(-150);
 	icon_ice->setRotation(-25);
-	icon_ice->setEnabled(false);
-	icon_ice->setAnchorPoint(Vec2(1, 0));
-	icon_ice->setPosition(Vec2(visibleSize.width + 30, 100));
+	icon_ice->setTouchEnabled(false);
+	icon_ice->setPosition(Vec2(870, 140));
 	this->addChild(icon_ice);
 	icon_ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		auto turn = GameSetting::getInstance()->isSound();
-		if (turn == true)
-		{
-			auto audio = SimpleAudioEngine::getInstance();
-			audio->playEffect("sounds/bang.wav", false);
-		}
 		switch (type)
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
-			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
+			if (timeSkillIce > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-				timeCount = 0;
+				timeSkillIce = 0;
 			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
@@ -333,35 +399,25 @@ void MenuLayer::createSkillIce()
 			break;
 		}
 
-	});
+		});
+	auto fin = FadeIn::create(3.0f);
+	icon_ice->setTouchEnabled(true);
+	icon_ice->runAction(fin);
 
-}
-void MenuLayer::createSkillFire() {
-
-	auto visibleSize = Director::getInstance()->getVisibleSize();
-	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
-	icon_fire->setScale(0.25);
-	//icon_fire->setOpacity(-150);
-	icon_fire->setEnabled(false);
-	icon_fire->setRotation(-45);
-	icon_fire->setAnchorPoint(Vec2(1, 0));
-	icon_fire->setPosition(Vec2(visibleSize.width - 40, 90));
-	this->addChild(icon_fire); 
-	icon_fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		auto turn = GameSetting::getInstance()->isSound();
-		if (turn == true)
-		{
-			auto audio = SimpleAudioEngine::getInstance();
-			audio->playEffect("sounds/lua.wav", false);
-		}
+	icon_ice2 = ui::Button::create("Sprites/Item/skill_khienbang.png");
+	icon_ice2->setOpacity(-150);
+	icon_ice2->setRotation(-45);
+	icon_ice2->setPosition(Vec2(800, 100));
+	this->addChild(icon_ice2);
+	icon_ice2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
-			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
-				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
+			if (timeSkillIce2 > 20.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE_2;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-				timeCount = 0;
+				timeSkillIce2 = 0;
 			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
@@ -370,7 +426,73 @@ void MenuLayer::createSkillFire() {
 			break;
 		}
 
-	});
+		});
+
+	icon_ice->setVisible(false);
+	icon_ice2->setVisible(false);
+
+	icon_ice->setTouchEnabled(false);
+//	icon_ice2->setTouchEnabled(false);
+}
+void MenuLayer::createSkillFire() {
+	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
+	icon_fire->setScale(0.3);
+	icon_fire->setOpacity(-150);
+	icon_fire->setTouchEnabled(false);
+	icon_fire->setRotation(-45);
+	icon_fire->setPosition(Vec2(800, 100));
+	this->addChild(icon_fire);
+	icon_fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+		case ui::Widget::TouchEventType::MOVED:
+			if (timeSkillFire > 2.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeSkillFire = 0;
+			}
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+		});
+	auto fin = FadeIn::create(3.0f);
+	icon_fire->runAction(fin);
+	icon_fire->setTouchEnabled(true);
+
+	icon_fire2 = ui::Button::create("Sprites/Item/skill_pet.png");
+	icon_fire2->setOpacity(-150);
+	icon_fire2->setRotation(-25);
+	icon_fire2->setPosition(Vec2(870, 140));
+	this->addChild(icon_fire2);
+	icon_fire2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+		case ui::Widget::TouchEventType::MOVED:
+ 			if (timeSkillFire2 > 20.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE_2;
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeSkillFire2 = 0;
+			}
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+		});
+
+	icon_fire->setVisible(false);
+	icon_fire2->setVisible(false);
+
+	icon_fire->setTouchEnabled(false);
+//	icon_fire2->setTouchEnabled(false);
 }
 /////////////////////////begin nhan
 

@@ -44,8 +44,10 @@ private:
 	cocos2d::ui::LoadingBar* loadhelth;
 	cocos2d::ui::LoadingBar* loaddame;
 
-	ui::Button* icon_ice;
 	ui::Button* icon_fire;
+	ui::Button* icon_fire2;
+	ui::Button* icon_ice;
+	ui::Button* icon_ice2;
 
 	Sprite* quest; // nhan
 	Label* label1, *label2 , *label3 ; // nhan
@@ -60,6 +62,7 @@ private:
 	ItemLayer* item;
 
 	Sprite*  mPauseLayer1;
+
 };
 
 #endif // __MENU_LAYER__

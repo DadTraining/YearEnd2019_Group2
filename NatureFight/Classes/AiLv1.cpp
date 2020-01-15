@@ -317,6 +317,30 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 			CCLOG("exp: %d", player->Exp);
 		}
 	}
+	if (nodeA->getTag() == DRAGONTAG & nodeB->getTag() == m_sprite->getTag() || nodeB->getTag() == DRAGONTAG & nodeA->getTag() == m_sprite->getTag()) {
+		std::srand(time(NULL));
+		int x = std::rand() % 25 + 50;
+		int y = std::rand() % 25 + 50;
+		int x1 = std::rand() % 25 + 50;
+		int y1 = std::rand() % 25 + 50;
+		x = x > x1 ? x : -x1;
+		y = y > y1 ? y : -y1;
+		Vec2 temp = m_sprite->getPosition() - player->dragon->m_dragon->getPosition();
+		float s = Distance(Vec2(x, y), Vec2(0, 0));
+		if ((int)temp.x <= 10 && (int)temp.y <= 10) {
+			SetState(ACTION_HURT_FIRE);
+			m_health -= 10;
+			player->dragon->m_dragon->runAction(MoveBy::create(s / 70, Vec2(x, y)));
+			player->onDragonAttack = false;
+			player->dragon->SetFace(Vec2(x, y) + player->dragon->m_dragon->getPosition());
+			if (m_health == 0) {
+				m_sprite->runAction(DieRight());
+				physicsBodyChar->setEnabled(false);
+				player->Exp += 20;
+				CCLOG("exp: %d", player->Exp);
+			}
+		}
+	}
 
 	
 	return true;

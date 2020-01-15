@@ -79,8 +79,18 @@ void MapTutorialScene::update(float deltaTime)
 	times += deltaTime;
 	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
-		ai[i]->Collision(mainPlayer, deltaTime);
+		ai[i]->Collision(mainPlayer, deltaTime); 
+		if (mainPlayer->onDragon) {
+			if (mainPlayer->onDragon)
+				if (Distance(mainPlayer->dragon->m_dragon->getPosition(), ai[i]->m_sprite->getPosition()) < 300 && mainPlayer->dragon->DragonAttacked >= 5)
+				{
+					mainPlayer->onDragonAttack = true;
+					mainPlayer->dragon->DragonAttacked = 0;
+					isAI = ai[i];
+				}
+		}
 	}
+	UpdateDragon();
 	if (x == 2) {
 		menuLayer->setD(mainPlayer->CountCreep);
 	}
@@ -88,7 +98,7 @@ void MapTutorialScene::update(float deltaTime)
 		
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
-	if (mainPlayer->m_health <= 0) menuLayer->createPlayerDie(true);
+
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -313,3 +323,22 @@ void MapTutorialScene::createPhysicMap()
 
 //end nhan
 
+void MapTutorialScene::UpdateDragon()
+{
+	if (mainPlayer->onDragon) {
+		if (mainPlayer->onDragonAttack) {
+			float s = Distance(isAI->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / (200 * 10), (isAI->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition()) / 7));
+				mainPlayer->dragon->SetFace(isAI->m_sprite->getPosition());
+			}
+		}
+		else if (mainPlayer->dragon->DragonAttacked >= 6) {
+			float s = Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
+				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
+			}
+		}
+	}
+}

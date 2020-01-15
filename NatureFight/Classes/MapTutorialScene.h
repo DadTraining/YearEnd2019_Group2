@@ -32,7 +32,7 @@ public:
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
-
+	AiLv1* isAI;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 
@@ -51,6 +51,7 @@ public:
 	void MovePlayer();
 	void Quest(); // Button display quest
 	void createPhysicMap();
+	void UpdateDragon();
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);

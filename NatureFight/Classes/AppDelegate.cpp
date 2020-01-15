@@ -115,8 +115,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	//ResourceManager::GetInstance()->Init("DataCreep.bin");
     // create a scene. it's an autorelease object
 	//auto scene = MapTutorialScene::createScene();
-	auto scene = Map_2::createScene();
-	//auto scene = LoadingScene::createScene();
+	//auto scene = MapBossMan2Scene::createScene();
+	auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);
 

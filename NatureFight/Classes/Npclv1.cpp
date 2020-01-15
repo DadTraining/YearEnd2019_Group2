@@ -10,8 +10,6 @@ Npclv1::Npclv1(cocos2d::Scene* scene)
 void Npclv1::Update(float deltaTime)
 {
 	count += deltaTime;
-
-	
 }
 
 void Npclv1::Init()
