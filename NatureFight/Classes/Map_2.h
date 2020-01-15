@@ -11,6 +11,8 @@
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
 #include<AiLv1.h>
+#include <AiRange.h>
+#include <BossLv3.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -26,6 +28,8 @@ USING_NS_CC;
 class Map_2 : public cocos2d::Scene
 {
 public:
+	AiRange* airan;
+	BossLv3* bossLv3;
 	Player* mainPlayer;
 	Npclv1* npcFroz, *npcIce , *npcWilch;
 	TMXTiledMap* map,*MapBackGround;

@@ -78,10 +78,6 @@ void MapTutorialScene::update(float deltaTime)
 	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
 	}
 	if (x == 2) {
 		menuLayer->setD(mainPlayer->CountCreep);

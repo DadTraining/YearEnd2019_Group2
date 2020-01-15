@@ -260,8 +260,8 @@ cocos2d::RepeatForever* AiLv1::IdleRight() {
 cocos2d::Animate* AiLv1::AttackRightAngry() {
 	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking", AttackSpeed);
 }
-cocos2d::RepeatForever* AiLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(104, "Goblin_Dying", AttackSpeed);
+cocos2d::Animate* AiLv1::DieRight() {
+	return ObjectParent::AnimationObjectOnce(104, "Goblin_Dying", AttackSpeed);
 }
 cocos2d::Animate* AiLv1::HurtRight() {
 	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt", AttackSpeed);

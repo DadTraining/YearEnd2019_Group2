@@ -12,6 +12,7 @@ Player::Player(cocos2d::Scene* scene)
 }
 float timeAttack = 0, timeDie = 0;
 bool checkAttack = false;
+float timeColorPlayer = 0;
 void Player::Update(float deltaTime)
 {
 	if (m_health <= 0) {
@@ -43,6 +44,13 @@ void Player::Update(float deltaTime)
 		}
 		if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
 			edgeNode->setPosition(Vec2(1000, 1000));
+		}
+	}
+	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
+		timeColorPlayer += deltaTime;
+		if (timeColorPlayer >= 1) {
+			m_sprite->setColor(ccc3(255, 255, 255));
+			timeColorPlayer = 0;
 		}
 	}
 }
@@ -392,8 +400,8 @@ cocos2d::RepeatForever* Player::IdleRight() {
 cocos2d::Animate* Player::AttackRightAngry() {
 	return ObjectParent::AnimationObjectOnce(5, "Warrior_Attack_2", AttackSpeed);
 }
-cocos2d::RepeatForever* Player::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died", AttackSpeed);
+cocos2d::Animate* Player::DieRight() {
+	return ObjectParent::AnimationObjectOnce(4, "Warrior_Died", AttackSpeed);
 }
 cocos2d::Animate* Player::HurtRight() {
 	return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt", AttackSpeed);

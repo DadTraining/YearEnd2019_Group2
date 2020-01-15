@@ -13,7 +13,8 @@ public:
 	static const int BITMASK_NPC = BITMASK_MONSTER + 1;
 	static const int MODLE_TYPE_MAIN_CHARACTER = 1;
 	static const int MODLE_TYPE_MONSTER = 2;
-	static const int BITMASK_MONSTER_BULLET = BITMASK_MONSTER + 1;
+	static const int BITMASK_MONSTER_BULLET = BITMASK_MONSTER + 1; 
+	static const int BITMASK_MONSTER_BULLET_FIREBALL = BITMASK_MONSTER_BULLET + 1;
 protected:
 	cocos2d::Sprite* mSprite;
 	cocos2d::PhysicsBody* mPhysicsBody;

@@ -11,6 +11,11 @@ BossLv1::BossLv1(cocos2d::Scene* scene)
 		mBooms[i] = new Boom(scene, sprite, Model::BITMASK_MONSTER_BULLET);
 		mBooms[i]->setIndex(i);
 	}
+	Sprite* sprite = Sprite::create("FireBall/0_FireBall_000.png");
+	sprite->setScale(0.7f);
+	mBullet = new Bullet(sceneGame, sprite, Model::BITMASK_MONSTER_BULLET_FIREBALL, "FireBall", 116, true);
+	mBullet->setScale(0.5f);
+	mBullet->setAlive(false);
 }
 float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0,timeDelayHeal=0;
 bool checkAttackBoss = false;
@@ -103,6 +108,7 @@ void BossLv1::Init()
 }
 
 float timeBoss = 0;
+int countBoom = 0;
 void BossLv1::Collision(Player* player, float deltaTime)
 {
 	Update(deltaTime);
@@ -111,16 +117,27 @@ void BossLv1::Collision(Player* player, float deltaTime)
 		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 200) {
 			if (timeBoss > 2.0f) {
 				SetState(BossLv1::ACTION_ATTACK);
-				for (int i = 0; i < MAX_BULLET; i++)
-				{
-					if (!mBooms[i]->isAlive()) {
-						mBooms[i]->setAlive(true);
-						mBooms[i]->setPosition(this->m_sprite->getPosition());
-						mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
-						
-						break;
+				if (countBoom == 3) {
+					countBoom = 0;
+					if (!mBullet->isAlive()) {
+						mBullet->setAlive(true);
+						mBullet->setPosition(this->m_sprite->getPosition());
+						mBullet->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBullet->getPosition()) * 2);
 					}
 				}
+				else {
+					for (int i = 0; i < MAX_BULLET; i++)
+					{
+						if (!mBooms[i]->isAlive()) {
+							mBooms[i]->setAlive(true);
+							mBooms[i]->setPosition(this->m_sprite->getPosition());
+							mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
+							countBoom++;
+							break;
+						}
+					}
+				}
+
 				timeBoss = 0;
 			}
 		}
@@ -148,6 +165,7 @@ void BossLv1::Collision(Player* player, float deltaTime)
 		}
 	}
 	updateBullets(deltaTime);
+	mBullet->update(deltaTime, player);
 	//flip boss
 	if ((player->m_sprite->getPosition() - this->m_sprite->getPosition()).x>0) {
 		m_sprite->setFlipX(false);
@@ -314,6 +332,9 @@ void BossLv1::SetMove(int state)
 		m_sprite->runAction(MovingRight());
 	}
 }
+void BossLv1::SetTagAI(int)
+{
+}
 void BossLv1::SetState(int state)
 {
 	if (!((m_CurrentState == ACTION_ATTACK) && m_sprite->getNumberOfRunningActions() > 0) || state == ACTION_HURT_ICE || state == ACTION_HURT_FIRE)
@@ -415,6 +436,17 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 			this->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
 		}
 	}
+	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL && nodeB->getTag() == playertag) ||
+		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)) {
+		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
+		{
+			this->fireBallHasCollision();
+		}
+		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
+		{
+			this->fireBallHasCollision();
+		}
+	}
 	return true;
 }
 
@@ -430,8 +462,8 @@ cocos2d::RepeatForever* BossLv1::IdleRight() {
 cocos2d::Animate* BossLv1::AttackRightAngry() {
 	return ObjectParent::AnimationObjectOnce(112, "Ogre_Throwing", AttackSpeed);
 }
-cocos2d::RepeatForever* BossLv1::DieRight() {
-	return ObjectParent::AnimationObjectRepeat(109, "Ogre_Dying", AttackSpeed);
+cocos2d::Animate* BossLv1::DieRight() {
+	return ObjectParent::AnimationObjectOnce(109, "Ogre_Dying", AttackSpeed);
 }
 cocos2d::Animate* BossLv1::HurtRight() {
 	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt", AttackSpeed);
@@ -466,6 +498,11 @@ void BossLv1::bulletHasCollision(int bulletIndex)
 {
 	//mBullets[bulletIndex]->setAlive(false);
 	mBooms[bulletIndex]->SetExplo(true);
+}
+void BossLv1::fireBallHasCollision()
+{
+	//mBullets[bulletIndex]->setAlive(false);
+	this->mBullet->setAlive(false);
 }
 void BossLv1::setSkillHeal(bool sHeal) {
 	if (sHeal != stateHeal) {

@@ -11,7 +11,7 @@
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
 #include<AiLv1.h>
-#include <BossLv1.h>
+#include "BossLv1.h"
 #include <Boom.h>
 USING_NS_CC;
 #define ATTACK 0

@@ -1,5 +1,6 @@
 #include "Map_2.h"
 
+
 using namespace std;
 float times2 = 0;
 int x2 = 1;//nhan
@@ -58,13 +59,12 @@ void Map_2::update(float deltaTime)
 	mainPlayer->Update(deltaTime);
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
+	airan->Collision(mainPlayer, deltaTime);
+	bossLv3->Collision(mainPlayer, deltaTime);
 	times2 += deltaTime;
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
 
 	}
 	if (x2 == 2) {
@@ -216,6 +216,11 @@ void Map_2::createPhysicMap()
 			//
 			mainPlayer = new Player(this);
 			mainPlayer->m_sprite->setPosition(Vec2(posx2, posY));
+			airan = new AiRange(this);
+			airan->m_sprite->setPosition(Vec2(posx2 - 100, posY - 100));
+			bossLv3 = new BossLv3(this);
+			bossLv3->m_sprite->setPosition(Vec2(posx2 - 200, posY + 100));
+
 		}
 		if (type == 3)
 		{
@@ -243,6 +248,7 @@ void Map_2::createPhysicMap()
 			npcWilch->m_sprite->setTag(NpcWilchtag);
 			npcWilch->m_sprite->runAction(npcWilch->CommunicationNPCWilch());
 			npcWilch->m_sprite->setPosition(Vec2(posx2, posY));
+
 		}
 
 		if (type == 1)
