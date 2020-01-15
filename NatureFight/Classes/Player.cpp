@@ -10,7 +10,7 @@ Player::Player(cocos2d::Scene* scene)
 	sceneGame = scene;
 	Init();
 }
-float timeAttack = 0, timeDie = 0, timeShield = 0;
+float timeAttack = 0, timeDie = 0, timeShield = 0, timeColorPlayer = 0;;
 bool checkAttack = false;
 void Player::Update(float deltaTime)
 {
@@ -24,6 +24,13 @@ void Player::Update(float deltaTime)
 		CheckAttackAndSkill(deltaTime);
 	}
 	particleMove->setPosition(m_sprite->getPosition() - Vec2(0, 20));
+	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
+		timeColorPlayer += deltaTime;
+		if (timeColorPlayer >= 1) {
+			m_sprite->setColor(ccc3(255, 255, 255));
+			timeColorPlayer = 0;
+		}
+	}
 }
 
 void Player::Init()
@@ -31,7 +38,6 @@ void Player::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	updateLevel();
 	m_health = MaxHealth;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(50, 50);
@@ -49,6 +55,7 @@ void Player::Init()
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
 	m_CurrentSkill = SKILL_DEFAULT;
+	updateLevel();
 
 	edgeNode = Node::create();
 	sceneGame->addChild(edgeNode);
@@ -66,8 +73,20 @@ void Player::Collision()
 
 void Player::updateLevel()
 {
-	if(Level==2) ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
-	if(Level==3) ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+	if (Level == 2) {
+		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
+		particleSystem->setPosition(m_sprite->getPosition());
+		sceneGame->addChild(particleSystem);
+		ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+		SetState(ACTION_ATTACK);
+	}
+	if(Level==3) {
+		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
+		particleSystem->setPosition(m_sprite->getPosition());
+		sceneGame->addChild(particleSystem);
+		ResourceManager::GetInstance()->Init("DataPlayerLv3.bin");
+		SetState(ACTION_ATTACK);
+	}
 	MaxExp += Level * 50;
 	AttackSpeed = 1.0f + (Level - 1) * 0.2;
 	MoveSpeed = 1.0f;
@@ -116,10 +135,10 @@ void Player::SetDie(int state)
 	case FACE_LEFT:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
-			m_sprite->runAction(DieRight());
+			m_sprite->runAction(DieRight1());
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(DieRight());
+			m_sprite->runAction(DieRight1());
 		}
 		break;
 	case FACE_UP:
@@ -408,8 +427,11 @@ cocos2d::RepeatForever* Player::IdleRight() {
 cocos2d::Animate* Player::AttackRightAngry() {
 	return ObjectParent::AnimationObjectOnce(5, "Warrior_Attack_2", AttackSpeed);
 }
-cocos2d::RepeatForever* Player::DieRight() {
+cocos2d::RepeatForever* Player::DieRight1() {
 	return ObjectParent::AnimationObjectRepeat(4, "Warrior_Died", AttackSpeed);
+}
+cocos2d::Animate* Player::DieRight() {
+	return NULL;
 }
 cocos2d::Animate* Player::HurtRight() {
 	return ObjectParent::AnimationObjectOnce(3, "Warrior_Hurt", AttackSpeed);

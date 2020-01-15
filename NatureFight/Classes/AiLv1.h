@@ -4,10 +4,10 @@
 #include "ObjectParent.h"
 #include <list>
 #include <vector> 
-#include <ctime>
 #include "cocos2d.h"
 #include "Model.h"
 #include <Player.h>
+#include <ctime>
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
@@ -51,12 +51,14 @@ public:
 	void SetTagAI(int);
 	void setIndex(int index);
 
+	float setHealth();
+
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
-	cocos2d::RepeatForever* DieRight();
+	cocos2d::Animate* DieRight();
 
 	cocos2d::RepeatForever* MovingUp();
 	cocos2d::Animate* AttackUp();
@@ -75,5 +77,8 @@ public:
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
+
+	cocos2d::ui::LoadingBar* loadingbar;
+	cocos2d::ui::LoadingBar* load;
 };
 #endif // _HERO_SCENE_H_

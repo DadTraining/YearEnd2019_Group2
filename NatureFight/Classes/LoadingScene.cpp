@@ -53,8 +53,7 @@ bool LoadingScene::init()
 	auto updateLoadingBar = CallFunc::create([]() {
 		if (load->getPercent() < 100)
 		{	
-			load->setPercent(load->getPercent() + 25);
-			if (load->getPercent()==50) ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
+			load->setPercent(load->getPercent() + 4);
 		}
 
 	});

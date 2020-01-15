@@ -11,6 +11,7 @@
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
 #include<AiLv1.h>
+#include<AiRange.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -32,8 +33,8 @@ public:
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
+	std::vector<AiRange*> aiRange;
 	std::vector<AiLv1*> ai;
-
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 

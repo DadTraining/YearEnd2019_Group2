@@ -2,13 +2,15 @@
 
 using namespace std;
 float times = 0;
-
+int x = 1;//nhan
 
 
 Scene* MapTutorialScene::createScene()
 {
 	CCLOG("Create Scene******************");
+	x = 1;
     return MapTutorialScene::create();
+	
 }
 
 bool MapTutorialScene::init()
@@ -75,24 +77,31 @@ void MapTutorialScene::update(float deltaTime)
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
-//	boss->Collision(mainPlayer, deltaTime);
+	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
-		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
+		ai[i]->Collision(mainPlayer, deltaTime); 
 		if (mainPlayer->onDragon) {
-			if (mainPlayer->onDragon)
-				if (Distance(mainPlayer->dragon->m_dragon->getPosition(), ai[i]->m_sprite->getPosition()) < 300 && mainPlayer->dragon->DragonAttacked >= 5)
-				{
+			if (Distance(mainPlayer->dragon->m_dragon->getPosition(), ai[i]->m_sprite->getPosition()) < 300 && mainPlayer->dragon->DragonAttacked >= 5)
+			{
+				if (ai[i]->m_health > 0) {
 					mainPlayer->onDragonAttack = true;
 					mainPlayer->dragon->DragonAttacked = 0;
 					isAI = ai[i];
 				}
+			}
 		}
 	}
 	UpdateDragon();
+	if (x == 2) {
+		menuLayer->setD(mainPlayer->CountCreep);
+	}
+	if (x == 4) {
+		
+		menuLayer->setC(mainPlayer->CountCreep);
+	}
+	if (mainPlayer->Level == 3) {
+		Director::getInstance()->replaceScene(Map_2::createScene());
+	}
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -125,25 +134,6 @@ void MapTutorialScene::addMap()
 float MapTutorialScene::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
 }
-void MapTutorialScene::UpdateDragon()
-{
-	if (mainPlayer->onDragon) {
-		if (mainPlayer->onDragonAttack) {
-			float s = Distance(isAI->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
-			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
-				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / (200 * 10), (isAI->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition()) / 7));
-				mainPlayer->dragon->SetFace(isAI->m_sprite->getPosition());
-			}
-		}
-		else if (mainPlayer->dragon->DragonAttacked >= 6) {
-			float s = Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
-			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
-				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
-				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
-			}
-		}
-	}
-}
 void MapTutorialScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
@@ -165,20 +155,41 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 	{
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcSolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcSolotag)
 		{
-			menuLayer->setQuestSolo(2);
-			npcsolo->Collision();
-
+			if (x == 3) {
+				menuLayer->setQuestSolo(2);
+				npcsolo->Collision();
+				x += 1;
+			}
+			if (x == 4) {
+				if (mainPlayer->CountCreep >= 6) {
+					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
+					mainPlayer->CountCreep = 0;
+					menuLayer->getIcon_Ice()->setEnabled(true);
+				}
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
 		{
-			npcYolo->Collision1();
-			menuLayer->setQuestYolo(1);
-		}
-		else if (nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK || nodeB->getTag() == playertag & nodeA->getTag() == CREEPATTACK) {
-			mainPlayer->SetState(Player::ACTION_HURT);
+			if (x == 1) {
+				npcYolo->Collision1();
+				menuLayer->setQuestYolo(1);
+				mainPlayer->CountCreep = 0;
+				x += 1;
+			}
+			if (x == 2) {
+				if (mainPlayer->CountCreep >= 3) {
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition());
+					menuLayer->setD(4);
+					mainPlayer->CountCreep = 0;
+					x += 1;
+				}
+			}
+
 		}
 		
+		
 	}
+
 	return true;
 
 }
@@ -271,6 +282,9 @@ void MapTutorialScene::createPhysicMap()
 			CCLOG("LoadMapTutorial 316******************");
 			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 317******************");
+
+			boss = new BossLv1(this);
+			boss->m_sprite->setPosition(Vec2(posX - 300, posY - 300));
 		}
 		if (type == 3)
 		{
@@ -311,3 +325,23 @@ void MapTutorialScene::createPhysicMap()
 
 
 //end nhan
+
+void MapTutorialScene::UpdateDragon()
+{
+	if (mainPlayer->onDragon) {
+		if (mainPlayer->onDragonAttack) {
+			float s = Distance(isAI->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / (200 * 10), (isAI->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition()) / 7));
+				mainPlayer->dragon->SetFace(isAI->m_sprite->getPosition());
+			}
+		}
+		else if (mainPlayer->dragon->DragonAttacked >= 6) {
+			float s = Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
+				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
+			}
+		}
+	}
+}

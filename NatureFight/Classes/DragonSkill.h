@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include<Model.h>
 #include<ResourceManager.h>
+#define DRAGONTAG 989
 class DragonSkill
 {
 private:

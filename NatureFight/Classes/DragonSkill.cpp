@@ -22,7 +22,7 @@ void DragonSkill::Update(float deltaTime)
 void DragonSkill::Init()
 {
 	this->m_dragon = cocos2d::Sprite::create("Sprites/pet/Fire_Dragon_1.png");
-	this->m_dragon->setPosition(Vec2(1000, 1000));
+	this->m_dragon->setPosition(Vec2(2000, 2000));
 	sceneGame->addChild(this->m_dragon,5);
 	physicsBody = PhysicsBody::createEdgeBox(this->m_dragon->getContentSize() / 3);
 	physicsBody->setContactTestBitmask(Model::BITMASK_PLAYER);

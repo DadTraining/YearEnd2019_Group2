@@ -23,7 +23,9 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include"Map_2.h"
+#include"Map_3.h"
+#include "MapBossMan2Scene.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -45,7 +47,7 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(912, 432);
+static cocos2d::Size designResolutionSize = cocos2d::Size(960, 540);
 
 AppDelegate::AppDelegate()
 {
@@ -102,11 +104,18 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     ResourceManager::GetInstance()->Init("Data.bin");
-    ResourceManager::GetInstance()->Init("DataCreep.bin");
-	
+	ResourceManager::GetInstance()->Init("DataCreep.bin");
+	ResourceManager::GetInstance()->Init("DataPlayerLv1.bin");
+	/*for (int i = 0; i < 4; i++) {
+		std::string loadfile = "DataPlayerLv1_" + std::to_string(i) + ".bin";
+
+		ResourceManager::GetInstance()->Init(loadfile);*/
+		CCLOG("Loadding DataPlayer  End******************");
+	//}
 	//ResourceManager::GetInstance()->Init("DataCreep.bin");
     // create a scene. it's an autorelease object
 	//auto scene = MapTutorialScene::createScene();
+	//auto scene = MapBossMan2Scene::createScene();
 	auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);

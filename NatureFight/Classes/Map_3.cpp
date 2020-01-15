@@ -50,6 +50,9 @@ bool Map_3::init()
 	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
+	menuLayer->getIcon_Fire()->setEnabled(true);
+	menuLayer->getIcon_Ice()->setEnabled(true);
+
 	return true;
 }
 
@@ -62,18 +65,8 @@ void Map_3::update(float deltaTime)
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
 	}
-	if (x3 == 2) {
-		menuLayer->setD(mainPlayer->CountCreep);
-	}
-	if (x3 == 4) {
-		
-		menuLayer->setC(mainPlayer->CountCreep);
-	}
+	bosslv3->Collision(mainPlayer, deltaTime);
 }
 bool Map_3::onTouchBegan(Touch* touch, Event* event)
 {
@@ -151,11 +144,18 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 					menuLayer->setD(4);
 					mainPlayer->CountCreep = 0;
 					x3 += 1;
+					
 				}
 			}
 
 		}
-		
+		else if (nodeA->getTag() == CREEPATTACK & nodeB->getTag() == playertag || nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK)
+		{
+			mainPlayer->m_sprite->setColor(ccc3(200, 0, 0));
+			mainPlayer->SetState(Player::ACTION_HURT);
+			CCLOG("mau :%d", mainPlayer->m_health);
+			CCLOG(" ********* ");
+		}
 	}
 	return true;
 
@@ -259,6 +259,11 @@ void Map_3::createPhysicMap()
 			ailv->m_sprite->setTag(AILV1+i);
 			ailv->m_sprite->setPosition(Vec2(posx3, posY));
 			ai.push_back(ailv);
+		}
+		if (type == 5)
+		{
+			bosslv3 = new BossLv3(this);
+			bosslv3->m_sprite->setPosition(Vec2(posx3, posY));
 		}
 	}
 }

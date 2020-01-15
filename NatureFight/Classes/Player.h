@@ -33,7 +33,7 @@ public:
 	Node* edgeNode;
 	int m_CurrentSkill;
 	int Armor;
-
+	int CountCreep = 0;
 	static int Level;
 	static int Exp;
 	static int MaxExp;
@@ -87,7 +87,8 @@ public:
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
-	cocos2d::RepeatForever* DieRight();
+	cocos2d::RepeatForever* DieRight1();
+	cocos2d::Animate* DieRight();
 
 	cocos2d::RepeatForever* MovingUp();
 	cocos2d::Animate* AttackUp();

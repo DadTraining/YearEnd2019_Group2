@@ -53,7 +53,7 @@ public:
 	virtual cocos2d::RepeatForever* IdleRight() = 0;
 	virtual cocos2d::Animate* AttackRightAngry() = 0;
 	virtual cocos2d::Animate* HurtRight() = 0;
-	virtual cocos2d::RepeatForever* DieRight() = 0;
+	virtual cocos2d::Animate* DieRight() = 0;
 
 	virtual cocos2d::RepeatForever* MovingUp() = 0;
 	virtual cocos2d::Animate* AttackUp() = 0;

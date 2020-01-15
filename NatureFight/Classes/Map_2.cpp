@@ -7,6 +7,7 @@ int x2 = 1;//nhan
 
 Scene* Map_2::createScene()
 {
+	x2 = 1;
     return Map_2::create();
 }
 
@@ -50,6 +51,7 @@ bool Map_2::init()
 	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
+	menuLayer->getIcon_Ice()->setEnabled(true);
 	return true;
 }
 
@@ -62,16 +64,11 @@ void Map_2::update(float deltaTime)
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
 	}
-	if (x2 == 2) {
-		menuLayer->setD(mainPlayer->CountCreep);
+	for (int i = 0; i < aiRange.size(); i++) {
+		aiRange[i]->Collision(mainPlayer, deltaTime);
 	}
 	if (x2 == 4) {
-		
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
 }
@@ -125,17 +122,33 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 	{
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcFroztag || nodeB->getTag() == playertag & nodeA->getTag() == NpcFroztag)
 		{
-			npcFroz->CollisionFroz();
-
+			if (x2 == 1) {
+				npcFroz->CollisionFroz();
+				x2 += 1;
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcIcetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcIcetag)
 		{
-			
-			npcIce->CollisionIce();
+			if (x2 == 2) {
+				npcIce->CollisionIce();
+				x2 += 1;
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcWilchtag || nodeB->getTag() == playertag & nodeA->getTag() == NpcWilchtag)
 		{
-			npcWilch->CollisionWilch();
+			if (x2 == 3) {
+				npcWilch->CollisionWilch();
+				menuLayer->setQuestMan2(2);
+				mainPlayer->CountCreep = 0;
+				x2 += 1;
+			}
+		}
+		else if (nodeA->getTag() == CREEPATTACK & nodeB->getTag() == playertag || nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK)
+		{
+			mainPlayer->m_sprite->setColor(ccc3(200, 0, 0));
+			mainPlayer->SetState(Player::ACTION_HURT);
+			CCLOG("mau :%d", mainPlayer->m_health);
+			CCLOG(" ********* ");
 		}
 
 	}
@@ -216,6 +229,7 @@ void Map_2::createPhysicMap()
 			//
 			mainPlayer = new Player(this);
 			mainPlayer->m_sprite->setPosition(Vec2(posx2, posY));
+
 		}
 		if (type == 3)
 		{
@@ -251,6 +265,14 @@ void Map_2::createPhysicMap()
 			ailv->m_sprite->setTag(AILV1+i);
 			ailv->m_sprite->setPosition(Vec2(posx2, posY));
 			ai.push_back(ailv);
+		}
+		if (type == 6)
+		{
+			AiRange* ailv = new AiRange(this);
+			ailv->m_sprite->setPosition(Vec2(posx2, posY));
+			ailv->m_sprite->setTag(AIRANGE+i);
+			aiRange.push_back(ailv);
+			
 		}
 	}
 }
