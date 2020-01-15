@@ -1,4 +1,5 @@
 #include<MenuLayer.h>
+#include <MapTutorialScene.h>
 #include<SimpleAudioEngine.h>
 using namespace CocosDenshion;
 MenuLayer::MenuLayer(Player* mainPlayer) {
@@ -18,6 +19,7 @@ bool MenuLayer::init() {
 	createSkillFire();
 	createSkillIce();
 
+	//createGameOver(); //GAMEOVER
 
 	createFlood();//suong
 
@@ -47,6 +49,7 @@ void MenuLayer::update(float deltaTime) {
 }
 
 cocos2d::Sprite* mPauseLayer;
+cocos2d::Sprite* mGameOver;
 void MenuLayer::createButtonLayer()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -60,7 +63,8 @@ void MenuLayer::createButtonLayer()
 		item->showFire();
 		//item->showItemBlood();
 		this->addChild(item);
-		//pause
+
+
 		//pause
 		auto btnPause = ui::Button::create("settings/pause.png");
 		btnPause->setPosition(Vec2(visibleSize));
@@ -139,6 +143,10 @@ void MenuLayer::createButtonLayer()
 			Director::getInstance()->replaceScene(SettingScene::createScene());
 		});
 		mPauseLayer->addChild(btnSetting);
+
+		
+
+
 ////////
 
 	auto ButtonAttack = ResourceManager::GetInstance()->GetButtonById(5);
@@ -199,6 +207,44 @@ void MenuLayer::createUpLevelLayer()
 	ButtonUpLevel->removeFromParent();
 	addChild(ButtonUpLevel, 1);
 	ButtonUpLevel->setVisible(false);
+}
+void MenuLayer::createGameOver()
+{
+	//Gameover
+	mGameOver = Sprite::create("settings/g_over.png");
+	mGameOver->setScaleX(1.2);
+	mGameOver->setPosition(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height*0.6);
+	//mGameOver->setVisible(false);
+	addChild(mGameOver, 50);
+	auto btnHome2 = ui::Button::create("settings/menu.png");
+	btnHome2->setPosition(mGameOver->getPosition() - Vec2(320, 300));
+	btnHome2->setScale(0.3);
+	btnHome2->addClickEventListener([](Ref* event) {
+		auto turn = GameSetting::getInstance()->isSound();
+		if (turn == true)
+		{
+			auto audio = SimpleAudioEngine::getInstance();
+			audio->playEffect("sounds/212.wav", false);
+		}
+		Director::getInstance()->resume();
+		Director::getInstance()->replaceScene(MainMenuScene::createScene());
+	});
+	mGameOver->addChild(btnHome2);
+
+	auto btnResume2 = ui::Button::create("settings/restart.png");
+	btnResume2->setPosition(mGameOver->getPosition() + Vec2(-50, -300));
+	btnResume2->setScale(0.3);
+	btnResume2->addClickEventListener([](Ref* event) {
+		auto turn = GameSetting::getInstance()->isSound();
+		if (turn == true)
+		{
+			auto audio = SimpleAudioEngine::getInstance();
+			audio->playEffect("sounds/212.wav", false);
+		}
+		Director::getInstance()->resume();
+		Director::getInstance()->replaceScene(MapTutorialScene::createScene());
+	});
+	mGameOver->addChild(btnResume2);
 }
 void MenuLayer::createJoyStickLayer()
 {

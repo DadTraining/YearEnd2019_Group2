@@ -139,7 +139,7 @@ void BossLv1::Collision(Player* player, float deltaTime)
 						if (turn == true)
 						{
 							auto audio = SimpleAudioEngine::getInstance();
-							audio->playEffect("sounds/bom.wav", false);
+							audio->playEffect("sounds/1.mp3", false);
 						}
 						break;
 					}

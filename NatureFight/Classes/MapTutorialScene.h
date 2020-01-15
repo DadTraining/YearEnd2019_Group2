@@ -54,6 +54,7 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
+	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 
 	void bossCollistionSkill(Node* nodeA, Node* nodeB);
 };

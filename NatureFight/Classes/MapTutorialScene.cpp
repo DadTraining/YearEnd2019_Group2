@@ -17,11 +17,20 @@ bool MapTutorialScene::init()
     {
         return false;
     }
+	//auto particle = ParticleSystem::create("settings/partic.plist");
+	//particle->setPosition(10,10);
+
+	//addChild(particle,60);
+
+
+
+
 	CCLOG("LoadMapTutorial 1******************");
 	schedule(schedule_selector(MapTutorialScene::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//create map
+
 	addMap();
 	CCLOG("LoadMapTutorial 2******************");
 	//create Physics 
@@ -109,6 +118,9 @@ void MapTutorialScene::addMap()
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setPosition(Vec2(0, 0));
 	MapBackGround = TMXTiledMap::create("Map1/BackGround2.tmx");
+	MapBackGround->setPosition(Vec2(Director::getInstance()->getVisibleSize()));
+	MapBackGround->setScale(1.6);
+	MapBackGround->setAnchorPoint(Vec2(0.5, 0.5));
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");
@@ -116,7 +128,8 @@ void MapTutorialScene::addMap()
 	mPhysicsLayer->setVisible(true);
 	addChild(map,20);
 	addChild(MapBackGround);
-	
+
+
 
 }
 float MapTutorialScene::Distance(Vec2 A, Vec2 C) {
@@ -270,6 +283,7 @@ void MapTutorialScene::createPhysicMap()
 			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 317******************");
 
+
 			boss = new BossLv1(this);
 			boss->m_sprite->setPosition(Vec2(posX - 300, posY - 300));
 		}
@@ -298,6 +312,7 @@ void MapTutorialScene::createPhysicMap()
 			CCLOG("LoadMapTutorial 324******************");
 			npcYolo->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 325******************");
+
 		}
 		if (type == 1)
 		{
@@ -306,8 +321,24 @@ void MapTutorialScene::createPhysicMap()
 			ailv->m_sprite->setPosition(Vec2(posX, posY));
 			ai.push_back(ailv);
 		}
+		if (type == 5) {
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
+		}
 	}
 	CCLOG("LoadMapTutorial 3 END******************");
+}
+cocos2d::ParticleSystemQuad* MapTutorialScene::Particletele(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.6f);
+	//particleSystem->setDuration(10.0f);
+	return particleSystem;
 }
 
 

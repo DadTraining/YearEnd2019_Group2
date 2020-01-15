@@ -23,6 +23,8 @@ public:
 	void createSkillFire();
 	void createUpLevelLayer();
 
+	void createGameOver();
+
 
 	void createFlood();
 	
