@@ -93,7 +93,6 @@ public:
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
-
 	cocos2d::ui::LoadingBar* loadingbar;
 	cocos2d::ui::LoadingBar* load;
 };

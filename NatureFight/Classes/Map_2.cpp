@@ -51,6 +51,7 @@ bool Map_2::init()
 	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
+	menuLayer->getIcon_Ice()->setEnabled(true);
 	return true;
 }
 
@@ -63,6 +64,9 @@ void Map_2::update(float deltaTime)
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
+	}
+	for (int i = 0; i < aiRange.size(); i++) {
+		aiRange[i]->Collision(mainPlayer, deltaTime);
 	}
 	if (x2 == 4) {
 		menuLayer->setC(mainPlayer->CountCreep);
@@ -138,6 +142,13 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 				mainPlayer->CountCreep = 0;
 				x2 += 1;
 			}
+		}
+		else if (nodeA->getTag() == CREEPATTACK & nodeB->getTag() == playertag || nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK)
+		{
+			mainPlayer->m_sprite->setColor(ccc3(200, 0, 0));
+			mainPlayer->SetState(Player::ACTION_HURT);
+			CCLOG("mau :%d", mainPlayer->m_health);
+			CCLOG(" ********* ");
 		}
 
 	}
@@ -254,6 +265,14 @@ void Map_2::createPhysicMap()
 			ailv->m_sprite->setTag(AILV1+i);
 			ailv->m_sprite->setPosition(Vec2(posx2, posY));
 			ai.push_back(ailv);
+		}
+		if (type == 6)
+		{
+			AiRange* ailv = new AiRange(this);
+			ailv->m_sprite->setPosition(Vec2(posx2, posY));
+			ailv->m_sprite->setTag(AIRANGE+i);
+			aiRange.push_back(ailv);
+			
 		}
 	}
 }

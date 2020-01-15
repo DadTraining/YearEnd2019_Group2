@@ -19,6 +19,7 @@
 #define AILV1 13
 #define BOSSLV1 14
 #define ATTACKTAG 8
+#define AIRANGE 200
 USING_NS_CC;
 class AiRange :
 	public ObjectParent

@@ -126,8 +126,8 @@ void BossLv3::Collision(Player* player, float deltaTime)
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) <= radius*6.4) {
 		//colistion here
-		m_health-=20;
-		player->m_sprite->setColor(ccc3(0, 0, 255));
+		player->m_health-=20;
+		player->m_sprite->setColor(ccc3(0, 0, 230));
 		CCLOG("%d", m_health);
 		this->setStateAttackIce(false);
 		radius = 0;
@@ -349,6 +349,21 @@ bool BossLv3::onContactBegin(const PhysicsContact& contact)
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->bulletHasCollision();
+		}
+	}
+	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
+		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
+		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+		{
+			this->bulletHasCollision();
+			this->player->m_sprite->setColor(ccc3(132, 112, 255));
+			this->player->m_health -= 15;
+		}
+		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+		{
+			this->bulletHasCollision();
+			this->player->m_sprite->setColor(ccc3(132, 112, 255));
+			this->player->m_health -= 15;
 		}
 	}
 	return true;

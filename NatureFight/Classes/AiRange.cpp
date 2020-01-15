@@ -59,7 +59,7 @@ void AiRange::Init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man2/Golem_3/PNG/PNG_Sequences/Idle/0_Golem_Idle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
-	this->m_sprite->setScale(2);
+	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2, PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	//physicsBodyChar->setDynamic(false);
@@ -67,7 +67,7 @@ void AiRange::Init()
 	physicsBodyChar->setCollisionBitmask(Model::BITMASK_MONSTER);
 	physicsBodyChar->setContactTestBitmask(1);
 	this->m_sprite->setPhysicsBody(physicsBodyChar);
-	this->m_sprite->setTag(BOSSLV1);
+
 	physicsBodyChar->setGravityEnable(false);
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
@@ -94,7 +94,8 @@ void AiRange::Collision(Player* player, float deltaTime)
 {
 	Update(deltaTime);
 	timeRange += deltaTime;
-		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 200) {
+	this->player = player;
+		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 150) {
 			if (timeRange > 2.0f) {
 				SetState(AiRange::ACTION_ATTACK);
 					if (!mBullet->isAlive()) {
@@ -105,7 +106,7 @@ void AiRange::Collision(Player* player, float deltaTime)
 				timeRange = 0;
 			}
 		}
-		if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 300 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 200) {
+		if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 300 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 150) {
 			this->physicsBodyChar->setVelocity((player->m_sprite->getPosition() - this->m_sprite->getPosition())/5);
 
 		}
@@ -317,6 +318,21 @@ bool AiRange::onContactBegin(const PhysicsContact& contact)
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->bulletHasCollision();
+		}
+	}
+	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL)
+		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
+	{
+		m_health -= 10;
+		if (player->edgeNode->getTag() == NORMALSKILL)	SetState(ACTION_HURT);
+		else if (player->edgeNode->getTag() == ATTACK_ICE) SetState(ACTION_HURT_ICE);
+		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetState(ACTION_HURT_FIRE);
+		if (m_health == 0) {
+			m_sprite->runAction(DieRight());
+			physicsBodyChar->setEnabled(false);
+			player->Exp += 20;
+			player->CountCreep += 1;
+			CCLOG("exp: %d", player->Exp);
 		}
 	}
 	return true;

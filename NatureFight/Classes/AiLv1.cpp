@@ -17,13 +17,15 @@ void AiLv1::Update(float deltaTime)
 	if (m_health <= 0) {
 		timeDieAI += deltaTime;
 		SetState(ACTION_DIE);
-		if (timeDieAI >= 5) {
+		if (timeDieAI >= 0.8) {
 			timeDieAI = 0;
 			m_sprite->setPosition(10, 10);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
 			edgeNode->setPosition(Vec2(1000, 1000));
 			physicsBodyChar->setEnabled(true);
+			this->m_sprite->setVisible(false);
+			loadingbar->setVisible(false);
 		}
 	}
 	else {
@@ -98,14 +100,14 @@ void AiLv1::Collision(Player* player, float deltaTime)
 	this->player = player;
 	Update(deltaTime);
 	timem += deltaTime;
-	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
+	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 50) {
 		if (timem > 0.3f) {
 			SetState(AiLv1::ACTION_ATTACK);
 			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 			timem = 0;
 		}
 	}
-	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80)
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
 		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }
@@ -315,6 +317,8 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 			CCLOG("exp: %d", player->Exp);
 		}
 	}
+
+	
 	return true;
 }
 float AiLv1::setHealth()

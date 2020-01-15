@@ -126,6 +126,7 @@ float timeBoss = 0;
 int countBoom = 0;
 void BossLv1::Collision(Player* player, float deltaTime)
 {
+	this->player = player;
 	Update(deltaTime);
 	timeBoss += deltaTime;
 	if (stateAngry) {
@@ -437,6 +438,8 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 	}
 	if (nodeA->getTag() == playertag & nodeB->getTag() == BoomEx || nodeB->getTag() == playertag & nodeA->getTag() == BoomEx)
 	{
+		this->player->m_sprite->setColor(ccc3(255, 0, 0));
+		this->player->m_health -= 25;
 		//mainPlayer->SetState(Player::ACTION_HURT);
 	}
 	//creepCollistionSkill(nodeA, nodeB);
@@ -444,10 +447,14 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
 		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
+			this->player->m_sprite->setColor(ccc3(255, 64, 64));
+			this->player->m_health -= 20;
 			this->bulletHasCollision(nodeA->getPhysicsBody()->getGroup());
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
+			this->player->m_sprite->setColor(ccc3(255, 64, 64));
+			this->player->m_health -= 20;
 			this->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
 		}
 	}
@@ -455,12 +462,23 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)) {
 		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
 		{
+			this->player->m_sprite->setColor(ccc3(255, 64, 64));
+			this->player->m_health -= 20;
 			this->fireBallHasCollision();
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
 		{
+			this->player->m_sprite->setColor(ccc3(255, 64, 64));
+			this->player->m_health -= 20;
 			this->fireBallHasCollision();
 		}
+		
+	}
+	if (nodeA->getTag() == playertag & nodeB->getTag() == BOSSATTACK || nodeB->getTag() == playertag & nodeA->getTag() == BOSSATTACK)
+	{
+		this->player->m_sprite->setColor(ccc3(255, 64, 64));
+		this->player->m_health -= 10;
+		//mainPlayer->SetState(Player::ACTION_HURT);
 	}
 	return true;
 }

@@ -50,6 +50,9 @@ bool Map_3::init()
 	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
+	menuLayer->getIcon_Fire()->setEnabled(true);
+	menuLayer->getIcon_Ice()->setEnabled(true);
+
 	return true;
 }
 
@@ -141,11 +144,18 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 					menuLayer->setD(4);
 					mainPlayer->CountCreep = 0;
 					x3 += 1;
+					
 				}
 			}
 
 		}
-		
+		else if (nodeA->getTag() == CREEPATTACK & nodeB->getTag() == playertag || nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK)
+		{
+			mainPlayer->m_sprite->setColor(ccc3(200, 0, 0));
+			mainPlayer->SetState(Player::ACTION_HURT);
+			CCLOG("mau :%d", mainPlayer->m_health);
+			CCLOG(" ********* ");
+		}
 	}
 	return true;
 
