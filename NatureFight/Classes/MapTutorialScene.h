@@ -11,6 +11,8 @@
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
 #include<AiLv1.h>
+#include <BossLv1.h>
+#include <Boom.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -23,9 +25,7 @@ class MapTutorialScene : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
-	AiLv1* ailv1;
-	AiLv1* ailv2;
-
+	BossLv1* boss;
 	Npclv1* npcsolo, *npcYolo;
 	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
@@ -54,5 +54,7 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
+
+	void bossCollistionSkill(Node* nodeA, Node* nodeB);
 };
 #endif // __MAPTUTORIAL_SCENE_H__

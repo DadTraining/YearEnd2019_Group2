@@ -11,10 +11,11 @@ void ItemLayer::Init()
 	table->setPosition(Vec2(0, visibleSize.height));
 	table->setAnchorPoint(Vec2(0, 1));
 	table->setScaleX(1.3);
+	table->setScaleY(0.5);
 	table->setOpacity(-100);
 	this->addChild(table);
 	Ice = Sprite::create("Sprites/Item/Stone/DaBang.png");
-	Ice->setPosition(table->getPosition() + Vec2(30, -(table->getContentSize().height / 2)));
+	Ice->setPosition(table->getPosition() + Vec2(30, -(table->getContentSize().height / 4)));
 	Ice->setScale(0.5);
 	this->addChild(Ice, 1);
 	fire = Sprite::create("Sprites/Item/Stone/DaLua.png");

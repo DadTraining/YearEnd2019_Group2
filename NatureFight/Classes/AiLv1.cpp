@@ -84,14 +84,14 @@ void AiLv1::Collision(Player* player, float deltaTime)
 	this->player = player;
 	Update(deltaTime);
 	timem += deltaTime;
-	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
+	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 50) {
 		if (timem > 0.3f) {
 			SetState(AiLv1::ACTION_ATTACK);
 			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 			timem = 0;
 		}
 	}
-	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80)
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
 		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }

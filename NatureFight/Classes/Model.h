@@ -38,6 +38,7 @@ public:
 
 	int getIndex();
 
+	cocos2d::PhysicsBody* getPhysicBody();
 	cocos2d::Vec2 getPosition();
 
 	cocos2d::Size getContentSize();	

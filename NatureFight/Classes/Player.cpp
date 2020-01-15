@@ -14,6 +14,7 @@ float timeAttack = 0, timeDie = 0;
 bool checkAttack = false;
 void Player::Update(float deltaTime)
 {
+	//m_health -= 1;
 	if (m_health <= 0) {
 		timeDie += deltaTime;
 		SetState(ACTION_DIE);
