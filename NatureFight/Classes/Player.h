@@ -57,6 +57,10 @@ public:
 	void SetHurt(int state);
 	void SetMove(int state);
 
+	float setHealth();
+	float setDame();
+
+
 	void SetSkill();
 	void SetSkillFire();
 	void SetSkillIce();

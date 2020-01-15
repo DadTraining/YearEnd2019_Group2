@@ -8,6 +8,8 @@
 #include "Model.h"
 #include <Player.h>
 #include <Boom.h>
+#include <GameSetting.h>
+#include <SimpleAudioEngine.h>
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
@@ -61,6 +63,7 @@ public:
 	void SetTagAI(int);
 	void setIndex(int index);
 	void setSkillHeal(bool sHeal);
+	float setHealth();//suong
 
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
@@ -82,6 +85,11 @@ public:
 	cocos2d::Animate* AttackDownAngry();
 	cocos2d::Animate* HurtDown();
 	cocos2d::RepeatForever* DieDown();
+
+	cocos2d::Sprite* loadingbar;
+	cocos2d::ui::LoadingBar* load;
+
+
 
 	cocos2d::ParticleSystemQuad* ParticleHeal(std::string name);
 	~BossLv1();

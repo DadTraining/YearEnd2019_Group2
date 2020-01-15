@@ -8,7 +8,9 @@ int x = 1;//nhan
 Scene* MapTutorialScene::createScene()
 {
 	CCLOG("Create Scene******************");
+	x = 1;
     return MapTutorialScene::create();
+	
 }
 
 bool MapTutorialScene::init()
@@ -78,10 +80,6 @@ void MapTutorialScene::update(float deltaTime)
 	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
 	}
 	if (x == 2) {
 		menuLayer->setD(mainPlayer->CountCreep);
@@ -90,6 +88,7 @@ void MapTutorialScene::update(float deltaTime)
 		
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
+	if (mainPlayer->m_health <= 0) menuLayer->createPlayerDie(true);
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -152,6 +151,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 				if (mainPlayer->CountCreep >= 6) {
 					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
 					mainPlayer->CountCreep = 0;
+					menuLayer->getIcon_Ice()->setEnabled(true);
 				}
 			}
 		}
@@ -165,7 +165,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			}
 			if (x == 2) {
 				if (mainPlayer->CountCreep >= 3) {
-					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition());
 					menuLayer->setD(4);
 					mainPlayer->CountCreep = 0;
 					x += 1;

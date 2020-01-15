@@ -7,6 +7,7 @@ int x2 = 1;//nhan
 
 Scene* Map_2::createScene()
 {
+	x2 = 1;
     return Map_2::create();
 }
 
@@ -62,16 +63,8 @@ void Map_2::update(float deltaTime)
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
-	}
-	if (x2 == 2) {
-		menuLayer->setD(mainPlayer->CountCreep);
 	}
 	if (x2 == 4) {
-		
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
 }
@@ -125,17 +118,26 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 	{
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcFroztag || nodeB->getTag() == playertag & nodeA->getTag() == NpcFroztag)
 		{
-			npcFroz->CollisionFroz();
-
+			if (x2 == 1) {
+				npcFroz->CollisionFroz();
+				x2 += 1;
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcIcetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcIcetag)
 		{
-			
-			npcIce->CollisionIce();
+			if (x2 == 2) {
+				npcIce->CollisionIce();
+				x2 += 1;
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcWilchtag || nodeB->getTag() == playertag & nodeA->getTag() == NpcWilchtag)
 		{
-			npcWilch->CollisionWilch();
+			if (x2 == 3) {
+				npcWilch->CollisionWilch();
+				menuLayer->setQuestMan2(2);
+				mainPlayer->CountCreep = 0;
+				x2 += 1;
+			}
 		}
 
 	}

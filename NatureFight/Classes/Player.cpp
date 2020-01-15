@@ -14,6 +14,7 @@ float timeAttack = 0, timeDie = 0;
 bool checkAttack = false;
 void Player::Update(float deltaTime)
 {
+	//m_health -= 1;
 	if (m_health <= 0) {
 		timeDie += deltaTime;
 		SetState(ACTION_DIE);
@@ -479,4 +480,13 @@ cocos2d::ParticleSystemQuad* Player::ParticleAttack(std::string name)
 		break;
 	}
 	return particleSystem;
+}
+float Player::setHealth()
+{
+	return m_health / 3;
+}
+
+float Player::setDame()
+{
+	return m_dame * 5;
 }

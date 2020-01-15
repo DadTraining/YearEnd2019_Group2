@@ -1,4 +1,4 @@
-#include "Npclv1.h"
+﻿#include "Npclv1.h"
 
 
 //using namespace CocosDenshion;
@@ -117,14 +117,14 @@ void Npclv1::CollisionFroz()
 	mess->setAnchorPoint(Vec2(0, 0));
 	this->sceneGame->addChild(mess);
 	//
-	auto label1 = Label::createWithSystemFont("xin chao \n toi la Froz \n   ", "Arial", 16);
+	auto label1 = Label::createWithSystemFont("xin chao \n toi la Froz \n  \n ", "Arial", 16);
 	label1->setAnchorPoint(Vec2(0, 0));
 	label1->setPositionX(mess->getPositionX() + 10);
 	label1->setPositionY(mess->getPositionY() + 10);
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh \n 5 con Goblin \n de nhan kiem  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay den \n cho cua Ice \n de biet them  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -152,14 +152,14 @@ void Npclv1::CollisionIce()
 	mess->setAnchorPoint(Vec2(0, 0));
 	this->sceneGame->addChild(mess);
 	//
-	auto label1 = Label::createWithSystemFont("xin chao \n toi la Ice \n   ", "Arial", 16);
+	auto label1 = Label::createWithSystemFont("xin chao \n toi la Ice \n \n  ", "Arial", 16);
 	label1->setAnchorPoint(Vec2(0, 0));
 	label1->setPositionX(mess->getPositionX() + 10);
 	label1->setPositionY(mess->getPositionY() + 10);
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh \n 15 con Goblin \n de nhan Skill  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay den \n cho cua Wilch \n de biet them  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -187,14 +187,14 @@ void Npclv1::CollisionWilch()
 	mess->setAnchorPoint(Vec2(0, 0));
 	this->sceneGame->addChild(mess);
 	//
-	auto label1 = Label::createWithSystemFont("xin chao \n toi la Wilch \n   ", "Arial", 16);
+	auto label1 = Label::createWithSystemFont("xin chao \n toi la Wilch \n \n   ", "Arial", 16);
 	label1->setAnchorPoint(Vec2(0, 0));
 	label1->setPositionX(mess->getPositionX() + 10);
 	label1->setPositionY(mess->getPositionY() + 10);
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Toi se trao \n cho ban thanh  \n kiem nay  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n 15 con goblin  \n va quay lai de \n nhan thuong ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);

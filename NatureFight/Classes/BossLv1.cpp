@@ -1,6 +1,7 @@
 #include "BossLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
+using namespace CocosDenshion;
 BossLv1::BossLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -16,6 +17,12 @@ float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0, timeDelayHeal = 0;
 bool checkAttackBoss = false;
 void BossLv1::Update(float deltaTime)
 {
+	//loadinghealth
+	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 50)));
+	load->setPosition(loadingbar->getPosition());
+	load->setPercent(setHealth());
+
+
 	if (m_health <= 0) {
 		timeDieBoss += deltaTime;
 		SetState(ACTION_DIE);
@@ -78,6 +85,16 @@ void BossLv1::Init()
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(2);
 	this->sceneGame->addChild(this->m_sprite);
+
+	//loaddinghealth
+	loadingbar = cocos2d::Sprite::create("loadingbar_bg.png");
+	loadingbar->setScale(0.3);
+	this->sceneGame->addChild(loadingbar, 1);
+	load = ui::LoadingBar::create("progress.png");
+	load->setScale(0.32);
+	this->sceneGame->addChild(load, 2);
+	load->setDirection(ui::LoadingBar::Direction::LEFT);
+
 	physicsBodyChar = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2, PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	//physicsBodyChar->setDynamic(false);
 	physicsBodyChar->setRotationEnable(false);
@@ -118,7 +135,12 @@ void BossLv1::Collision(Player* player, float deltaTime)
 						mBooms[i]->setAlive(true);
 						mBooms[i]->setPosition(this->m_sprite->getPosition());
 						mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
-
+						auto turn = GameSetting::getInstance()->isSound();
+						if (turn == true)
+						{
+							auto audio = SimpleAudioEngine::getInstance();
+							audio->playEffect("sounds/bom.wav", false);
+						}
 						break;
 					}
 				}
@@ -180,6 +202,12 @@ void BossLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void BossLv1::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isSound();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("sounds/chem.wav", false);
+	}
 	if (!stateAngry) {
 		switch (m_CurrentFace)
 		{
@@ -449,6 +477,10 @@ cocos2d::RepeatForever* BossLv1::IdleDown() { return NULL; }
 cocos2d::Animate* BossLv1::AttackDownAngry() { return NULL; }
 cocos2d::Animate* BossLv1::HurtDown() { return NULL; }
 cocos2d::RepeatForever* BossLv1::DieDown() { return NULL; }
+float BossLv1::setHealth()
+{
+	return m_health;
+}
 void BossLv1::setIndex(int index)
 {
 	this->m_sprite->getPhysicsBody()->setGroup(index);
