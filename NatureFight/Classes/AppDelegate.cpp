@@ -116,6 +116,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
 	//auto scene = MapTutorialScene::createScene();
 	//auto scene = MapBossMan2Scene::createScene();
+	//auto scene = Map_3::createScene();
 	auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);

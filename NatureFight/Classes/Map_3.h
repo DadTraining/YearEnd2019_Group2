@@ -17,15 +17,15 @@ USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
-#define NpcSolotag 11
-#define NpcYolotag 12
+#define NpcFireWilthtag 511
+#define NpcJoetag 512
 #define AILV1 13
 #define ATTACKTAG 8
 class Map_3 : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
-	Npclv1* npcsolo, *npcYolo;
+	Npclv1* npcFireWilth , *npcJoe;
 	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;

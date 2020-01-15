@@ -356,27 +356,20 @@
   <object id="69" name="main" type="2" x="2145" y="781" width="44" height="54"/>
   <object id="71" name="npc" type="3" x="2190.66" y="364" width="34.6667" height="40"/>
   <object id="72" name="npc" type="4" x="214.667" y="233.333" width="36" height="37.3333"/>
-  <object id="73" type="1" x="1952" y="1008" width="46.6667" height="46.6667"/>
   <object id="74" type="1" x="1790.67" y="881.333" width="48" height="48"/>
-  <object id="75" type="1" x="2096" y="52" width="38.6667" height="46.6667"/>
   <object id="76" type="6" x="1985.33" y="126.667" width="44" height="56"/>
   <object id="77" type="1" x="1985.33" y="30.6667" width="46.6667" height="50.6667"/>
-  <object id="79" type="1" x="1502.67" y="38.6667" width="22.6667" height="25.3333"/>
   <object id="82" type="1" x="1618.67" y="142.667" width="30.6667" height="28"/>
   <object id="83" type="6" x="1478.67" y="173.333" width="30.6667" height="26.6667"/>
-  <object id="84" type="1" x="1324" y="242.667" width="24" height="30.6667"/>
   <object id="85" type="1" x="1414.67" y="326.667" width="29.3333" height="28"/>
-  <object id="86" type="1" x="1016" y="44" width="25.3333" height="25.3333"/>
   <object id="87" type="1" x="798.667" y="417.333" width="30.6667" height="34.6667"/>
   <object id="88" type="1" x="574.667" y="169.333" width="30.6667" height="32"/>
-  <object id="89" type="1" x="257.333" y="72" width="41.3333" height="37.3333"/>
   <object id="90" type="6" x="420" y="429.333" width="32" height="29.3333"/>
   <object id="91" type="1" x="717.333" y="772" width="38.6667" height="41.3333"/>
   <object id="92" type="1" x="821.333" y="1006.67" width="26.6667" height="30.6667"/>
   <object id="93" type="6" x="994.667" y="836" width="21.3333" height="30.6667"/>
   <object id="94" type="1" x="270.667" y="974.667" width="25.3333" height="25.3333"/>
   <object id="95" type="1" x="60" y="704" width="34.6667" height="41.3333"/>
-  <object id="96" type="1" x="52" y="952" width="30.6667" height="29.3333"/>
   <object id="97" type="6" x="346.667" y="780" width="25.3333" height="30.6667"/>
   <object id="98" type="1" x="1476" y="886.667" width="25.3333" height="28"/>
   <object id="99" name="npc" type="5" x="1093.33" y="516" width="34.6667" height="45.3333"/>

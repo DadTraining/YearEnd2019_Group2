@@ -86,6 +86,8 @@ void Map_3::addMap()
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setPosition(Vec2(0, 0));
 	MapBackGround = TMXTiledMap::create("map3/BackGroundMap3.tmx");
+	MapBackGround->setScale(1.6);
+	MapBackGround->setAnchorPoint(Vec2(0.2,0.2));
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");
@@ -120,12 +122,12 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 		{
 			if (x3 == 3) {
 				menuLayer->setQuestSolo(2);
-				npcsolo->Collision();
+				npcJoe->CollisionJoe();
 				x3 += 1;
 			}
 			if (x3 == 4) {
 				if (mainPlayer->CountCreep >= 6) {
-					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
+					menuLayer->showItemSword(npcJoe->m_sprite->getPosition());
 					mainPlayer->CountCreep = 0;
 				}
 			}
@@ -133,14 +135,14 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
 		{
 			if (x3 == 1) {
-				npcYolo->Collision1();
+				npcFireWilth->CollisionFireWilth();
 				menuLayer->setQuestYolo(1);
 				mainPlayer->CountCreep = 0;
 				x3 += 1;
 			}
 			if (x3 == 2) {
 				if (mainPlayer->CountCreep >= 3) {
-					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
+					menuLayer->showItemSword(npcFireWilth->m_sprite->getPosition());
 					menuLayer->setD(4);
 					mainPlayer->CountCreep = 0;
 					x3 += 1;
@@ -238,20 +240,20 @@ void Map_3::createPhysicMap()
 		if (type == 3)
 		{
 			//npc zolo
-			npcsolo = new Npclv1(this);
-			npcsolo->Init();
-			npcsolo->m_sprite->setTag(NpcSolotag);
-			npcsolo->m_sprite->runAction(npcsolo->Communication());
-			npcsolo->m_sprite->setPosition(Vec2(posx3, posY));
+			npcFireWilth = new Npclv1(this);
+			npcFireWilth->Init();
+			npcFireWilth->m_sprite->setTag(NpcFireWilthtag);
+			npcFireWilth->m_sprite->runAction(npcFireWilth->CommunicationNPCFireWilth());
+			npcFireWilth->m_sprite->setPosition(Vec2(posx3, posY));
 		}
 		if (type == 4)
 		{
 			//
-			npcYolo = new Npclv1(this);
-			npcYolo->Init();
-			npcYolo->m_sprite->setTag(NpcYolotag);
-			npcYolo->m_sprite->runAction(npcYolo->CommunicationNPCYolo());
-			npcYolo->m_sprite->setPosition(Vec2(posx3, posY));
+			npcJoe = new Npclv1(this);
+			npcJoe->Init();
+			npcJoe->m_sprite->setTag(NpcJoetag);
+			npcJoe->m_sprite->runAction(npcJoe->CommunicationNPCJoe());
+			npcJoe->m_sprite->setPosition(Vec2(posx3, posY));
 		}
 		if (type == 1)
 		{

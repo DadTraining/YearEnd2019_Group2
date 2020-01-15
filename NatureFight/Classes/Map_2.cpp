@@ -90,6 +90,8 @@ void Map_2::addMap()
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setPosition(Vec2(0, 0));
 	MapBackGround = TMXTiledMap::create("map2/BackGroundMap2.tmx");
+	MapBackGround->setScale(1.6);
+	MapBackGround->setAnchorPoint(Vec2(0.2,0.2));
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");

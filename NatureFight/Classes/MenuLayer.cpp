@@ -534,9 +534,9 @@ void MenuLayer::Quest()
 	}
 
 	//Quest 3 of man 2 
-	for (int i = 0; i <= 15; i++)
+	for (int i = 0; i <= 10; i++)
 	{
-		label3 = Label::createWithSystemFont("con quai Goblin (" + std::to_string(i) + " / 15)", "Arial", 16);
+		label3 = Label::createWithSystemFont("con quai Goblin (" + std::to_string(i) + " / 10)", "Arial", 16);
 		label3->setAnchorPoint(Vec2(0, 1));
 		label3->setPositionX(quest->getPositionX() + 20);
 		label3->setPositionY(label1->getPositionY() - 20);
@@ -604,13 +604,13 @@ void MenuLayer::Quest()
 
 				}
 				if (questman2 == 2) {
-					for (int i = 0; i < 16; i++)
+					for (int i = 0; i <= 10; i++)
 					{
 						if (c == i)
 						{
 							if (i == 0) vlabel3[i]->setVisible(true);
 							else {
-								if (i <= 15) {
+								if (i <= 10) {
 									vlabel3[i - 1]->setVisible(false);
 									vlabel3[i]->setVisible(true);
 								}
@@ -634,7 +634,7 @@ void MenuLayer::Quest()
 
 					vlabel1[i]->setVisible(false);
 				}
-				for (int i = 0; i <= 15; i++)
+				for (int i = 0; i <= 10; i++)
 				{
 
 					vlabel3[i]->setVisible(false);
