@@ -23,7 +23,6 @@ Bullet::~Bullet()
 }
 
 
-float timeBul = 0;
 void Bullet::update(float deltaTime,Player* player)
 {
 	

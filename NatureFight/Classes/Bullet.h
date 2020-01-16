@@ -12,6 +12,7 @@ class Bullet : public Model
 
 public:
 	bool stateBulletFollow;
+	float timeBul = 0;
 public:
 	Bullet(cocos2d::Scene* scene, cocos2d::Sprite* sprite, int owner, std::string nameAction, int idAction,bool stateFolow);
 	~Bullet();

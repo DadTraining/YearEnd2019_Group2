@@ -19,6 +19,7 @@ bool MapTutorialScene::init()
     {
         return false;
     }
+	gate = false;
 	CCLOG("LoadMapTutorial 1******************");
 	schedule(schedule_selector(MapTutorialScene::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -165,6 +166,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
 					mainPlayer->CountCreep = 0;
 					menuLayer->getIcon_Ice()->setEnabled(true);
+					gate = true;
 				}
 			}
 		}
@@ -188,7 +190,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			Director::getInstance()->replaceScene(Map_2::createScene());
+			if(gate==true) Director::getInstance()->replaceScene(Map_2::createScene());
 		}
 		
 		

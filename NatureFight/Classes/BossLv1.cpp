@@ -17,8 +17,7 @@ BossLv1::BossLv1(cocos2d::Scene* scene)
 	mBullet->setScale(0.5f);
 	mBullet->setAlive(false);
 }
-float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0,timeDelayHeal=0;
-bool checkAttackBoss = false;
+
 void BossLv1::Update(float deltaTime)
 {
 	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 30)));
