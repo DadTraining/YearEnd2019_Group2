@@ -378,6 +378,8 @@ float AiRange::Distance(Vec2 A, Vec2 C) {
 void AiRange::bulletHasCollision()
 {
 	mBullet->setAlive(false);
+	player->m_sprite->setColor(ccc3(255, 69, 0));
+ 	player->m_health -= 10;
 }
 
 cocos2d::ParticleSystemQuad* AiRange::ParticleHeal(std::string name)

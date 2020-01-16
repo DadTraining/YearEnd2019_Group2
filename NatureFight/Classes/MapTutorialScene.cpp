@@ -1,7 +1,6 @@
 #include "MapTutorialScene.h"
 
 using namespace std;
-float times = 0;
 int x = 1;//nhan
 
 
@@ -102,7 +101,11 @@ void MapTutorialScene::update(float deltaTime)
 	}
 	if (isCreepDie() == true)
 	{
-		gate = true;
+		if (times >= 4) {
+			ai.clear();
+			createCreepScene();
+		}
+
 	}
 	
 
@@ -164,10 +167,15 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			if (x == 3) {
 				menuLayer->setQuestSolo(2);
 				npcsolo->Collision();
+				mainPlayer->CountCreep = 0;
 				x += 1;
 			}
 			if (x == 4) {
-				mainPlayer->haveIceStone = true;
+				if (mainPlayer->CountCreep >= 6) {
+					mainPlayer->haveIceStone = true;
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Stone/DaBang.png");
+					gate = true;
+				}
 			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
@@ -180,7 +188,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			}
 			if (x == 2) {
 				if (mainPlayer->CountCreep >= 3) {
-					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition());
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Sword.png");
 					menuLayer->setD(4);
 					mainPlayer->CountCreep = 0;
 					mainPlayer->haveSword = true;
@@ -393,6 +401,25 @@ void MapTutorialScene::createMoveScene()
 			emitter->setPosition(Vec2(posX, posY));
 			emitter->setScale(0.7f);
 			this->addChild(emitter);
+		}
+	}
+}
+void MapTutorialScene::createCreepScene()
+{
+	auto objects1 = mObjectGroup1->getObjects();
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		if (object1.asValueMap().at("type").asInt() == 1)
+		{
+				AiLv1* ailv = new AiLv1(this);
+				ailv->m_sprite->setTag(AILV1 + i);
+				ailv->m_sprite->setPosition(Vec2(posX, posY));
+				ai.push_back(ailv);
+			
 		}
 	}
 }

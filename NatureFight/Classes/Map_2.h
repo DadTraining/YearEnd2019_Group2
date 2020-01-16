@@ -13,21 +13,23 @@
 #include<AiLv1.h>
 #include<AiRange.h>
 #include<MapBossMan2Scene.h>
+#include <AiLv2.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
 #define NpcSolotag 11
 #define NpcYolotag 12
-#define NpcFroztag 21
-#define NpcIcetag 22
-#define NpcWilchtag 23
+#define NpcFroztag 211
+#define NpcIcetag 221
+#define NpcWilchtag 231
 #define AILV1 13
 #define ATTACKTAG 8
 #define GATEtag 400
 class Map_2 : public cocos2d::Scene
 {
 private: bool gate;
+	   float times=0;
 public:
 	Player* mainPlayer;
 	Npclv1* npcFroz, *npcIce , *npcWilch;
@@ -36,7 +38,7 @@ public:
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiRange*> aiRange;
-	std::vector<AiLv1*> ai;
+	std::vector<AiLv2*> ai;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 
@@ -58,6 +60,7 @@ public:
 	bool onContactSeparate(const PhysicsContact& contact);
 
 	bool isCreepDie();
+	void createCreepScene();
 
 	void createMoveScene();
 	cocos2d::ParticleSystemQuad* Particletele(std::string name);

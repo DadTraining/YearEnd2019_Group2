@@ -7,7 +7,7 @@ BossEnd::BossEnd(cocos2d::Scene* scene)
 
 	Init();
 	stateHeal = false;
-	stateRain = false;
+	stateRain = 0;
 	//bullet
 	Sprite* sprite = Sprite::create("Sprites/Man3/Ice_Dino/IceBall/0_IceBall_001.png");
 	sprite->setScale(0.7f);
@@ -18,7 +18,7 @@ BossEnd::BossEnd(cocos2d::Scene* scene)
 	for (int i = 0; i < MAX_BULLET; i++) {
 		Sprite* sprite = Sprite::create("Sprites/Boss/SkillTonato/Tonato/0_Tonato_001.png");
 		sprite->setScale(1.0f);
-		mBullets[i] = new Bullet(sceneGame, sprite, Model::BITMASK_MONSTER_BULLET, "Tonato", 126, false);
+		mBullets[i] = new Bullet(sceneGame, sprite, Model::BITMASK_MONSTER_TONATO, "Tonato", 126, false);
 		mBullets[i]->setIndex(i);
 	}
 }
@@ -31,14 +31,15 @@ void BossEnd::Update(float deltaTime)
 	if (m_health <= 0) {
 		timeDieAIBossLv3 += deltaTime;
 		SetState(ACTION_DIE);
-		if (timeDieAIBossLv3 >= 5) {
-			stateRain == false;
+		if (timeDieAIBossLv3 >= 4) {
+			stateRain = 3;
 			timeDieAIBossLv3 = 0;
 			m_sprite->setPosition(10, 10);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
 			physicsBodyChar->setEnabled(true);
 			this->m_sprite->setVisible(false);
+			this->loadingbar->setVisible(false);
 		}
 	}
 	else {
@@ -96,7 +97,7 @@ void BossEnd::Update(float deltaTime)
 	//heal
 	if (m_health > 0 && m_health <= 80) {
 		timeDelayHeal += deltaTime;
-		if (timeDelayHeal > 3) {
+		if (timeDelayHeal > 4) {
 			setSkillHeal(true);
 			timeDelayHeal = 0;
 		}
@@ -104,12 +105,12 @@ void BossEnd::Update(float deltaTime)
 			stateHeal = false;
 		}
 	}
-	if (m_health > 0 && m_health <= 150&&stateRain==false) {
-		stateRain = true;
+	if (m_health > 0 && m_health <= 150&&stateRain==0) {
+		stateRain = 1;
 		player->m_dame -= 5;
 		ParticleRain("Particles/Rain.plist");
 	}
-	if (stateRain == true) {
+	if (stateRain == 1) {
 		timeHealRain += deltaTime;
 		if (timeHealRain > 4) {
 			timeHealRain = 0;
@@ -352,7 +353,7 @@ cocos2d::Animate* BossEnd::AttackRightAngry() {
 	return ObjectParent::AnimationObjectOnce(105, "Goblin_Kicking", AttackSpeed);
 }
 cocos2d::Animate* BossEnd::DieRight() {
-	return ObjectParent::AnimationObjectOnce(119, "DinoDead", AttackSpeed);
+	return ObjectParent::AnimationObjectOnce(131, "Boss_dead", AttackSpeed);
 }
 cocos2d::Animate* BossEnd::HurtRight() {
 	return ObjectParent::AnimationObjectOnce(103, "Goblin_Hurt", AttackSpeed);
@@ -409,13 +410,28 @@ bool BossEnd::onContactBegin(const PhysicsContact& contact)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
-			this->player->m_health -= 15;
+			this->player->m_health -= 5;
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
+			this->player->m_health -= 5;
+		}
+	}
+	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_TONATO && nodeB->getTag() == playertag) ||
+		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_TONATO)) {
+		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_TONATO)
+		{
+			this->player->m_sprite->setColor(ccc3(0, 238, 238));
 			this->player->m_health -= 15;
+			this->tonatoHasCollision(nodeA->getPhysicsBody()->getGroup());
+		}
+		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_TONATO)
+		{
+			this->player->m_sprite->setColor(ccc3(0, 238, 238));
+			this->player->m_health -= 15;
+			this->tonatoHasCollision(nodeB->getPhysicsBody()->getGroup());
 		}
 	}
 	return true;
@@ -474,4 +490,8 @@ void BossEnd::updateBullets(float deltaTime, Player* player)
 	{
 		mBullets[i]->update(deltaTime,player);
 	}
+}
+void BossEnd::tonatoHasCollision(int bulletIndex)
+{
+	mBullets[bulletIndex]->setAlive(false);
 }

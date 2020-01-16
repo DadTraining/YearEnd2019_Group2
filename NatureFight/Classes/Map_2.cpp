@@ -73,10 +73,16 @@ void Map_2::update(float deltaTime)
 	for (int i = 0; i < aiRange.size(); i++) {
 		aiRange[i]->Collision(mainPlayer, deltaTime);
 	}
-	if (x2 == 4) {
+	if (x2 == 3) {
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
-	if (isCreepDie()) gate = true;
+	if (isCreepDie()) {
+		if (times >= 4) {
+			ai.clear();
+			aiRange.clear();
+			createCreepScene();
+		}
+	}
 }
 bool Map_2::onTouchBegan(Touch* touch, Event* event)
 {
@@ -132,6 +138,7 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 		{
 			if (x2 == 1) {
 				npcFroz->CollisionFroz();
+				
 				mainPlayer->haveSwordIce = true;
 				x2 += 1;
 			}
@@ -147,6 +154,7 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 			if (x2 == 3) {
 				if (mainPlayer->CountCreep == 10)
 				{
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/KiemBang.png");
 					mainPlayer->haveFireStone = true;
 					x2 += 1;
 				}
@@ -157,6 +165,7 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 			if (x2 == 4) {
 				npcWilch->CollisionWilch();
 				mainPlayer->haveFirePet = true;
+				gate = true;
 				x2 += 1;
 			}
 		}
@@ -282,8 +291,8 @@ void Map_2::createPhysicMap()
 
 		if (type == 1)
 		{
-			AiLv1* ailv = new AiLv1(this);
-			ailv->m_sprite->setTag(AILV1+i);
+			AiLv2* ailv = new AiLv2(this);
+			ailv->m_sprite->setTag(AILV2+i);
 			ailv->m_sprite->setPosition(Vec2(posx2, posY));
 			ai.push_back(ailv);
 		}
@@ -347,5 +356,34 @@ void Map_2::createMoveScene()
 			emitter->setScale(0.7f);
 			this->addChild(emitter);
 		}
+	}
+}
+
+void Map_2::createCreepScene()
+{
+	auto objects1 = mObjectGroup1->getObjects();
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posx2 = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object1.asValueMap().at("type").asInt();
+			if (type == 1)
+			{
+				AiLv2* ailv = new AiLv2(this);
+				ailv->m_sprite->setTag(AILV2 + i);
+				ailv->m_sprite->setPosition(Vec2(posx2, posY));
+				ai.push_back(ailv);
+			}
+			if (type == 6)
+			{
+				AiRange* ailv = new AiRange(this);
+				ailv->m_sprite->setPosition(Vec2(posx2, posY));
+				ailv->m_sprite->setTag(AIRANGE + i);
+				aiRange.push_back(ailv);
+
+			}
+		
 	}
 }

@@ -20,6 +20,7 @@ USING_NS_CC;
 #define GATEtag 400
 class MapBossMan2Scene : public cocos2d::Scene
 {
+private: bool gate, alreadyItem;
 public:
 	Player* mainPlayer;
 	TMXTiledMap* map,*MapBackGround;

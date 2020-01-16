@@ -38,7 +38,6 @@ public:
 
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
-
 	BossLv1* bosslv1;
 	int countCreepDie=0;
 	BossEnd* bossEnd;

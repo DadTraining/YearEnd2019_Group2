@@ -1,6 +1,7 @@
 #include "AiLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
+#include <GameSetting.h>
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -30,7 +31,7 @@ void AiLv1::Update(float deltaTime)
 	else {
 		if (m_CurrentState == ACTION_ATTACK) checkAttackAI = true;
 		if (checkAttackAI) timeAttackAI += deltaTime;
-		if (timeAttackAI > 1.0f) {
+		if (timeAttackAI > 3.0f) {
 			m_CurrentState = ACTION_DEFAULT;
 			timeAttackAI = 0;
 			checkAttackAI = false;
@@ -133,6 +134,12 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playBackgroundMusic("Sounds/chem.wav", true);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:

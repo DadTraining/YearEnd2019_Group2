@@ -11,6 +11,7 @@
 #include <MenuLayer.h>
 #include<BossLv3.h>
 #include<Map_3.h>
+#include <MapBossEndScene.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1

@@ -1,5 +1,6 @@
 #include "MapBossMan3Scene.h"
 
+
 using namespace std;
 float time5 = 0;
 
@@ -124,7 +125,11 @@ bool MapBossMan3Scene::onContactBegin(const PhysicsContact& contact)
 			CCLOG("mau :%d", mainPlayer->m_health);
 			CCLOG(" ********* ");
 		}
-		
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
+		{
+			Director::getInstance()->replaceScene(MapBossEndScene::createScene());
+		}
+
 		
 	}
 	return true;

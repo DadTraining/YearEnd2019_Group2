@@ -28,6 +28,7 @@ class MapTutorialScene : public cocos2d::Scene
 private:
 	bool gate;
 	int creepDie;
+	float times = 0;
 public:
 	Player* mainPlayer;
 	BossLv1* boss;
@@ -64,5 +65,6 @@ public:
 	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 
 	bool isCreepDie();
+	void createCreepScene();
 };
 #endif // __MAPTUTORIAL_SCENE_H__

@@ -16,6 +16,7 @@ bool MapBossMan2Scene::init()
         return false;
     }
 	schedule(schedule_selector(MapBossMan2Scene::update));
+	alreadyItem = false;
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//create map
@@ -23,7 +24,7 @@ bool MapBossMan2Scene::init()
 	//create Physics 
 	createPhysicMap();
 	
-	
+	gate = false;
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapBossMan2Scene::onTouchBegan, this);
@@ -66,6 +67,13 @@ void MapBossMan2Scene::update(float deltaTime)
 	times4 += deltaTime;
 
 	bosslv1->Collision(mainPlayer, deltaTime);
+	if (bosslv1->m_sprite->isVisible() == false&& alreadyItem==false) 
+	{
+		menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Stone/DaLua.png");
+		alreadyItem = true;
+		mainPlayer->haveFireStone = true;
+		gate = true;
+	}
 }
 bool MapBossMan2Scene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -126,7 +134,7 @@ bool MapBossMan2Scene::onContactBegin(const PhysicsContact& contact)
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			Director::getInstance()->replaceScene(Map_3::createScene());
+			if (gate == true) Director::getInstance()->replaceScene(Map_3::createScene());
 		}
 		
 	}
