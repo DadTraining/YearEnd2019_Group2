@@ -72,7 +72,7 @@ bool SettingScene::init()
 		if (musicbtn->isSelected())
 		{
 			GameSetting::getInstance()->setMusic(true);
-			SimpleAudioEngine::getInstance()->playBackgroundMusic("melodyloops.mp3", true);
+			SimpleAudioEngine::getInstance()->playBackgroundMusic("Sounds/melodyloops.mp3", true);
 		}
 		else
 		{
@@ -139,7 +139,7 @@ bool SettingScene::init()
 		if (turn == true)
 		{
 			auto audio = SimpleAudioEngine::getInstance();
-			audio->playEffect("sounds/212.mp3", false);
+			audio->playEffect("Sounds/212.mp3", false);
 		}
 		Director::getInstance()->replaceScene(MainMenuScene::create());
 	});

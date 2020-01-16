@@ -50,7 +50,7 @@ void Npclv1::Collision(/*Sprite main*/)
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh \n 6 con Goblin \n de nhan Skill  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n tat ca con quai \n con trong map  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -100,10 +100,11 @@ void Npclv1::Collision1()
 	auto fadehue = FadeOut::create(3.0f);
 	auto remove = RemoveSelf::create(); // clean up memory
 	auto doubletrouble1 = Sequence::create(fadehue,remove, nullptr);
-	auto doubletrouble = Sequence::create(fadehue,fadeIn, fadehue, remove, nullptr);
+	auto doubletrouble = Sequence::create(fadehue,fadeIn, fadehue, remove , nullptr);
 	label1->runAction(doubletrouble1);
 	label2->setOpacity(0);
 	label2->runAction(doubletrouble);
+	
 	
 }
 
@@ -157,7 +158,7 @@ void Npclv1::CollisionIce()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay den \n cho cua Wilch \n de biet them  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n 10 con goblin  \n de nhan skill ice  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -192,7 +193,7 @@ void Npclv1::CollisionWilch()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n 10 con goblin  \n va quay lai de \n nhan thuong ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n tat ca con goblin \n de qua man tiep theo", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);

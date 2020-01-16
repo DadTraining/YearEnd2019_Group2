@@ -27,6 +27,7 @@ class MapTutorialScene : public cocos2d::Scene
 {
 private:
 	bool gate;
+	int creepDie;
 public:
 	Player* mainPlayer;
 	BossLv1* boss;
@@ -61,5 +62,7 @@ public:
 	bool onContactSeparate(const PhysicsContact& contact);
 	void createMoveScene();
 	cocos2d::ParticleSystemQuad* Particletele(std::string name);
+
+	bool isCreepDie();
 };
 #endif // __MAPTUTORIAL_SCENE_H__

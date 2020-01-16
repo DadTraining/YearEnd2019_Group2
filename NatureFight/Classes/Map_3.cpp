@@ -118,7 +118,7 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 	if (nodeA && nodeB)
 	{
-		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcSolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcSolotag)
+		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcFireWilthtag || nodeB->getTag() == playertag & nodeA->getTag() == NpcFireWilthtag)
 		{
 			if (x3 == 3) {
 				menuLayer->setQuestSolo(2);
@@ -126,13 +126,12 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 				x3 += 1;
 			}
 			if (x3 == 4) {
-				if (mainPlayer->CountCreep >= 6) {
-					menuLayer->showItemSword(npcJoe->m_sprite->getPosition());
+				
 					mainPlayer->CountCreep = 0;
-				}
+					mainPlayer->haveSwordFire = true;
 			}
 		}
-		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcJoetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcJoetag)
 		{
 			if (x3 == 1) {
 				npcFireWilth->CollisionFireWilth();
@@ -141,13 +140,11 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 				x3 += 1;
 			}
 			if (x3 == 2) {
-				if (mainPlayer->CountCreep >= 3) {
-					menuLayer->showItemSword(npcFireWilth->m_sprite->getPosition());
-					menuLayer->setD(4);
-					mainPlayer->CountCreep = 0;
-					x3 += 1;
+				mainPlayer->haveIceShield = true;
+				mainPlayer->CountCreep = 0;
+				x3 += 1;
 					
-				}
+				
 			}
 
 		}

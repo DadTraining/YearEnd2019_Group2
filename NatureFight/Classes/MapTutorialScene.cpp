@@ -100,6 +100,11 @@ void MapTutorialScene::update(float deltaTime)
 		
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
+	if (isCreepDie() == true)
+	{
+		gate = true;
+	}
+	
 
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -162,20 +167,15 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 				x += 1;
 			}
 			if (x == 4) {
-				if (mainPlayer->CountCreep >= 6) {
-					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
-					mainPlayer->CountCreep = 0;
-					menuLayer->getIcon_Ice()->setEnabled(true);
-					gate = true;
-				}
+				mainPlayer->haveIceStone = true;
 			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
 		{
 			if (x == 1) {
+				mainPlayer->CountCreep = 0;
 				npcYolo->Collision1();
 				menuLayer->setQuestYolo(1);
-				mainPlayer->CountCreep = 0;
 				x += 1;
 			}
 			if (x == 2) {
@@ -183,6 +183,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition());
 					menuLayer->setD(4);
 					mainPlayer->CountCreep = 0;
+					mainPlayer->haveSword = true;
 					x += 1;
 				}
 			}
@@ -355,6 +356,15 @@ cocos2d::ParticleSystemQuad* MapTutorialScene::Particletele(std::string name)
 	particleSystem->setScale(0.6f);
 	//particleSystem->setDuration(10.0f);
 	return particleSystem;
+}
+
+bool MapTutorialScene::isCreepDie()
+{
+	for (int i = 0; i < ai.size(); i++)
+	{
+		if (ai[i]->m_sprite->isVisible() == true) return false;
+	}
+	return true;
 }
 
 void MapTutorialScene::createMoveScene()

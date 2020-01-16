@@ -17,6 +17,7 @@ bool Map_2::init()
     {
         return false;
     }
+	gate = false;
 	schedule(schedule_selector(Map_2::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -75,6 +76,7 @@ void Map_2::update(float deltaTime)
 	if (x2 == 4) {
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
+	if (isCreepDie()) gate = true;
 }
 bool Map_2::onTouchBegan(Touch* touch, Event* event)
 {
@@ -130,6 +132,7 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 		{
 			if (x2 == 1) {
 				npcFroz->CollisionFroz();
+				mainPlayer->haveSwordIce = true;
 				x2 += 1;
 			}
 		}
@@ -137,15 +140,23 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 		{
 			if (x2 == 2) {
 				npcIce->CollisionIce();
+				mainPlayer->CountCreep = 0;
+				menuLayer->setQuestMan2(2);
 				x2 += 1;
+			}
+			if (x2 == 3) {
+				if (mainPlayer->CountCreep == 10)
+				{
+					mainPlayer->haveFireStone = true;
+					x2 += 1;
+				}
 			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcWilchtag || nodeB->getTag() == playertag & nodeA->getTag() == NpcWilchtag)
 		{
-			if (x2 == 3) {
+			if (x2 == 4) {
 				npcWilch->CollisionWilch();
-				menuLayer->setQuestMan2(2);
-				mainPlayer->CountCreep = 0;
+				mainPlayer->haveFirePet = true;
 				x2 += 1;
 			}
 		}
@@ -159,7 +170,7 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			Director::getInstance()->replaceScene(MapBossMan2Scene::createScene());
+			if(gate == true ) Director::getInstance()->replaceScene(MapBossMan2Scene::createScene());
 		}
 	}
 	return true;
@@ -296,7 +307,18 @@ cocos2d::ParticleSystemQuad* Map_2::Particletele(std::string name)
 	particleSystem->setScale(0.6f);
 	return particleSystem;
 }
-
+bool Map_2::isCreepDie()
+{
+	for (int i = 0; i < ai.size(); i++)
+	{
+		for (int j = 0; j < aiRange.size(); j++)
+		{
+			if (aiRange[j]->m_sprite->isVisible()) return false;
+		}
+		if (ai[i]->m_sprite->isVisible() == true) return false;
+	}
+	return true;
+}
 void Map_2::createMoveScene()
 {
 	auto objects = mObjectGroup->getObjects();

@@ -27,6 +27,7 @@ USING_NS_CC;
 #define GATEtag 400
 class Map_2 : public cocos2d::Scene
 {
+private: bool gate;
 public:
 	Player* mainPlayer;
 	Npclv1* npcFroz, *npcIce , *npcWilch;
@@ -55,6 +56,8 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
+
+	bool isCreepDie();
 
 	void createMoveScene();
 	cocos2d::ParticleSystemQuad* Particletele(std::string name);
