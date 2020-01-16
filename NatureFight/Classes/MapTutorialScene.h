@@ -13,6 +13,7 @@
 #include<AiLv1.h>
 #include <BossLv1.h>
 #include <Boom.h>
+#include <Map_2.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -21,8 +22,13 @@ USING_NS_CC;
 #define NpcYolotag 12
 #define AILV1 13
 #define ATTACKTAG 8
+#define GATEtag 400 
 class MapTutorialScene : public cocos2d::Scene
 {
+private:
+	bool gate;
+	int creepDie;
+	float times = 0;
 public:
 	Player* mainPlayer;
 	BossLv1* boss;
@@ -32,7 +38,7 @@ public:
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
-
+	AiLv1* isAI;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 
@@ -51,10 +57,14 @@ public:
 	void MovePlayer();
 	void Quest(); // Button display quest
 	void createPhysicMap();
+	void UpdateDragon();
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
+	void createMoveScene();
+	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 
-	void bossCollistionSkill(Node* nodeA, Node* nodeB);
+	bool isCreepDie();
+	void createCreepScene();
 };
 #endif // __MAPTUTORIAL_SCENE_H__

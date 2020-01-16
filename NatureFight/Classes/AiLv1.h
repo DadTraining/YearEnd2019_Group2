@@ -7,6 +7,9 @@
 #include "cocos2d.h"
 #include "Model.h"
 #include <Player.h>
+#include <ctime>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
@@ -22,7 +25,8 @@ public:
 	static const int ACTION_HURT_FIRE = 12;
 private:
 	int tagAI;
-
+	float timeAttackAI = 0, timeDieAI = 0, timeColor = 0, timem = 0;
+	bool checkAttackAI = false;
 public:
 	PhysicsBody* physicsBodyChar;
 	int m_health = 100;
@@ -50,12 +54,14 @@ public:
 	void SetTagAI(int);
 	void setIndex(int index);
 
+	float setHealth();
+
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
-	cocos2d::RepeatForever* DieRight();
+	cocos2d::Animate* DieRight();
 
 	cocos2d::RepeatForever* MovingUp();
 	cocos2d::Animate* AttackUp();
@@ -74,5 +80,8 @@ public:
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
+
+	cocos2d::ui::LoadingBar* loadingbar;
+	cocos2d::ui::LoadingBar* load;
 };
 #endif // _HERO_SCENE_H_

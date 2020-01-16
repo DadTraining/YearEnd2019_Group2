@@ -14,14 +14,17 @@ void ItemLayer::Init()
 	table->setScaleY(0.5);
 	table->setOpacity(-100);
 	this->addChild(table);
-	Ice = Sprite::create("Sprites/Item/Stone/DaBang.png");
+
+	Ice = ui::CheckBox::create("Sprites/Item/Stone/DaBang.png", "Sprites/Item/Stone/DaVanNang.png");
+	Ice->setScale(0.3f);
 	Ice->setPosition(table->getPosition() + Vec2(30, -(table->getContentSize().height / 4)));
-	Ice->setScale(0.5);
 	this->addChild(Ice, 1);
-	fire = Sprite::create("Sprites/Item/Stone/DaLua.png");
+
+	fire = ui::CheckBox::create("Sprites/Item/Stone/DaLua.png", "Sprites/Item/Stone/DaVanNang.png");
+	fire->setScale(0.3f);
 	fire->setPosition(Ice->getPosition() + Vec2(70, 0));
-	fire->setScale(0.5);
 	this->addChild(fire, 1);
+
 	toxic = Sprite::create("Sprites/Item/Stone/DaDoc.png");
 	toxic->setPosition(fire->getPosition() + Vec2(70, 0));
 	toxic->setScale(0.5);
@@ -30,20 +33,21 @@ void ItemLayer::Init()
 	wood->setPosition(toxic->getPosition() + Vec2(70, 0));
 	wood->setScale(0.5);
 	this->addChild(wood, 1);
-	icon_sword = ui::Button::create("Sprites/Item/icon-kiem.png");
-	icon_sword->setScale(0.25);
-	icon_sword->setTouchEnabled(false);
-	icon_sword->setOpacity(-150);
-	icon_sword->setPosition(Vec2(visibleSize.width - 145, 35));
-	icon_sword->setRotation(-60);
-	this->addChild(icon_sword);
+
+	icon_power = ui::Button::create("Sprites/Item/icon-kiem.png");
+	icon_power->setScale(0.25);
+	icon_power->setTouchEnabled(false);
+	icon_power->setOpacity(-150);
+	icon_power->setPosition(Vec2(visibleSize.width - 145, 35));
+	icon_power->setRotation(-60);
+	this->addChild(icon_power);
 
 }
 void ItemLayer::showIconSword()
 {
 	auto fin = FadeIn::create(3.0f);
-	icon_sword->setTouchEnabled(true);
-	icon_sword->runAction(fin);
+	icon_power->setTouchEnabled(true);
+	icon_power->runAction(fin);
 }
 
 

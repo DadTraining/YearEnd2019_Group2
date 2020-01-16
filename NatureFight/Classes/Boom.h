@@ -1,5 +1,5 @@
-#ifndef _BULLET_H_
-#define _BULLET_H_
+#ifndef _BOOM_H_
+#define _BOOM_H_
 
 #include "Model.h"
 #include "cocos2d.h"

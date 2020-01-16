@@ -1,12 +1,12 @@
 #include "Map_2.h"
 
 using namespace std;
-float times2 = 0;
 int x2 = 1;//nhan
 
 
 Scene* Map_2::createScene()
 {
+	x2 = 1;
     return Map_2::create();
 }
 
@@ -16,6 +16,7 @@ bool Map_2::init()
     {
         return false;
     }
+	gate = false;
 	schedule(schedule_selector(Map_2::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -50,6 +51,11 @@ bool Map_2::init()
 	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
+	menuLayer->getIcon_Ice()->setEnabled(true);
+	
+	//gate -> MapBossMan2
+	createMoveScene();
+
 	return true;
 }
 
@@ -58,21 +64,23 @@ void Map_2::update(float deltaTime)
 	mainPlayer->Update(deltaTime);
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
-	times2 += deltaTime;
+	times += deltaTime;
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
-		if (Distance(mainPlayer->m_sprite->getPosition(), ai[i]->m_sprite->getPosition()) < 100)
-			ai[i]->physicsBodyChar->setVelocity(mainPlayer->m_sprite->getPosition() - ai[i]->m_sprite->getPosition());
-		else ai[i]->physicsBodyChar->setVelocity(Vec2(0, 0));
-
 	}
-	if (x2 == 2) {
-		menuLayer->setD(mainPlayer->CountCreep);
+	for (int i = 0; i < aiRange.size(); i++) {
+		aiRange[i]->Collision(mainPlayer, deltaTime);
 	}
-	if (x2 == 4) {
-		
+	if (x2 == 3) {
 		menuLayer->setC(mainPlayer->CountCreep);
+	}
+	if (isCreepDie()) {
+		if (times >= 4) {
+			ai.clear();
+			aiRange.clear();
+			createCreepScene();
+		}
 	}
 }
 bool Map_2::onTouchBegan(Touch* touch, Event* event)
@@ -93,6 +101,8 @@ void Map_2::addMap()
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setPosition(Vec2(0, 0));
 	MapBackGround = TMXTiledMap::create("map2/BackGroundMap2.tmx");
+	MapBackGround->setScale(1.6);
+	MapBackGround->setAnchorPoint(Vec2(0.2,0.2));
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");
@@ -106,8 +116,8 @@ float Map_2::Distance(Vec2 A, Vec2 C) {
 }
 void Map_2::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	if (times2 > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
-		times2 = 0;
+	if (times > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
+		times = 0;
 		mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 	}
 	if (Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()) < 100.0f)
@@ -125,19 +135,51 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 	{
 		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcFroztag || nodeB->getTag() == playertag & nodeA->getTag() == NpcFroztag)
 		{
-			npcFroz->CollisionFroz();
-
+			if (x2 == 1) {
+				npcFroz->CollisionFroz();
+				
+				mainPlayer->haveSwordIce = true;
+				x2 += 1;
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcIcetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcIcetag)
 		{
-			
-			npcIce->CollisionIce();
+			if (x2 == 2) {
+				npcIce->CollisionIce();
+				mainPlayer->CountCreep = 0;
+				menuLayer->setQuestMan2(2);
+				x2 += 1;
+			}
+			if (x2 == 3) {
+				if (mainPlayer->CountCreep == 10)
+				{
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/KiemBang.png");
+					mainPlayer->haveFireStone = true;
+					x2 += 1;
+				}
+			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcWilchtag || nodeB->getTag() == playertag & nodeA->getTag() == NpcWilchtag)
 		{
-			npcWilch->CollisionWilch();
+			if (x2 == 4) {
+				npcWilch->CollisionWilch();
+				mainPlayer->haveFirePet = true;
+				gate = true;
+				x2 += 1;
+			}
+		}
+		else if (nodeA->getTag() == CREEPATTACK & nodeB->getTag() == playertag || nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK)
+		{
+			mainPlayer->m_sprite->setColor(ccc3(200, 0, 0));
+			mainPlayer->SetState(Player::ACTION_HURT);
+			CCLOG("mau :%d", mainPlayer->m_health);
+			CCLOG(" ********* ");
 		}
 
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
+		{
+			if(gate == true ) Director::getInstance()->replaceScene(MapBossMan2Scene::createScene());
+		}
 	}
 	return true;
 
@@ -216,6 +258,7 @@ void Map_2::createPhysicMap()
 			//
 			mainPlayer = new Player(this);
 			mainPlayer->m_sprite->setPosition(Vec2(posx2, posY));
+
 		}
 		if (type == 3)
 		{
@@ -247,13 +290,99 @@ void Map_2::createPhysicMap()
 
 		if (type == 1)
 		{
-			AiLv1* ailv = new AiLv1(this);
-			ailv->m_sprite->setTag(AILV1+i);
+			AiLv2* ailv = new AiLv2(this);
+			ailv->m_sprite->setTag(AILV2+i);
 			ailv->m_sprite->setPosition(Vec2(posx2, posY));
 			ai.push_back(ailv);
+		}
+		if (type == 6)
+		{
+			AiRange* ailv = new AiRange(this);
+			ailv->m_sprite->setPosition(Vec2(posx2, posY));
+			ailv->m_sprite->setTag(AIRANGE+i);
+			aiRange.push_back(ailv);
+			
 		}
 	}
 }
 
 
 //end nhan
+
+cocos2d::ParticleSystemQuad* Map_2::Particletele(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.6f);
+	return particleSystem;
+}
+bool Map_2::isCreepDie()
+{
+	for (int i = 0; i < ai.size(); i++)
+	{
+		for (int j = 0; j < aiRange.size(); j++)
+		{
+			if (aiRange[j]->m_sprite->isVisible()) return false;
+		}
+		if (ai[i]->m_sprite->isVisible() == true) return false;
+	}
+	return true;
+}
+void Map_2::createMoveScene()
+{
+	auto objects = mObjectGroup->getObjects();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		auto object = objects.at(i);
+		auto properties = object.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object.asValueMap().at("type").asInt();
+		if (object.asValueMap().at("type").asInt() == 5)
+		{
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+
+			auto physics = PhysicsBody::createBox(particleSystem->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 0));
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			particleSystem->setTag(GATEtag);
+			particleSystem->setPhysicsBody(physics);
+
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
+		}
+	}
+}
+
+void Map_2::createCreepScene()
+{
+	auto objects1 = mObjectGroup1->getObjects();
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posx2 = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object1.asValueMap().at("type").asInt();
+			if (type == 1)
+			{
+				AiLv2* ailv = new AiLv2(this);
+				ailv->m_sprite->setTag(AILV2 + i);
+				ailv->m_sprite->setPosition(Vec2(posx2, posY));
+				ai.push_back(ailv);
+			}
+			if (type == 6)
+			{
+				AiRange* ailv = new AiRange(this);
+				ailv->m_sprite->setPosition(Vec2(posx2, posY));
+				ailv->m_sprite->setTag(AIRANGE + i);
+				aiRange.push_back(ailv);
+
+			}
+		
+	}
+}
