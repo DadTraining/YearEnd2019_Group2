@@ -16,6 +16,7 @@ bool MapBossMan2Scene::init()
         return false;
     }
 	schedule(schedule_selector(MapBossMan2Scene::update));
+	alreadyItem = false;
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//create map
@@ -23,7 +24,7 @@ bool MapBossMan2Scene::init()
 	//create Physics 
 	createPhysicMap();
 	
-	
+	gate = false;
 
 	auto listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(MapBossMan2Scene::onTouchBegan, this);
@@ -46,7 +47,10 @@ bool MapBossMan2Scene::init()
 	contactListener->onContactSeparate = CC_CALLBACK_1(MapBossMan2Scene::onContactSeparate, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	//end va cham npc
-	
+
+	//Gate
+	createMoveScene();
+
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
 	menuLayer->getIcon_Fire()->setEnabled(true);
@@ -63,6 +67,13 @@ void MapBossMan2Scene::update(float deltaTime)
 	times4 += deltaTime;
 
 	bosslv1->Collision(mainPlayer, deltaTime);
+	if (bosslv1->m_sprite->isVisible() == false&& alreadyItem==false) 
+	{
+		menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Stone/DaLua.png");
+		alreadyItem = true;
+		mainPlayer->haveFireStone = true;
+		gate = true;
+	}
 }
 bool MapBossMan2Scene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -86,6 +97,8 @@ void MapBossMan2Scene::addMap()
 	addChild(map,20);
 
 	MapBackGround = TMXTiledMap::create("mapBossLv1/BackGround.tmx");
+	MapBackGround->setScale(1.6);
+	MapBackGround->setAnchorPoint(Vec2(0.2 , 0.2));
 	addChild(MapBackGround);
 	
 
@@ -118,6 +131,10 @@ bool MapBossMan2Scene::onContactBegin(const PhysicsContact& contact)
 			mainPlayer->SetState(Player::ACTION_HURT);
 			CCLOG("mau :%d", mainPlayer->m_health);
 			CCLOG(" ********* ");
+		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
+		{
+			if (gate == true) Director::getInstance()->replaceScene(Map_3::createScene());
 		}
 		
 	}
@@ -198,3 +215,41 @@ void MapBossMan2Scene::createPhysicMap()
 
 
 //end nhan
+
+cocos2d::ParticleSystemQuad* MapBossMan2Scene::Particletele(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.6f);
+	return particleSystem;
+}
+
+void MapBossMan2Scene::createMoveScene()
+{
+	auto objects = mObjectGroup->getObjects();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		auto object = objects.at(i);
+		auto properties = object.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object.asValueMap().at("type").asInt();
+		if (object.asValueMap().at("type").asInt() == 5)
+		{
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+
+			auto physics = PhysicsBody::createBox(particleSystem->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 0));
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			particleSystem->setTag(GATEtag);
+			particleSystem->setPhysicsBody(physics);
+
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
+		}
+	}
+}

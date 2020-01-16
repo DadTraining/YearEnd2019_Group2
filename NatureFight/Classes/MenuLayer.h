@@ -34,7 +34,7 @@ public:
 	void setQuestYolo(int);// nhan
 	void setD(int );//nhan
 	void setC(int);//nhan
-	void showItemSword(Vec2);
+	void showItemSword(Vec2, std::string);
 	ui::Button* getIcon_Ice();
 	ui::Button* getIcon_Fire();
 protected:

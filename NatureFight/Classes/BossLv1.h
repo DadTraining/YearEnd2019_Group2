@@ -95,6 +95,9 @@ private:
 	Player* player;
 	cocos2d::ui::LoadingBar* loadingbar;
 	cocos2d::ui::LoadingBar* load;
+	float timeAttackBoss = 0, timeDieBoss = 0, timeColorBoss = 0, timeDelayHeal = 0, timeBoss = 0;
+	bool checkAttackBoss = false;
+	int countBoom = 0;
 };
 
 #endif // _BOSS_SCENE_H_

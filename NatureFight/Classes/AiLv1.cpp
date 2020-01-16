@@ -1,13 +1,13 @@
 #include "AiLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
+#include <GameSetting.h>
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
 	Init();
 }
-float timeAttackAI = 0, timeDieAI = 0, timeColor = 0;
-bool checkAttackAI = false;
+
 void AiLv1::Update(float deltaTime)
 {
 	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 30)));
@@ -31,7 +31,7 @@ void AiLv1::Update(float deltaTime)
 	else {
 		if (m_CurrentState == ACTION_ATTACK) checkAttackAI = true;
 		if (checkAttackAI) timeAttackAI += deltaTime;
-		if (timeAttackAI > 1.0f) {
+		if (timeAttackAI > 3.0f) {
 			m_CurrentState = ACTION_DEFAULT;
 			timeAttackAI = 0;
 			checkAttackAI = false;
@@ -94,7 +94,7 @@ void AiLv1::Init()
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 }
 
-float timem = 0;
+
 void AiLv1::Collision(Player* player, float deltaTime)
 {
 	this->player = player;
@@ -134,6 +134,12 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("Sounds/chem.wav", true);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
@@ -325,21 +331,30 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 		int y1 = std::rand() % 25 + 50;
 		x = x > x1 ? x : -x1;
 		y = y > y1 ? y : -y1;
-		Vec2 temp = m_sprite->getPosition() - player->dragon->m_dragon->getPosition();
-		float s = Distance(Vec2(x, y), Vec2(0, 0));
-		if ((int)temp.x <= 10 && (int)temp.y <= 10) {
-			SetState(ACTION_HURT_FIRE);
-			m_health -= 10;
-			player->dragon->m_dragon->runAction(MoveBy::create(s / 70, Vec2(x, y)));
-			player->onDragonAttack = false;
-			player->dragon->SetFace(Vec2(x, y) + player->dragon->m_dragon->getPosition());
-			if (m_health == 0) {
-				m_sprite->runAction(DieRight());
-				physicsBodyChar->setEnabled(false);
-				player->Exp += 20;
-				CCLOG("exp: %d", player->Exp);
+	
+			Vec2 temp = m_sprite->getPosition() - player->dragon->m_dragon->getPosition();
+			float s = Distance(Vec2(x, y), Vec2(0, 0));
+			if ((int)temp.x <= 10 && (int)temp.y <= 10) {
+				SetState(ACTION_HURT_FIRE);
+				m_health -= 10;
+				player->dragon->m_dragon->runAction(MoveBy::create(s / 70, Vec2(x, y)));
+				player->onDragonAttack = false;
+				player->dragon->SetFace(Vec2(x, y) + player->dragon->m_dragon->getPosition());
+				if (m_health == 0) {
+					m_sprite->runAction(DieRight());
+					physicsBodyChar->setEnabled(false);
+					player->Exp += 20;
+					CCLOG("exp: %d", player->Exp);
+				}
 			}
-		}
+
+		
+	}
+	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == CREEPATTACK)
+		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == CREEPATTACK))
+	{
+		player->m_health -= 10;
+		player->m_sprite->setColor(ccc3(255, 0, 0));
 	}
 
 	
