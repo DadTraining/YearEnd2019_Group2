@@ -34,13 +34,24 @@ void ItemLayer::Init()
 	wood->setScale(0.5);
 	this->addChild(wood, 1);
 
-	icon_power = ui::Button::create("Sprites/Item/icon-kiem.png");
-	icon_power->setScale(0.25);
-	icon_power->setTouchEnabled(false);
-	icon_power->setOpacity(-150);
-	icon_power->setPosition(Vec2(visibleSize.width - 145, 35));
-	icon_power->setRotation(-60);
+	auto loadingBarGB = Sprite::create("Sprites/Item/pow/power15_1.png");
+	loadingBarGB->setScale(1.5f);
+	loadingBarGB->setPosition(Vec2(visibleSize.width - 145, 35));
+	addChild(loadingBarGB);
+
+	icon_power = ui::LoadingBar::create("Sprites/Item/pow/power15.png");
+	icon_power->setScale(1.5f);
+	icon_power->setPercent(0);
+	icon_power->setDirection(ui::LoadingBar::Direction::LEFT);
+	icon_power->setPosition(loadingBarGB->getPosition());
 	this->addChild(icon_power);
+
+	icon_power_bt = Sprite::create("Sprites/Item/pow/power15.png");
+	icon_power_bt->setScale(1.5f);
+	icon_power_bt->setPosition(loadingBarGB->getPosition());
+	AnimatePow();
+	icon_power_bt->setVisible(false);
+	this->addChild(icon_power_bt,-1);
 
 }
 void ItemLayer::showIconSword()
@@ -139,4 +150,22 @@ void ItemLayer::showWood()
 	emitter->setScale(0.5f);
 	addChild(emitter);
 	wood->runAction(RepeatForever::create(rotateBy));;
+}
+void ItemLayer::AnimatePow()
+{
+	cocos2d::SpriteFrameCache* spriteCache = ResourceManager::GetInstance()->GetFrameAIById(999);
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	int i = 1;
+	std::string link;
+	while (true) {
+		link = "power" + std::to_string(i) + ".png";
+		if (i >= 10) link = "power" + std::to_string(i) + ".png";
+		if (spriteCache->getSpriteFrameByName(link) == nullptr) break;
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
+		i++;
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.3f);
+	auto animate = cocos2d::Animate::create(animation);
+	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
+	icon_power_bt->runAction(repeat);
 }

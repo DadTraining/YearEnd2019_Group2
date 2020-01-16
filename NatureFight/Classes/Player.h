@@ -7,9 +7,13 @@
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
+
 #define NORMALSKILL 8
 #define ATTACK_FIRE 9
 #define ATTACK_ICE 10
+#define ATTACK_ICE 10
+#define ATTACK_FIRE_ICE 11
+
 #define NpcSolotag 11
 #define NpcYolotag 12
 class Player :
@@ -21,6 +25,7 @@ public:
 	static const int SKILL_FIRE_2 = 2;
 	static const int SKILL_ICE = 3;
 	static const int SKILL_ICE_2 = 4;
+	static const int SKILL_FIRE_ICE = 5;
 
 	static const int STONE_CBN = 2;
 	static const int STONE_FIRE = 3;
@@ -58,6 +63,7 @@ public:
 	bool onShield = false;
 	bool onDragon = false;
 	bool onDragonAttack = false;
+	bool onAngry = false;
 
 public:
 	Player(cocos2d::Scene* scene);
@@ -76,7 +82,7 @@ public:
 	void SetSkill();
 	void SetSkillFire();
 	void SetSkillIce();
-	void SetSkillIce2();
+	void SetSkillFireIce();
 	void SetSkillDefault();
 
 	void UseStone(int);
@@ -105,7 +111,9 @@ public:
 	cocos2d::RepeatForever* DieDown();
 
 	cocos2d::ParticleSystemQuad* ParticleAttack(std::string name);
+	cocos2d::ParticleSystemQuad* particlePow;
 	void SetParticleMove();
+	void ParticlePow();
 
 	void CheckShield(float);
 	void CheckDragon(float);

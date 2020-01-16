@@ -19,9 +19,9 @@ public:
     void update(float);
     void createButtonLayer();
     void createJoyStickLayer();
-    void createLabelLayer();
 	void createSkillIce();
 	void createSkillFire();
+	void createSkillFireIce();
 	void createUpLevelLayer();
 	void createPlayerDie(bool);
 
@@ -48,6 +48,8 @@ private:
 	ui::Button* icon_fire2;
 	ui::Button* icon_ice;
 	ui::Button* icon_ice2;
+	ui::Button* icon_fire_ice;
+
 
 	Sprite* quest; // nhan
 	Label* label1, *label2 , *label3 ; // nhan
