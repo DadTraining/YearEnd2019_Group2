@@ -56,6 +56,8 @@ public:
 	void SetTagAI(int);
 	void setIndex(int index);
 
+	float setHealth();
+
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
@@ -81,5 +83,8 @@ public:
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
+
+	cocos2d::ui::LoadingBar* loadingbar;
+	cocos2d::ui::LoadingBar* load;
 };
 #endif // _HERO_SCENE_H_

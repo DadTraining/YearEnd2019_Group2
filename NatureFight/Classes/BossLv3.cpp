@@ -17,6 +17,9 @@ float timeAttackBossLv3 = 0, timeDieAIBossLv3 = 0, timeColorAIBossLv3 = 0;
 bool checkAttackAIBossLv3 = false;
 void BossLv3::Update(float deltaTime)
 {
+	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 30)));
+	load->setPosition(loadingbar->getPosition());
+	load->setPercent(setHealth());
 	if (m_health <= 0) {
 		timeDieAIBossLv3 += deltaTime;
 		SetState(ACTION_DIE);
@@ -88,6 +91,17 @@ void BossLv3::Init()
 	AttackSpeed = 1;
 	radius = 0;
 	stateAttackIce = false;
+
+	//loaddinghealth
+	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
+	loadingbar->setScale(0.2);
+	loadingbar->setPercent(100);
+	this->sceneGame->addChild(loadingbar, 1);
+	load = ui::LoadingBar::create("progress.png");
+	load->setScale(0.21);
+	this->sceneGame->addChild(load, 2);
+	load->setDirection(ui::LoadingBar::Direction::LEFT);
+
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(BossLv3::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
@@ -112,8 +126,8 @@ void BossLv3::Collision(Player* player, float deltaTime)
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) <= radius*6.4) {
 		//colistion here
-		m_health-=20;
-		player->m_sprite->setColor(ccc3(0, 0, 255));
+		player->m_health-=20;
+		player->m_sprite->setColor(ccc3(0, 0, 230));
 		CCLOG("%d", m_health);
 		this->setStateAttackIce(false);
 		radius = 0;
@@ -337,6 +351,21 @@ bool BossLv3::onContactBegin(const PhysicsContact& contact)
 			this->bulletHasCollision();
 		}
 	}
+	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
+		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
+		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+		{
+			this->bulletHasCollision();
+			this->player->m_sprite->setColor(ccc3(132, 112, 255));
+			this->player->m_health -= 15;
+		}
+		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
+		{
+			this->bulletHasCollision();
+			this->player->m_sprite->setColor(ccc3(132, 112, 255));
+			this->player->m_health -= 15;
+		}
+	}
 	return true;
 }
 cocos2d::ParticleSystemQuad* BossLv3::ParticleIce(std::string name)
@@ -353,4 +382,8 @@ void BossLv3::setStateAttackIce(bool state) {
 void BossLv3::bulletHasCollision()
 {
 	mBullet->setAlive(false);
+}
+float BossLv3::setHealth()
+{
+	return m_health;
 }

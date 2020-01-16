@@ -3,6 +3,7 @@
 #include "ObjectParent.h"
 #include <vector> 
 #include<Model.h>
+#include<DragonSkill.h>
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
@@ -17,32 +18,47 @@ class Player :
 public:
 	static const int SKILL_DEFAULT = -1;
 	static const int SKILL_FIRE = 1;
-	static const int SKILL_ICE = 2;
+	static const int SKILL_FIRE_2 = 2;
+	static const int SKILL_ICE = 3;
+	static const int SKILL_ICE_2 = 4;
 
-	static const int STONE_CBN = 1;
-	static const int STONE_FIRE = 2;
+	static const int STONE_CBN = 2;
+	static const int STONE_FIRE = 3;
+	static const int STONE_ICE = 5;
+	static const int STONE_FIRE_ICE = STONE_FIRE + STONE_ICE;
 
 public:
 	PhysicsBody* physicsBody;
+	DragonSkill* dragon;
 	Node* edgeNode;
 	int m_CurrentSkill;
-	int CountCreep=0;
-
+	int Armor;
+	int CountCreep = 0;
 	static int Level;
 	static int Exp;
 	static int MaxExp;
 
-	bool haveSword;
-	bool haveMagicSword;
+	bool haveSword = false;
+	bool haveSwordFire = true;
+	bool haveSwordIce = true;
 
-	bool haveHeatBalanceStone;
-	bool haveFireStone;
+	bool haveHeatBalanceStone = false;
+	bool haveFireStone = false;
+	bool haveIceStone = false;
 
-	bool haveMask;
+	bool haveMask = false;
+	bool haveFirePet = false;
+	bool haveIceShield = false;
 
-private:
+public:
 	cocos2d::Scene* sceneGame;
 	static int m_CurrentStone;
+	ParticleSystemQuad* particleMove;
+
+	bool onShield = false;
+	bool onDragon = false;
+	bool onDragonAttack = false;
+
 public:
 	Player(cocos2d::Scene* scene);
 	void Update(float deltaTime);
@@ -60,6 +76,7 @@ public:
 	void SetSkill();
 	void SetSkillFire();
 	void SetSkillIce();
+	void SetSkillIce2();
 	void SetSkillDefault();
 
 	void UseStone(int);
@@ -70,6 +87,7 @@ public:
 	cocos2d::RepeatForever* IdleRight();
 	cocos2d::Animate* AttackRightAngry();
 	cocos2d::Animate* HurtRight();
+	cocos2d::RepeatForever* DieRight1();
 	cocos2d::Animate* DieRight();
 
 	cocos2d::RepeatForever* MovingUp();
@@ -87,5 +105,9 @@ public:
 	cocos2d::RepeatForever* DieDown();
 
 	cocos2d::ParticleSystemQuad* ParticleAttack(std::string name);
+	void SetParticleMove();
 
+	void CheckShield(float);
+	void CheckDragon(float);
+	void CheckAttackAndSkill(float);
 };

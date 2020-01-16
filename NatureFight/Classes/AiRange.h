@@ -19,6 +19,7 @@
 #define AILV1 13
 #define BOSSLV1 14
 #define ATTACKTAG 8
+#define AIRANGE 200
 USING_NS_CC;
 class AiRange :
 	public ObjectParent
@@ -30,6 +31,8 @@ public:
 	static const int MAX_BULLET = 10;
 private:
 	int tagAI;
+	float timeAttackRange = 0, timeDieRange = 0, timeColorRange = 0, timeDelayHealRange = 0, timeRange = 0;;
+	bool checkAttackRange = false;
 
 public:
 	PhysicsBody* physicsBodyChar;
@@ -59,6 +62,8 @@ public:
 	void SetTagAI(int);
 	void setIndex(int index);
 
+	float setHealth();
+
 	cocos2d::RepeatForever* MovingRight();
 	cocos2d::Animate* AttackRight();
 	cocos2d::RepeatForever* IdleRight();
@@ -85,6 +90,10 @@ public:
 private:
 	cocos2d::Scene* sceneGame;
 	Player* player;
+
+
+	cocos2d::ui::LoadingBar* loadingbar;
+	cocos2d::ui::LoadingBar* load;
 };
 
 #endif // _BOSS_SCENE_H_

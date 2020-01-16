@@ -25,6 +25,7 @@
 #include "AppDelegate.h"
 #include"Map_2.h"
 #include"Map_3.h"
+#include "MapBossEndScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -114,8 +115,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	//ResourceManager::GetInstance()->Init("DataCreep.bin");
     // create a scene. it's an autorelease object
 	//auto scene = MapTutorialScene::createScene();
-	auto scene = Map_2::createScene();
-	//auto scene = LoadingScene::createScene();
+	auto scene = MapBossEndScene::createScene();
+	//	auto scene = Map_2::createScene();
+//	auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);
 

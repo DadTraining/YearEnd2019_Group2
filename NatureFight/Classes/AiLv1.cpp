@@ -6,20 +6,25 @@ AiLv1::AiLv1(cocos2d::Scene* scene)
 	sceneGame = scene;
 	Init();
 }
-float timeAttackAI = 0, timeDieAI = 0, timeColor = 0;
-bool checkAttackAI = false;
+
 void AiLv1::Update(float deltaTime)
 {
+	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 30)));
+	load->setPosition(loadingbar->getPosition());
+	load->setPercent(setHealth());
+
 	if (m_health <= 0) {
 		timeDieAI += deltaTime;
 		SetState(ACTION_DIE);
-		if (timeDieAI >= 5) {
+		if (timeDieAI >= 0.8) {
 			timeDieAI = 0;
 			m_sprite->setPosition(10, 10);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
 			edgeNode->setPosition(Vec2(1000, 1000));
 			physicsBodyChar->setEnabled(true);
+			this->m_sprite->setVisible(false);
+			loadingbar->setVisible(false);
 		}
 	}
 	else {
@@ -49,7 +54,7 @@ void AiLv1::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	m_health = 30;
+	//m_health = 30;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
@@ -73,25 +78,35 @@ void AiLv1::Init()
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(CREEPATTACK);
 
+	//loaddinghealth
+	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
+	loadingbar->setScale(0.2);
+	loadingbar->setPercent(100);
+	this->sceneGame->addChild(loadingbar, 1);
+	load = ui::LoadingBar::create("progress.png");
+	load->setScale(0.21);
+	this->sceneGame->addChild(load, 2);
+	load->setDirection(ui::LoadingBar::Direction::LEFT);
+
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(AiLv1::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 }
 
-float timem = 0;
+
 void AiLv1::Collision(Player* player, float deltaTime)
 {
 	this->player = player;
 	Update(deltaTime);
 	timem += deltaTime;
-	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 80) {
+	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 50) {
 		if (timem > 0.3f) {
 			SetState(AiLv1::ACTION_ATTACK);
 			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 			timem = 0;
 		}
 	}
-	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 80)
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
 		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }
@@ -301,5 +316,44 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 			CCLOG("exp: %d", player->Exp);
 		}
 	}
+	if (nodeA->getTag() == DRAGONTAG & nodeB->getTag() == m_sprite->getTag() || nodeB->getTag() == DRAGONTAG & nodeA->getTag() == m_sprite->getTag()) {
+		std::srand(time(NULL));
+		int x = std::rand() % 25 + 50;
+		int y = std::rand() % 25 + 50;
+		int x1 = std::rand() % 25 + 50;
+		int y1 = std::rand() % 25 + 50;
+		x = x > x1 ? x : -x1;
+		y = y > y1 ? y : -y1;
+	
+			Vec2 temp = m_sprite->getPosition() - player->dragon->m_dragon->getPosition();
+			float s = Distance(Vec2(x, y), Vec2(0, 0));
+			if ((int)temp.x <= 10 && (int)temp.y <= 10) {
+				SetState(ACTION_HURT_FIRE);
+				m_health -= 10;
+				player->dragon->m_dragon->runAction(MoveBy::create(s / 70, Vec2(x, y)));
+				player->onDragonAttack = false;
+				player->dragon->SetFace(Vec2(x, y) + player->dragon->m_dragon->getPosition());
+				if (m_health == 0) {
+					m_sprite->runAction(DieRight());
+					physicsBodyChar->setEnabled(false);
+					player->Exp += 20;
+					CCLOG("exp: %d", player->Exp);
+				}
+			}
+
+		
+	}
+	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == CREEPATTACK)
+		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == CREEPATTACK))
+	{
+		player->m_health -= 10;
+		player->m_sprite->setColor(ccc3(255, 0, 0));
+	}
+
+	
 	return true;
+}
+float AiLv1::setHealth()
+{
+	return m_health;
 }
