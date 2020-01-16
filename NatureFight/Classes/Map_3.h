@@ -25,6 +25,7 @@ USING_NS_CC;
 #define GATEtag 400
 class Map_3 : public cocos2d::Scene
 {
+private: bool gate;
 public:
 	Player* mainPlayer;
 	Npclv1* npcFireWilth , *npcJoe;

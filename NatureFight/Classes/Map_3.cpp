@@ -134,7 +134,7 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 		{
 			if (x3 == 3) {
 				menuLayer->setQuestSolo(2);
-				npcJoe->CollisionFireWilth();
+				npcFireWilth->CollisionFireWilth();
 				x3 += 1;
 			}
 			if (x3 == 4) {
@@ -142,13 +142,14 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 					mainPlayer->CountCreep = 0;
 					mainPlayer->haveSwordFire = true;
 					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(),"Sprites/Item/KiemBang.png");
+					gate = true; 
 				}
 			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcJoetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcJoetag)
 		{
 			if (x3 == 1) {
-				npcFireWilth->CollisionJoe();
+				npcJoe->CollisionJoe();
 				menuLayer->setQuestYolo(1);
 				mainPlayer->CountCreep = 0;
 				x3 += 1;
@@ -173,7 +174,7 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			Director::getInstance()->replaceScene(MapBossMan3Scene::createScene());
+			if(gate == true) Director::getInstance()->replaceScene(MapBossMan3Scene::createScene());
 		}
 	}
 	return true;

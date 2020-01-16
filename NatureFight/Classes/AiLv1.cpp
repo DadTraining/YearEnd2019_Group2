@@ -134,12 +134,7 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
-	auto turn = GameSetting::getInstance()->isMusic();
-	if (turn == true)
-	{
-		auto audio = SimpleAudioEngine::getInstance();
-		audio->playBackgroundMusic("Sounds/chem.wav", true);
-	}
+	
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
