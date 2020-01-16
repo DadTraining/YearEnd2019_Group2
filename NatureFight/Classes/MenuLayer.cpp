@@ -155,7 +155,7 @@ void MenuLayer::createButtonLayer()
 			if (turn == true)
 			{
 				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/212.mp3", false);
+				audio->playEffect("Sounds/212.mp3", false);
 			}
 			Director::getInstance()->pause();
 			mPauseLayer->setVisible(true);
@@ -188,7 +188,7 @@ void MenuLayer::createButtonLayer()
 			if (turn == true)
 			{
 				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/212.mp3", false);
+				audio->playEffect("Sounds/212.mp3", false);
 			}
 			Director::getInstance()->resume();
 			Director::getInstance()->replaceScene(MainMenuScene::createScene());
@@ -203,7 +203,7 @@ void MenuLayer::createButtonLayer()
 			if (turn == true)
 			{
 				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/212.mp3", false);
+				audio->playEffect("Sounds/212.mp3", false);
 			}
 			Director::getInstance()->resume();
 			mPauseLayer->setVisible(false);
@@ -218,7 +218,7 @@ void MenuLayer::createButtonLayer()
 			if (turn == true)
 			{
 				auto audio = SimpleAudioEngine::getInstance();
-				audio->playEffect("sounds/212.mp3", false);
+				audio->playEffect("Sounds/212.mp3", false);
 			}
 			Director::getInstance()->replaceScene(SettingScene::createScene());
 		});

@@ -12,6 +12,7 @@
 #include <MenuLayer.h>
 #include<AiLv1.h>
 #include<AiRange.h>
+#include<MapBossMan2Scene.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -23,7 +24,7 @@ USING_NS_CC;
 #define NpcWilchtag 23
 #define AILV1 13
 #define ATTACKTAG 8
-
+#define GATEtag 400
 class Map_2 : public cocos2d::Scene
 {
 public:
@@ -54,5 +55,8 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
+
+	void createMoveScene();
+	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 };
 #endif // __Map2_SCENE_H__

@@ -65,6 +65,8 @@ bool MapTutorialScene::init()
 	//boss = new BossLv1(this);
 	//boss->m_sprite->setPosition(mainPlayer->m_sprite->getPosition()-Vec2(100,100));
 	
+	createMoveScene();
+
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
 	CCLOG("LoadMapTutorial 8******************");
@@ -77,7 +79,6 @@ void MapTutorialScene::update(float deltaTime)
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times += deltaTime;
-	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime); 
 		if (mainPlayer->onDragon) {
@@ -123,8 +124,8 @@ void MapTutorialScene::addMap()
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");
-	mPhysicsLayer = map->getLayer("item_3");
-	mPhysicsLayer->setVisible(true);
+	/*mPhysicsLayer = map->getLayer("item_3");
+	mPhysicsLayer->setVisible(true);*/
 	addChild(map,20);
 	addChild(MapBackGround);
 	
@@ -184,6 +185,10 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 				}
 			}
 
+		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
+		{
+			Director::getInstance()->replaceScene(Map_2::createScene());
 		}
 		
 		
@@ -282,8 +287,6 @@ void MapTutorialScene::createPhysicMap()
 			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 317******************");
 
-			boss = new BossLv1(this);
-			boss->m_sprite->setPosition(Vec2(posX - 300, posY - 300));
 		}
 		if (type == 3)
 		{
@@ -341,6 +344,43 @@ void MapTutorialScene::UpdateDragon()
 				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
 				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
 			}
+		}
+	}
+}
+cocos2d::ParticleSystemQuad* MapTutorialScene::Particletele(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.6f);
+	//particleSystem->setDuration(10.0f);
+	return particleSystem;
+}
+
+void MapTutorialScene::createMoveScene()
+{
+	auto objects1 = mObjectGroup1->getObjects();
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		if (object1.asValueMap().at("type").asInt() == 5)
+		{
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+
+			auto physics = PhysicsBody::createBox(particleSystem->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 0));
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			particleSystem->setTag(GATEtag);
+			particleSystem->setPhysicsBody(physics);
+
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
 		}
 	}
 }

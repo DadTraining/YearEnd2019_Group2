@@ -1,5 +1,5 @@
-#ifndef __MAPBOSSMAN2_SCENE_H__
-#define __MAPBOSSMAN2_SCENE_H__
+#ifndef __MAPBOSSMAN3_SCENE_H__
+#define __MAPBOSSMAN3_SCENE_H__
 
 #include "cocos2d.h"
 #include<ObjectParent.h>
@@ -9,7 +9,7 @@
 #include <ResourceManager.h>
 #include <SneakyJoystickSkinnedBase.h>
 #include <MenuLayer.h>
-#include<BossLv1.h>
+#include<BossLv3.h>
 #include<Map_3.h>
 USING_NS_CC;
 #define ATTACK 0
@@ -18,7 +18,7 @@ USING_NS_CC;
 #define AILV1 13
 #define ATTACKTAG 8
 #define GATEtag 400
-class MapBossMan2Scene : public cocos2d::Scene
+class MapBossMan3Scene : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
@@ -30,14 +30,14 @@ public:
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 
-	BossLv1* bosslv1;
+	BossLv3* bosslv3;
 	int countCreepDie=0;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
     virtual bool init();
     void update(float deltaTime);
-    CREATE_FUNC(MapBossMan2Scene);
+    CREATE_FUNC(MapBossMan3Scene);
 	virtual bool onTouchBegan(Touch*, Event*);
 	virtual bool onTouchEnded(Touch*, Event*);
 	virtual bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
@@ -51,4 +51,4 @@ public:
 	void createMoveScene();
 	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 };
-#endif // __MAPBOSSMAN2_SCENE_H__
+#endif // __MAPBOSSMAN3_SCENE_H__

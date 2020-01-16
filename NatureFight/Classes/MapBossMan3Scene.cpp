@@ -1,21 +1,21 @@
-#include "MapBossMan2Scene.h"
+#include "MapBossMan3Scene.h"
 
 using namespace std;
-float times4 = 0;
+float time5 = 0;
 
 
-Scene* MapBossMan2Scene::createScene()
+Scene* MapBossMan3Scene::createScene()
 {
-    return MapBossMan2Scene::create();
+    return MapBossMan3Scene::create();
 }
 
-bool MapBossMan2Scene::init()
+bool MapBossMan3Scene::init()
 {
     if ( !Scene::initWithPhysics() )
     {
         return false;
     }
-	schedule(schedule_selector(MapBossMan2Scene::update));
+	schedule(schedule_selector(MapBossMan3Scene::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//create map
@@ -26,14 +26,14 @@ bool MapBossMan2Scene::init()
 	
 
 	auto listener = EventListenerTouchOneByOne::create();
-	listener->onTouchBegan = CC_CALLBACK_2(MapBossMan2Scene::onTouchBegan, this);
-	listener->onTouchMoved = CC_CALLBACK_2(MapBossMan2Scene::onTouchMoved, this);
-	listener->onTouchEnded = CC_CALLBACK_2(MapBossMan2Scene::onTouchEnded, this);
+	listener->onTouchBegan = CC_CALLBACK_2(MapBossMan3Scene::onTouchBegan, this);
+	listener->onTouchMoved = CC_CALLBACK_2(MapBossMan3Scene::onTouchMoved, this);
+	listener->onTouchEnded = CC_CALLBACK_2(MapBossMan3Scene::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	
 
 	auto listenerKey = EventListenerKeyboard::create();
-	listenerKey->onKeyPressed = CC_CALLBACK_2(MapBossMan2Scene::onKeyPressed, this);
+	listenerKey->onKeyPressed = CC_CALLBACK_2(MapBossMan3Scene::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
@@ -41,9 +41,9 @@ bool MapBossMan2Scene::init()
 	
 	// va cham npc
 	auto contactListener = EventListenerPhysicsContact::create();
-	contactListener->onContactBegin = CC_CALLBACK_1(MapBossMan2Scene::onContactBegin, this);
-	contactListener->onContactPreSolve = CC_CALLBACK_1(MapBossMan2Scene::onContactPreSolve, this);
-	contactListener->onContactSeparate = CC_CALLBACK_1(MapBossMan2Scene::onContactSeparate, this);
+	contactListener->onContactBegin = CC_CALLBACK_1(MapBossMan3Scene::onContactBegin, this);
+	contactListener->onContactPreSolve = CC_CALLBACK_1(MapBossMan3Scene::onContactPreSolve, this);
+	contactListener->onContactSeparate = CC_CALLBACK_1(MapBossMan3Scene::onContactSeparate, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	//end va cham npc
 
@@ -58,28 +58,28 @@ bool MapBossMan2Scene::init()
 	return true;
 }
 
-void MapBossMan2Scene::update(float deltaTime)
+void MapBossMan3Scene::update(float deltaTime)
 {
 	mainPlayer->Update(deltaTime);
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
-	times4 += deltaTime;
+	time5 += deltaTime;
 
-	bosslv1->Collision(mainPlayer, deltaTime);
+	bosslv3->Collision(mainPlayer, deltaTime);
 }
-bool MapBossMan2Scene::onTouchBegan(Touch* touch, Event* event)
+bool MapBossMan3Scene::onTouchBegan(Touch* touch, Event* event)
 {
 	return true;
 }
-bool MapBossMan2Scene::onTouchEnded(Touch* touch, Event* event)
+bool MapBossMan3Scene::onTouchEnded(Touch* touch, Event* event)
 {
 	return true;
 }
-bool MapBossMan2Scene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
+bool MapBossMan3Scene::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event)
 {
 	return false;
 }
-void MapBossMan2Scene::addMap()
+void MapBossMan3Scene::addMap()
 {
 	map = TMXTiledMap::create("mapBossLv1/tiled.tmx");
 	map->setAnchorPoint(Vec2(0, 0));
@@ -95,13 +95,13 @@ void MapBossMan2Scene::addMap()
 	
 
 }
-float MapBossMan2Scene::Distance(Vec2 A, Vec2 C) {
+float MapBossMan3Scene::Distance(Vec2 A, Vec2 C) {
 	return std::sqrt((A.x - C.x) * (A.x - C.x) + (A.y - C.y) * (A.y - C.y));
 }
-void MapBossMan2Scene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+void MapBossMan3Scene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	if (times4 > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
-		times4 = 0;
+	if (time5 > 2.0f && keyCode == EventKeyboard::KeyCode::KEY_SPACE) {
+		time5 = 0;
 		mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 	}
 	if (Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->m_sprite->getPosition()) < 100.0f)
@@ -111,7 +111,7 @@ void MapBossMan2Scene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event
 }
 //nhan
 
-bool MapBossMan2Scene::onContactBegin(const PhysicsContact& contact)
+bool MapBossMan3Scene::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
@@ -124,17 +124,14 @@ bool MapBossMan2Scene::onContactBegin(const PhysicsContact& contact)
 			CCLOG("mau :%d", mainPlayer->m_health);
 			CCLOG(" ********* ");
 		}
-		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
-		{
-			Director::getInstance()->replaceScene(Map_3::createScene());
-		}
+		
 		
 	}
 	return true;
 
 }
 
-bool MapBossMan2Scene::onContactPreSolve(const PhysicsContact& contact)
+bool MapBossMan3Scene::onContactPreSolve(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
@@ -145,7 +142,7 @@ bool MapBossMan2Scene::onContactPreSolve(const PhysicsContact& contact)
 	return true;
 }
 
-bool MapBossMan2Scene::onContactSeparate(const PhysicsContact& contact)
+bool MapBossMan3Scene::onContactSeparate(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
@@ -157,7 +154,7 @@ bool MapBossMan2Scene::onContactSeparate(const PhysicsContact& contact)
 }
 
 
-void MapBossMan2Scene::createPhysicMap()
+void MapBossMan3Scene::createPhysicMap()
 {
 	// set physics map
 	auto objects = mObjectGroup->getObjects();
@@ -193,8 +190,8 @@ void MapBossMan2Scene::createPhysicMap()
 		}
 		if (type == 3)
 		{
-			bosslv1 = new BossLv1(this);
-			bosslv1->m_sprite->setPosition(Vec2(posx4, posY));
+			bosslv3 = new BossLv3(this);
+			bosslv3->m_sprite->setPosition(Vec2(posx4, posY));
 		}
 		if (type == 4)
 		{
@@ -208,14 +205,14 @@ void MapBossMan2Scene::createPhysicMap()
 
 //end nhan
 
-cocos2d::ParticleSystemQuad* MapBossMan2Scene::Particletele(std::string name)
+cocos2d::ParticleSystemQuad* MapBossMan3Scene::Particletele(std::string name)
 {
 	auto particleSystem = ParticleSystemQuad::create(name);
 	particleSystem->setScale(0.6f);
 	return particleSystem;
 }
 
-void MapBossMan2Scene::createMoveScene()
+void MapBossMan3Scene::createMoveScene()
 {
 	auto objects = mObjectGroup->getObjects();
 	for (int i = 0; i < objects.size(); i++)

@@ -53,6 +53,7 @@ bool Map_3::init()
 	menuLayer->getIcon_Fire()->setEnabled(true);
 	menuLayer->getIcon_Ice()->setEnabled(true);
 
+	createMoveScene();
 	return true;
 }
 
@@ -62,11 +63,10 @@ void Map_3::update(float deltaTime)
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times3 += deltaTime;
-//	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
 	}
-	bosslv3->Collision(mainPlayer, deltaTime);
+	//bosslv3->Collision(mainPlayer, deltaTime);
 }
 bool Map_3::onTouchBegan(Touch* touch, Event* event)
 {
@@ -157,6 +157,10 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 			mainPlayer->SetState(Player::ACTION_HURT);
 			CCLOG("mau :%d", mainPlayer->m_health);
 			CCLOG(" ********* ");
+		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
+		{
+			Director::getInstance()->replaceScene(MapBossMan3Scene::createScene());
 		}
 	}
 	return true;
@@ -264,11 +268,49 @@ void Map_3::createPhysicMap()
 		}
 		if (type == 5)
 		{
-			bosslv3 = new BossLv3(this);
-			bosslv3->m_sprite->setPosition(Vec2(posx3, posY));
+			/*bosslv3 = new BossLv3(this);
+			bosslv3->m_sprite->setPosition(Vec2(posx3, posY));*/
 		}
 	}
 }
 
 
 //end nhan
+
+cocos2d::ParticleSystemQuad* Map_3::Particletele(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.6f);
+	return particleSystem;
+}
+
+void Map_3::createMoveScene()
+{
+	auto objects = mObjectGroup->getObjects();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		auto object = objects.at(i);
+		auto properties = object.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object.asValueMap().at("type").asInt();
+		if (object.asValueMap().at("type").asInt() == 5)
+		{
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+
+			auto physics = PhysicsBody::createBox(particleSystem->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 0));
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			particleSystem->setTag(GATEtag);
+			particleSystem->setPhysicsBody(physics);
+
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
+		}
+	}
+}

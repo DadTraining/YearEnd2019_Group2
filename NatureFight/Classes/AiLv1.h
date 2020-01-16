@@ -8,6 +8,9 @@
 #include "Model.h"
 #include <Player.h>
 #include <ctime>
+#include <GameSetting.h>
+#include <SimpleAudioEngine.h>
+
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11

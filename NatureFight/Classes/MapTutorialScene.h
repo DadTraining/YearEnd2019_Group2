@@ -13,6 +13,7 @@
 #include<AiLv1.h>
 #include <BossLv1.h>
 #include <Boom.h>
+#include <Map_2.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
@@ -21,6 +22,7 @@ USING_NS_CC;
 #define NpcYolotag 12
 #define AILV1 13
 #define ATTACKTAG 8
+#define GATEtag 400 
 class MapTutorialScene : public cocos2d::Scene
 {
 public:
@@ -55,7 +57,7 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
-
-	void bossCollistionSkill(Node* nodeA, Node* nodeB);
+	void createMoveScene();
+	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 };
 #endif // __MAPTUTORIAL_SCENE_H__

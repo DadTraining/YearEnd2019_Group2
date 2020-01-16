@@ -1,6 +1,7 @@
 #include "AiLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
+using namespace CocosDenshion;
 AiLv1::AiLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -134,6 +135,12 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isSound();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("Sounds/chem.wav", false);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
