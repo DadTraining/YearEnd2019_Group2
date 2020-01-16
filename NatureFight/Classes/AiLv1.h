@@ -9,6 +9,7 @@
 #include <Player.h>
 #include <ctime>
 #include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11

@@ -118,9 +118,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	//auto scene = MapTutorialScene::createScene();
 	//auto scene = MapBossMan2Scene::createScene();
 	//	auto scene = MapBossMan3Scene::createScene();
-	auto scene = MapBossEndScene::createScene();
+//	auto scene = MapBossEndScene::createScene();
 //auto scene = Map_2::createScene();
-//		auto scene = LoadingScene::createScene();
+		auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);
 
