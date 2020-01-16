@@ -46,7 +46,7 @@ bool LoadingScene::init()
 	addChild(loadingbar, 1);
 	static auto load = ui::LoadingBar::create("settings/loadingbar.png");
 	load->setPercent(0);
-	load->setPosition(loadingbar->getPosition() + Vec2(0, 25));
+	load->setPosition(loadingbar->getPosition() + Vec2(0, 30));
 	load->setScaleX(2.3f);
 	load->setDirection(ui::LoadingBar::Direction::LEFT);
 	addChild(load, 0);

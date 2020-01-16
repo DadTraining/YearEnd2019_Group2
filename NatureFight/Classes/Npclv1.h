@@ -16,12 +16,17 @@ public:
 	void CollisionFroz();
 	void CollisionIce();
 	void CollisionWilch();
+	void CollisionFireWilth();
+	void CollisionJoe();
+
 	cocos2d::RepeatForever* Hello();
 	cocos2d::RepeatForever* Communication();
 	cocos2d::RepeatForever* CommunicationNPCYolo();
 	cocos2d::RepeatForever* CommunicationNPCFroz();
 	cocos2d::RepeatForever* CommunicationNPCIce();
 	cocos2d::RepeatForever* CommunicationNPCWilch();
+	cocos2d::RepeatForever* CommunicationNPCFireWilth();
+	cocos2d::RepeatForever* CommunicationNPCJoe();
 
 	~Npclv1();
 private:

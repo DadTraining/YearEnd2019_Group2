@@ -31,6 +31,8 @@ public:
 	static const int MAX_BULLET = 10;
 private:
 	int tagAI;
+	float timeAttackRange = 0, timeDieRange = 0, timeColorRange = 0, timeDelayHealRange = 0, timeRange = 0;;
+	bool checkAttackRange = false;
 
 public:
 	PhysicsBody* physicsBodyChar;

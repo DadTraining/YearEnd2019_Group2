@@ -34,7 +34,7 @@ public:
 	void setQuestYolo(int);// nhan
 	void setD(int );//nhan
 	void setC(int);//nhan
-	void showItemSword(Vec2);
+	void showItemSword(Vec2, std::string);
 	ui::Button* getIcon_Ice();
 	ui::Button* getIcon_Fire();
 protected:
@@ -49,7 +49,11 @@ private:
 	ui::Button* icon_ice;
 	ui::Button* icon_ice2;
 	ui::Button* icon_fire_ice;
+	Sprite* timeIconFire;
+	Sprite* timeIconIce;
 
+	void AnimationIconFire();
+	void AnimationIconIce();
 
 	Sprite* quest; // nhan
 	Label* label1, *label2 , *label3 ; // nhan

@@ -39,6 +39,9 @@ void Player::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	edgeNode = Node::create();
+	sceneGame->addChild(edgeNode);
+
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(50, 50);
 	this->m_sprite->setScale(1.5);
@@ -55,11 +58,10 @@ void Player::Init()
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
 	m_CurrentSkill = SKILL_DEFAULT;
+	Level = 1;
 	updateLevel();
 	m_health = MaxHealth;
 
-	edgeNode = Node::create();
-	sceneGame->addChild(edgeNode);
 
 	particleMove = ParticleSystemQuad::create("Particles/move_fire.plist");
 	SetParticleMove();
@@ -594,7 +596,7 @@ void Player::CheckDragon(float deltaTime)
 {
 	if (onDragon) {
 		dragon->Update(deltaTime);
-		if (dragon->countTimeExis > 30) onDragon = false;
+		if (dragon->countTimeExis > 20) onDragon = false;
 	}
 
 }

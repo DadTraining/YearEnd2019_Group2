@@ -8,6 +8,8 @@
 #include "Model.h"
 #include <Player.h>
 #include <ctime>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define CREEPTAG 11
@@ -23,7 +25,8 @@ public:
 	static const int ACTION_HURT_FIRE = 12;
 private:
 	int tagAI;
-
+	float timeAttackAI = 0, timeDieAI = 0, timeColor = 0, timem = 0;
+	bool checkAttackAI = false;
 public:
 	PhysicsBody* physicsBodyChar;
 	int m_health = 100;

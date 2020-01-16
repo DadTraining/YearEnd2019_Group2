@@ -51,7 +51,7 @@ void ItemLayer::Init()
 	icon_power_bt->setPosition(loadingBarGB->getPosition());
 	AnimatePow();
 	icon_power_bt->setVisible(false);
-	this->addChild(icon_power_bt,-1);
+	this->addChild(icon_power_bt, -1);
 
 }
 void ItemLayer::showIconSword()

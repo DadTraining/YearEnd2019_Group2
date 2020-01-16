@@ -52,8 +52,8 @@ public:
 	bool haveIceStone = false;
 
 	bool haveMask = false;
-	bool haveFirePet = false;
-	bool haveIceShield = false;
+	bool haveFirePet = true;
+	bool haveIceShield = true;
 
 public:
 	cocos2d::Scene* sceneGame;

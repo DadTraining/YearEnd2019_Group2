@@ -26,4 +26,15 @@
 120 Sprites/Man3/Ice_Dino/Running/spritesDino.plist
 121 Sprites/Man3/Ice_Dino/IceBall/spritesDino.plist
 898 Sprites/pet/FirePet.plist
+123 Sprites/Boss/Skill/spritesBoss.plist
+124 Sprites/Boss/Walk/spritesBoss.plist
+125 Sprites/Boss/Idle/spritesBoss.plist
+126 Sprites/Boss/SkillTonato/Tonato/spritesBoss.plist
+127 Sprites/Man2/Reaper_Man_2/PNG/PNG_Sequences/Dying/spritesReaper.plist
+128 Sprites/Man2/Reaper_Man_2/PNG/PNG_Sequences/Idle_Blinking/spritesReaper.plist
+129 Sprites/Man2/Reaper_Man_2/PNG/PNG_Sequences/Running/spritesReaper.plist
+130 Sprites/Man2/Reaper_Man_2/PNG/PNG_Sequences/Slashing/spritesReaper.plist
+131 Sprites/Boss/Die/spritesBossEnd.plist
 999 Sprites/Item/pow/power.plist
+565 Button/timeIce.plist
+656 Button/timeFire.plist

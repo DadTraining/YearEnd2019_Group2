@@ -44,7 +44,7 @@ bool MenuLayer::init() {
 
 	return true;
 }
-float timeCount = 0, timeSkillFire = 0, timeSkillFire2 = 0, timeSkillIce = 0, timeSkillIce2 = 0;
+float timeCount = 0, timeSkillFire = 2, timeSkillFire2 = 30, timeSkillIce = 2, timeSkillIce2 = 20;
 float timePower = 10, before = 0;
 void MenuLayer::update(float deltaTime) {
 
@@ -77,6 +77,13 @@ void MenuLayer::update(float deltaTime) {
 		item->icon_power->setPercent((before - mainPlayer->m_health) + item->icon_power->getPercent());
 		before = mainPlayer->m_health;
 	}
+	
+	if (timeSkillIce2 > 20) {
+		timeIconIce->setVisible(false);
+	}
+	if (timeSkillFire > 30) {
+		timeIconFire->setVisible(false);
+	}
 }
 
 cocos2d::Sprite* mPauseLayer;
@@ -104,12 +111,15 @@ void MenuLayer::createButtonLayer()
 						icon_fire2->setVisible(true);
 						if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
 						if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
+						icon_fire_ice->setVisible(false);
+						if (timeSkillFire2 < 30) timeIconFire->setVisible(true);
 					}
 					else {
+						icon_fire_ice->setVisible(false);
 						icon_ice->setVisible(false);
 						icon_ice2->setVisible(false);
 					}
-					icon_fire_ice->setVisible(false);
+					timeIconIce->setVisible(false);
 					mainPlayer->m_CurrentStone -= Player::STONE_ICE;
 				}
 				else {
@@ -119,8 +129,10 @@ void MenuLayer::createButtonLayer()
 
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_fire_ice->setVisible(true);
+						timeIconFire->setVisible(false);
 					}
 					else {
+						if(timeSkillIce2<20) timeIconIce->setVisible(true);
 						icon_ice->setVisible(true);
 						icon_ice2->setVisible(true);
 						if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
@@ -139,10 +151,13 @@ void MenuLayer::createButtonLayer()
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_ice->setVisible(true);
 						icon_ice2->setVisible(true);
-						if (mainPlayer->haveSwordFire) icon_ice->setTouchEnabled(true);
-						if (mainPlayer->haveFirePet) icon_ice2->setTouchEnabled(true);
+						if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
+						if (mainPlayer->haveIceShield) icon_ice2->setTouchEnabled(true);
+						timeIconFire->setVisible(false);
+						if (timeSkillIce2 < 20) timeIconIce->setVisible(true);
 					}
 					else {
+						timeIconFire->setVisible(false);
 						icon_fire->setVisible(false);
 						icon_fire2->setVisible(false);
 					}
@@ -156,8 +171,10 @@ void MenuLayer::createButtonLayer()
 
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_fire_ice->setVisible(true);
+						timeIconIce->setVisible(false);
 					}
 					else {
+						if(timeSkillFire2<30) timeIconFire->setVisible(true);
 						icon_fire->setVisible(true);
 						icon_fire2->setVisible(true);
 						if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
@@ -446,10 +463,12 @@ void MenuLayer::createSkillIce()
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
-			if (timeSkillIce2 > 20.0f - mainPlayer->AttackSpeed) {
+			if (timeSkillIce2 > 20.0f) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE_2;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeSkillIce2 = 0;
+				timeIconIce->setVisible(true);
+				AnimationIconIce();
 			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
@@ -464,7 +483,12 @@ void MenuLayer::createSkillIce()
 	icon_ice2->setVisible(false);
 
 	icon_ice->setTouchEnabled(false);
-//	icon_ice2->setTouchEnabled(false);
+	icon_ice2->setTouchEnabled(false);
+
+	timeIconIce = Sprite::create("Button/pic3(30).png");
+	timeIconIce->setPosition(icon_ice2->getPosition());
+	timeIconIce->setVisible(false);
+	this->addChild(timeIconIce, 5);
 }
 void MenuLayer::createSkillFire() {
 	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
@@ -499,16 +523,18 @@ void MenuLayer::createSkillFire() {
 	icon_fire2 = ui::Button::create("Sprites/Item/chua_skill_pet.png");
 	icon_fire2->setScale(2);
 	icon_fire2->setPosition(Vec2(870, 140));
-	this->addChild(icon_fire2);
+	this->addChild(icon_fire2,5);
 	icon_fire2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
 		{
 		case ui::Widget::TouchEventType::BEGAN:
 		case ui::Widget::TouchEventType::MOVED:
- 			if (timeSkillFire2 > 20.0f - mainPlayer->AttackSpeed) {
+ 			if (timeSkillFire2 > 30.0f) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE_2;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeSkillFire2 = 0;
+				timeIconFire->setVisible(true);
+				AnimationIconFire();
 			}
 			break;
 		case ui::Widget::TouchEventType::ENDED:
@@ -523,7 +549,12 @@ void MenuLayer::createSkillFire() {
 	icon_fire2->setVisible(false);
 
 	icon_fire->setTouchEnabled(false);
-//	icon_fire2->setTouchEnabled(false);
+	icon_fire2->setTouchEnabled(false);
+
+	timeIconFire = Sprite::create("Button/pic1(20).png");
+	timeIconFire->setPosition(icon_fire2->getPosition());
+	timeIconFire->setVisible(false);
+	this->addChild(timeIconFire,5);
 }
 
 void MenuLayer::createSkillFireIce()
@@ -552,6 +583,38 @@ void MenuLayer::createSkillFireIce()
 	});
 	icon_fire_ice->setVisible(false);
 	//	icon_ice2->setTouchEnabled(false);
+}
+
+void MenuLayer::AnimationIconFire() {
+	cocos2d::SpriteFrameCache* spriteCache = ResourceManager::GetInstance()->GetFrameAIById(656);
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	int i = 30;
+	std::string link;
+	while (true) {
+		link = "pic3(" + std::to_string(i) + ").png";
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
+		if (i==0) break;
+		i--;
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 1.0f);
+	auto animate = cocos2d::Animate::create(animation);
+	timeIconFire->runAction(animate);
+}
+
+void MenuLayer::AnimationIconIce() {
+	cocos2d::SpriteFrameCache* spriteCache = ResourceManager::GetInstance()->GetFrameAIById(565);
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	int i = 20;
+	std::string link;
+	while (true) {
+		link = "pic1(" + std::to_string(i) + ").png";
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
+		if (i == 0) break;
+		i--;
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 1.0f);
+	auto animate = cocos2d::Animate::create(animation);
+	timeIconIce->runAction(animate);
 }
 /////////////////////////begin nhan
 
@@ -736,10 +799,12 @@ void MenuLayer::setC(int x)
 }
 
 //end nhan
-void MenuLayer::showItemSword(Vec2 a)
+
+void MenuLayer::showItemSword(Vec2 a, std::string name)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto item_kiem = Sprite::create("Sprites/Item/Sword.png");
+
+	auto item_kiem = Sprite::create(name);
 	item_kiem->setPosition(a);
 	addChild(item_kiem, 80);
 	item_kiem->setScale(0.2); item_kiem->setRotation(45);

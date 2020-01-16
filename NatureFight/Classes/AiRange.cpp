@@ -12,8 +12,7 @@ AiRange::AiRange(cocos2d::Scene* scene)
 	mBullet->setScale(0.5f);
 	mBullet->setAlive(false);
 }
-float timeAttackRange = 0, timeDieRange = 0, timeColorRange = 0, timeDelayHealRange = 0;
-bool checkAttackRange = false;
+
 void AiRange::Update(float deltaTime)
 {
 	loadingbar->setPosition(Vec2(m_sprite->getPosition() + Vec2(0, 30)));
@@ -89,7 +88,7 @@ void AiRange::Init()
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 }
 
-float timeRange = 0;
+
 void AiRange::Collision(Player* player, float deltaTime)
 {
 	Update(deltaTime);
@@ -379,6 +378,8 @@ float AiRange::Distance(Vec2 A, Vec2 C) {
 void AiRange::bulletHasCollision()
 {
 	mBullet->setAlive(false);
+	player->m_sprite->setColor(ccc3(255, 69, 0));
+ 	player->m_health -= 10;
 }
 
 cocos2d::ParticleSystemQuad* AiRange::ParticleHeal(std::string name)

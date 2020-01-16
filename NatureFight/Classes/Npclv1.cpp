@@ -50,7 +50,7 @@ void Npclv1::Collision(/*Sprite main*/)
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh \n 6 con Goblin \n de nhan Skill  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n tat ca con quai \n con trong map  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -100,10 +100,11 @@ void Npclv1::Collision1()
 	auto fadehue = FadeOut::create(3.0f);
 	auto remove = RemoveSelf::create(); // clean up memory
 	auto doubletrouble1 = Sequence::create(fadehue,remove, nullptr);
-	auto doubletrouble = Sequence::create(fadehue,fadeIn, fadehue, remove, nullptr);
+	auto doubletrouble = Sequence::create(fadehue,fadeIn, fadehue, remove , nullptr);
 	label1->runAction(doubletrouble1);
 	label2->setOpacity(0);
 	label2->runAction(doubletrouble);
+	
 	
 }
 
@@ -157,7 +158,7 @@ void Npclv1::CollisionIce()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay den \n cho cua Wilch \n de biet them  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n 10 con goblin  \n de nhan skill ice  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -192,7 +193,77 @@ void Npclv1::CollisionWilch()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n 15 con goblin  \n va quay lai de \n nhan thuong ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n tat ca con goblin \n de qua man tiep theo", "Arial", 16);
+	label2->setAnchorPoint(Vec2(0, 0));
+	label2->setPositionX(mess->getPositionX() + 10);
+	label2->setPositionY(mess->getPositionY() + 10);
+	label2->setTextColor(Color4B::BLACK);
+	this->sceneGame->addChild(label2);
+
+	// action hiden mess
+	auto fadeIn = FadeIn::create(5.0f);
+	auto fadeOut = FadeOut::create(3.0f);
+	mess->runAction(FadeOut::create(14.0f));
+	auto fadehue = FadeOut::create(3.0f);
+	auto remove = RemoveSelf::create(); // clean up memory
+	auto doubletrouble1 = Sequence::create(fadehue, remove, nullptr);
+	auto doubletrouble = Sequence::create(fadehue, fadeIn, fadehue, remove, nullptr);
+	label1->runAction(doubletrouble1);
+	label2->setOpacity(0);
+	label2->runAction(doubletrouble);
+}
+
+void Npclv1::CollisionFireWilth()
+{
+	auto mess = Sprite::create("Sprites/Man1/NPC(Solo)/PNG/mess-removebg-preview.png");
+	mess->setPosition(this->m_sprite->getPosition());
+	mess->setScale(0.3);
+	mess->setAnchorPoint(Vec2(0, 0));
+	this->sceneGame->addChild(mess);
+	//
+	auto label1 = Label::createWithSystemFont("xin chao \n toi la Fire Wilth \n \n   ", "Arial", 16);
+	label1->setAnchorPoint(Vec2(0, 0));
+	label1->setPositionX(mess->getPositionX() + 10);
+	label1->setPositionY(mess->getPositionY() + 10);
+	label1->setTextColor(Color4B::BLACK);
+	this->sceneGame->addChild(label1);
+	//
+	auto label2 = Label::createWithSystemFont("Ban hay di den  \n nguoi ban cua toi  \n la Joe de  \n nhan nhiem vu ", "Arial", 16);
+	label2->setAnchorPoint(Vec2(0, 0));
+	label2->setPositionX(mess->getPositionX() + 10);
+	label2->setPositionY(mess->getPositionY() + 10);
+	label2->setTextColor(Color4B::BLACK);
+	this->sceneGame->addChild(label2);
+
+	// action hiden mess
+	auto fadeIn = FadeIn::create(5.0f);
+	auto fadeOut = FadeOut::create(3.0f);
+	mess->runAction(FadeOut::create(14.0f));
+	auto fadehue = FadeOut::create(3.0f);
+	auto remove = RemoveSelf::create(); // clean up memory
+	auto doubletrouble1 = Sequence::create(fadehue, remove, nullptr);
+	auto doubletrouble = Sequence::create(fadehue, fadeIn, fadehue, remove, nullptr);
+	label1->runAction(doubletrouble1);
+	label2->setOpacity(0);
+	label2->runAction(doubletrouble);
+}
+
+void Npclv1::CollisionJoe()
+{
+	auto mess = Sprite::create("Sprites/Man1/NPC(Solo)/PNG/mess-removebg-preview.png");
+	mess->setPosition(this->m_sprite->getPosition());
+	mess->setScale(0.3);
+	mess->setAnchorPoint(Vec2(0, 0));
+	this->sceneGame->addChild(mess);
+	//
+	auto label1 = Label::createWithSystemFont("xin chao \n toi la Joe \n \n   ", "Arial", 16);
+	label1->setAnchorPoint(Vec2(0, 0));
+	label1->setPositionX(mess->getPositionX() + 10);
+	label1->setPositionY(mess->getPositionY() + 10);
+	label1->setTextColor(Color4B::BLACK);
+	this->sceneGame->addChild(label1);
+	//
+	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n tat ca creep \n co trong map ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -349,6 +420,56 @@ cocos2d::RepeatForever * Npclv1::CommunicationNPCWilch()
 		}
 		else {
 			name = "0_Herbalist_Communication_0" + std::to_string(i) + ".png";
+		}
+
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	auto animate = cocos2d::Animate::create(animation);
+	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
+
+	return repeat;
+}
+
+cocos2d::RepeatForever * Npclv1::CommunicationNPCFireWilth()
+{
+	auto spriteCache = SpriteFrameCache::getInstance();
+	spriteCache->addSpriteFramesWithFile("Sprites/Man3/NPC(FireWilth)/PNG/Front/PNG_Sequences/Communication/Communication.plist");
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	std::string name;
+	for (int i = 0; i < 30; i++) {
+		if (i<10)
+		{
+
+			name = "0_Citizen_Communication_00" + std::to_string(i) + ".png";
+		}
+		else {
+			name = "0_Citizen_Communication_0" + std::to_string(i) + ".png";
+		}
+
+		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
+	}
+	auto animation = cocos2d::Animation::createWithSpriteFrames(exFrames, 0.05f);
+	auto animate = cocos2d::Animate::create(animation);
+	cocos2d::RepeatForever* repeat = cocos2d::RepeatForever::create(animate);
+
+	return repeat;
+}
+
+cocos2d::RepeatForever * Npclv1::CommunicationNPCJoe()
+{
+	auto spriteCache = SpriteFrameCache::getInstance();
+	spriteCache->addSpriteFramesWithFile("Sprites/Man3/NPC(Joe)/PNG/PNG_Sequences/Communication/Communication.plist");
+	cocos2d::Vector<cocos2d::SpriteFrame*> exFrames;
+	std::string name;
+	for (int i = 0; i < 30; i++) {
+		if (i<10)
+		{
+
+			name = "0_Warlord_Communication_00" + std::to_string(i) + ".png";
+		}
+		else {
+			name = "0_Warlord_Communication_0" + std::to_string(i) + ".png";
 		}
 
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(name));
