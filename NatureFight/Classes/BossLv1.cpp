@@ -91,7 +91,6 @@ void BossLv1::Update(float deltaTime)
 void BossLv1::Init()
 {
 	speedAtt = 2.0;
-	//m_health = 30;
 	stateIce = false;
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -135,6 +134,7 @@ void BossLv1::Init()
 	contactListener->onContactBegin = CC_CALLBACK_1(BossLv1::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 	m_dame = 40;
+	m_health = 300;
 }
 
 float timeBoss = 0;

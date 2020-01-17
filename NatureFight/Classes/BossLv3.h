@@ -28,7 +28,7 @@ private:
 public:
 	PhysicsBody* physicsBodyChar;
 	int m_health;
-	int maxHealth;
+	int maxHealth = 600;
 	int m_CurrentFace;
 	int m_CurrentState;
 	float AttackSpeed;

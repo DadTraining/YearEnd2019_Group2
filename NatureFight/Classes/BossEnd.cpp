@@ -125,7 +125,6 @@ void BossEnd::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	m_health = 200;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Boss/Idle/0_BossEnd_Idle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
@@ -159,6 +158,7 @@ void BossEnd::Init()
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 	countSkill = 0;
 	m_dame = 50;
+	m_health = 1000;
 }
 
 

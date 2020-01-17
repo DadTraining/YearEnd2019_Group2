@@ -31,7 +31,7 @@ private:
 public:
 	PhysicsBody* physicsBodyChar;
 	bool stateHeal;
-	int max_health = 200;
+	int max_health = 1000;
 	int m_health;
 	int m_CurrentFace;
 	int m_CurrentState;

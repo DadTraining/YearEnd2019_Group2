@@ -5,13 +5,13 @@ int Player::Level = 1;
 int Player::Exp = 0;
 int Player::MaxExp;
 int Player::m_CurrentStone;
-bool Player::haveSword = false;
-bool Player::haveSwordFire = false;
-bool Player::haveSwordIce = false;
-bool Player::haveFireStone = false;
-bool Player::haveIceStone = false;
-bool Player::haveFirePet = false;
-bool Player::haveIceShield = false;
+bool Player::haveSword = true;
+bool Player::haveSwordFire = true;
+bool Player::haveSwordIce = true;
+bool Player::haveFireStone = true;
+bool Player::haveIceStone = true;
+bool Player::haveFirePet = true;
+bool Player::haveIceShield = true;
 int Player::CountCreep = 0;
 Player::Player(cocos2d::Scene* scene)
 {
@@ -47,14 +47,11 @@ void Player::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto def = UserDefault::sharedUserDefault();
-	Level = def->getIntegerForKey("Level",1);
-
 	edgeNode = Node::create();
 	sceneGame->addChild(edgeNode);
 	m_CurrentStone = 0;
 
-	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
+	this->m_sprite = ResourceManager::GetInstance()->GetSpriteById(1);
 	this->m_sprite->setPosition(50, 50);
 	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
@@ -106,8 +103,8 @@ void Player::updateLevel()
 	MaxExp += Level * 50;
 	AttackSpeed = 1.0f + (Level - 1) * 0.05;
 	MoveSpeed = 1.0f;
-	MaxHealth = Level * 300;
-	m_dame = Level * 30;
+	MaxHealth = Level * 400;
+	m_dame = Level * 15;
 	Armor = Level * 5;
 }
 void Player::SetIdle(int state) {

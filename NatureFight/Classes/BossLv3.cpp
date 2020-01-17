@@ -73,7 +73,7 @@ void BossLv3::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	maxHealth = 300;
+	maxHealth = 600;
 	m_health = maxHealth;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man3/Ice_Dino/Idle/0_DinoIdle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
