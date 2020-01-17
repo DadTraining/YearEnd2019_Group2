@@ -13,12 +13,9 @@
 #define CREEPATTACK 111
 #define CREEPTAG 11
 #define BOSSATTACK 112
-#define SKILLICE 1
-#define SKILLFIRE 2
-#define NORMALSKILL 0
 #define AILV1 13
 #define BOSSLV1 14
-#define ATTACKTAG 8
+#define ATTACKSPEED 1
 USING_NS_CC;
 class BossLv1 :
 	public ObjectParent
@@ -30,11 +27,13 @@ public:
 	static const int MAX_BULLET = 10;
 private:
 	int tagAI;
-
+	float speedAtt;
+	bool stateIce;
 public:
+	void resetStateIce();
 	PhysicsBody* physicsBodyChar;
-	int maxHealth = 100;
-	int m_health = 100;
+	int maxHealth = 300;
+	int m_health = 300;
 	Node* edgeNode;
 	int m_CurrentFace;
 	int m_CurrentState;

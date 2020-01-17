@@ -38,7 +38,6 @@ public:
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
-	AiLv1* isAI;
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 

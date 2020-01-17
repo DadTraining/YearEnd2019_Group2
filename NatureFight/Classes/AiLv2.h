@@ -12,7 +12,8 @@
 #define CREEPATTACK 111
 #define CREEPTAG 11
 #define CREEPATTACK 111
-#define AILV2 300
+#define AILV2 3000
+#define ATTACKSPEED 1
 USING_NS_CC;
 class AiLv2 :
 	public ObjectParent
@@ -32,10 +33,13 @@ public:
 	int m_CurrentFace;
 	int m_CurrentState;
 	float AttackSpeed;
+	float speedAtt;
+	bool stateIce;
 
 public:
 	AiLv2(cocos2d::Scene* scene);
 	void Update(float deltaTime);
+	void resetStateIce();
 	void Init();
 	void Collision(Player* player, float deltaTime);
 	float Distance(Vec2 A, Vec2 C);

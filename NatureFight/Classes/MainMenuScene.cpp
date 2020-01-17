@@ -33,10 +33,11 @@ bool MainMenuScene::init()
 		auto audio = SimpleAudioEngine::getInstance();
 		audio->playBackgroundMusic("Sounds/melodyloops.mp3", true);
 	}
-	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Polo Bubble.ttf", 80);
-	titlelb->setPosition(Vec2(visibleSize.width/2,visibleSize.height-visibleSize.height/4));
-	titlelb->setColor(Color3B::RED);
-	addChild(titlelb,1);
+	auto title = Sprite::create("settings/title.png");
+	title->setScale(1.5);
+	title->setAnchorPoint(Vec2(0.5, 0.5));
+	title->setPosition(Vec2(visibleSize.width / 2, visibleSize.height*0.7));
+	addChild(title, 1);
 	auto bgimg = Sprite::create("settings/bgmain.jpg");
 	bgimg->setScale(0.80);
 	bgimg->setAnchorPoint(Vec2(0.5, 0.5));

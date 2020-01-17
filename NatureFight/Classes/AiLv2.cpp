@@ -1,6 +1,9 @@
 #include "AiLv2.h"
 #include <vector> 
 #include <ResourceManager.h>
+#include<GameSetting.h>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 AiLv2::AiLv2(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -21,8 +24,8 @@ void AiLv2::Update(float deltaTime)
 			m_sprite->setPosition(10, 10);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
-			edgeNode->setPosition(Vec2(1000, 1000));
-			physicsBodyChar->setEnabled(true);
+			edgeNode->setVisible(false);
+			physicsBodyChar->setEnabled(false);
 			this->m_sprite->setVisible(false);
 			loadingbar->setVisible(false);
 		}
@@ -36,22 +39,37 @@ void AiLv2::Update(float deltaTime)
 			checkAttackAI = false;
 		}
 		if (timeAttackAI > deltaTime) {
-			edgeNode->setPosition(Vec2(1000, 1000));
+			edgeNode->setPosition(Vec2(3000, 3000));
 		}
 		SetFace();
 	}
-	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
+	if (!(m_sprite->getColor() == ccc3(255, 255, 255)) && !(m_sprite->getColor() == ccc3(0, 0, 255))) {
 		timeColor += deltaTime;
 		if (timeColor >= 1) {
 			m_sprite->setColor(ccc3(255, 255, 255));
 			timeColor = 0;
 		}
 	}
+	else if (m_sprite->getColor() == ccc3(0, 0, 255)) {
+		timeColor += deltaTime;
+		if (timeColor >= 2.5) {
+			m_sprite->setColor(ccc3(255, 255, 255));
+			timeColor = 0;
+			resetStateIce();
+		}
+	}
+	if (stateIce) {
+		AttackSpeed = ATTACKSPEED - 0.5;
+		speedAtt = ATTACKSPEED + 1;//time delay Attack
+	}
 }
 
 
 void AiLv2::Init()
 {
+	speedAtt = 1;
+	//m_health = 30;
+	stateIce = false;
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//m_health = 30;
@@ -91,6 +109,7 @@ void AiLv2::Init()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(AiLv2::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
+	m_dame = 30;
 }
 
 
@@ -100,14 +119,14 @@ void AiLv2::Collision(Player* player, float deltaTime)
 	Update(deltaTime);
 	timem += deltaTime;
 	if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 50) {
-		if (timem > 0.3f) {
+		if (timem > speedAtt) {
 			SetState(AiLv2::ACTION_ATTACK);
 			this->physicsBodyChar->setVelocity(Vec2(0, 0));
 			timem = 0;
 		}
 	}
-	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
-		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 150 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
+		this->physicsBodyChar->setVelocity((player->m_sprite->getPosition() - this->m_sprite->getPosition())*AttackSpeed);
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }
 
@@ -133,6 +152,12 @@ void AiLv2::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv2::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isSound();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("Sounds/bang.wav", false);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
@@ -193,6 +218,7 @@ void AiLv2::SetHurtAi(int state, int skill) {
 		}
 		else if (skill == ATTACK_ICE) {
 			m_sprite->setColor(ccc3(0, 0, 255));
+			stateIce = true;
 		}
 		else if (skill == ATTACK_FIRE) {
 			m_sprite->setColor(ccc3(255, 0, 0));
@@ -304,10 +330,11 @@ bool AiLv2::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
-		m_health -= 10;
+		m_health -= player->m_dame;
 		if (player->edgeNode->getTag() == NORMALSKILL)	SetState(ACTION_HURT);
 		else if (player->edgeNode->getTag() == ATTACK_ICE) SetState(ACTION_HURT_ICE);
 		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetState(ACTION_HURT_FIRE);
+		if (m_health < 0) m_health = 0;
 		if (m_health == 0) {
 			m_sprite->runAction(DieRight());
 			physicsBodyChar->setEnabled(false);
@@ -329,7 +356,7 @@ bool AiLv2::onContactBegin(const PhysicsContact& contact)
 			float s = Distance(Vec2(x, y), Vec2(0, 0));
 			if ((int)temp.x <= 10 && (int)temp.y <= 10) {
 				SetState(ACTION_HURT_FIRE);
-				m_health -= 10;
+				m_health -= player->m_dame;
 				player->dragon->m_dragon->runAction(MoveBy::create(s / 70, Vec2(x, y)));
 				player->onDragonAttack = false;
 				player->dragon->SetFace(Vec2(x, y) + player->dragon->m_dragon->getPosition());
@@ -346,7 +373,7 @@ bool AiLv2::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == CREEPATTACK)
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == CREEPATTACK))
 	{
-		player->m_health -= 10;
+		player->m_health -= m_dame;
 		player->m_sprite->setColor(ccc3(255, 0, 0));
 	}
 
@@ -356,4 +383,9 @@ bool AiLv2::onContactBegin(const PhysicsContact& contact)
 float AiLv2::setHealth()
 {
 	return m_health;
+}
+void AiLv2::resetStateIce() {
+	stateIce = false;
+	AttackSpeed = ATTACKSPEED;
+	speedAtt = ATTACKSPEED;//time delay Attack
 }

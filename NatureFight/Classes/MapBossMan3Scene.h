@@ -21,6 +21,8 @@ USING_NS_CC;
 #define GATEtag 400
 class MapBossMan3Scene : public cocos2d::Scene
 {
+private:
+	bool gate;
 public:
 	Player* mainPlayer;
 	TMXTiledMap* map,*MapBackGround;
@@ -36,6 +38,7 @@ public:
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
+	void UpdateDragon();
     virtual bool init();
     void update(float deltaTime);
     CREATE_FUNC(MapBossMan3Scene);

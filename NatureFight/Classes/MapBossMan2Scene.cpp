@@ -37,7 +37,7 @@ bool MapBossMan2Scene::init()
 	listenerKey->onKeyPressed = CC_CALLBACK_2(MapBossMan2Scene::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc
@@ -71,6 +71,7 @@ void MapBossMan2Scene::update(float deltaTime)
 	{
 		menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Stone/DaLua.png");
 		alreadyItem = true;
+		menuLayer->item->fire->setVisible(true);
 		mainPlayer->haveFireStone = true;
 		gate = true;
 	}
