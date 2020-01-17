@@ -105,7 +105,7 @@ void MapBossMan3Scene::addMap()
 	MapBackGround = TMXTiledMap::create("mapBossLv1/BackGround.tmx");
 	MapBackGround->setScale(1.6);
 	MapBackGround->setAnchorPoint(Vec2(0.2 , 0.2));
-	addChild(MapBackGround);
+	addChild(MapBackGround,-10);
 	
 
 }

@@ -126,7 +126,7 @@ void MapTutorialScene::addMap()
 	/*mPhysicsLayer = map->getLayer("item_3");
 	mPhysicsLayer->setVisible(true);*/
 	addChild(map,20);
-	addChild(MapBackGround);
+	addChild(MapBackGround,-10);
 	
 
 }

@@ -109,7 +109,7 @@ void Map_2::addMap()
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");
 	addChild(map,20);
-	addChild(MapBackGround);
+	addChild(MapBackGround,-10);
 	
 
 }

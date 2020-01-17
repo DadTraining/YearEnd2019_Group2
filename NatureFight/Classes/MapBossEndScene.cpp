@@ -95,7 +95,7 @@ void MapBossEndScene::addMap()
 	addChild(map,20);
 
 	MapBackGround = TMXTiledMap::create("mapBossLv1/BackGround.tmx");
-	addChild(MapBackGround);
+	addChild(MapBackGround,-10);
 	
 
 }
