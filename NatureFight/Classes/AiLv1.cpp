@@ -107,7 +107,7 @@ void AiLv1::Collision(Player* player, float deltaTime)
 			timem = 0;
 		}
 	}
-	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 100 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
+	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 150 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 50)
 		this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 }
@@ -134,7 +134,12 @@ void AiLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv1::SetAttack(int state) {
-	
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("Sounds/chem.wav", false);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:

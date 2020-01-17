@@ -62,4 +62,4 @@ public:
 	void createCreepScene();
 	bool isCreepDie();
 };
-#endif // __Map2_SCENE_H__
+#endif // __Map3_SCENE_H__

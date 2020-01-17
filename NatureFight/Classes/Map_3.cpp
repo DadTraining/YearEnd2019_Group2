@@ -37,7 +37,7 @@ bool Map_3::init()
 	listenerKey->onKeyPressed = CC_CALLBACK_2(Map_3::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc
@@ -135,6 +135,7 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 			if (x3 == 3) {
 				menuLayer->setQuestSolo(2);
 				npcFireWilth->CollisionFireWilth();
+				mainPlayer->CountCreep = 0;
 				x3 += 1;
 			}
 			if (x3 == 4) {

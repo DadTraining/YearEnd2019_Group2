@@ -184,6 +184,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 				mainPlayer->CountCreep = 0;
 				npcYolo->Collision1();
 				menuLayer->setQuestYolo(1);
+				gate = true;
 				x += 1;
 			}
 			if (x == 2) {
@@ -199,7 +200,12 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			if(gate==true) Director::getInstance()->replaceScene(Map_2::createScene());
+			CCLOG("LoadMap2 1 ******************");
+			if (gate == true) {
+				Director::getInstance()->replaceScene(Map_2::createScene()); 
+			CCLOG("LoadMap2 2 ******************");
+			}
+		
 		}
 		
 		

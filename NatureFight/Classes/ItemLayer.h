@@ -3,6 +3,7 @@
 
 #include "ui/CocosGUI.h"
 #include "cocos2d.h"
+#include "ResourceManager.h"
 
 class ItemLayer : public cocos2d::Layer
 {
@@ -21,14 +22,17 @@ public:
 	void showIce();
 	void showToxic();
 	void showWood();
+	void AnimatePow();
 
 
 	cocos2d::ui::Button* icon_fire;
 	cocos2d::ui::Button* icon_ice;
+	cocos2d::ui::Button* icon_fire_ice;
+	Sprite* icon_power_bt;
 
 	cocos2d::ui::CheckBox* Ice;
 	cocos2d::ui::CheckBox* fire;
-	cocos2d::ui::Button* icon_power;
+	cocos2d::ui::LoadingBar* icon_power;
 private:
 	cocos2d::ui::LoadingBar* load;
 	cocos2d::ui::Button* item_blood;

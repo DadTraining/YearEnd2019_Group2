@@ -158,7 +158,7 @@ void Npclv1::CollisionIce()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh \n 10 con goblin  \n de nhan skill ice  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n 15 con quai  \n trong map  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);

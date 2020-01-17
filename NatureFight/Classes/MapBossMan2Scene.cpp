@@ -37,7 +37,7 @@ bool MapBossMan2Scene::init()
 	listenerKey->onKeyPressed = CC_CALLBACK_2(MapBossMan2Scene::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc

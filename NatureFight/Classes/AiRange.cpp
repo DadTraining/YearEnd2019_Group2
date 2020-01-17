@@ -28,6 +28,7 @@ void AiRange::Update(float deltaTime)
 			m_sprite->setPosition(-100, -100);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
+			
 			physicsBodyChar->setEnabled(true);
 		}
 	}

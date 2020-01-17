@@ -94,7 +94,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    //director->setDisplayStats(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
@@ -118,9 +118,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	//auto scene = MapTutorialScene::createScene();
 	//auto scene = MapBossMan2Scene::createScene();
 	//	auto scene = MapBossMan3Scene::createScene();
-	//auto scene = MapBossEndScene::createScene();
-     auto scene = Map_3::createScene();
-//		auto scene = LoadingScene::createScene();
+//	auto scene = MapBossEndScene::createScene();
+//auto scene = Map_2::createScene();
+		auto scene = LoadingScene::createScene();
     // run
     director->runWithScene(scene);
 

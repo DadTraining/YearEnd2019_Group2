@@ -1,6 +1,9 @@
 #include "AiLv2.h"
 #include <vector> 
 #include <ResourceManager.h>
+#include <GameSetting.h>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 AiLv2::AiLv2(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -133,6 +136,12 @@ void AiLv2::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void AiLv2::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isMusic();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("Sounds/chem.wav", false);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:

@@ -1,6 +1,9 @@
 #include "BossLv1.h"
 #include <vector> 
 #include <ResourceManager.h>
+#include<GameSetting.h>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 BossLv1::BossLv1(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -144,6 +147,12 @@ void BossLv1::Collision(Player* player, float deltaTime)
 					for (int i = 0; i < MAX_BULLET; i++)
 					{
 						if (!mBooms[i]->isAlive()) {
+							auto turn = GameSetting::getInstance()->isMusic();
+							if (turn == true)
+							{
+								auto audio = SimpleAudioEngine::getInstance();
+								audio->playEffect("Sounds/bom.wav", false);
+							}
 							mBooms[i]->setAlive(true);
 							mBooms[i]->setPosition(this->m_sprite->getPosition());
 							mBooms[i]->getPhysicBody()->setVelocity((player->m_sprite->getPosition() - mBooms[i]->getPosition()) * 2);
@@ -212,6 +221,12 @@ void BossLv1::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void BossLv1::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isSound();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("Sounds/chem.wav", false);
+	}
 	if (!stateAngry) {
 		switch (m_CurrentFace)
 		{
