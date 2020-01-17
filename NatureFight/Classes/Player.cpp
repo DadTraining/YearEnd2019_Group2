@@ -31,6 +31,7 @@ void Player::Update(float deltaTime)
 			timeColorPlayer = 0;
 		}
 	}
+	if (onAngry) particlePow->setPosition(m_sprite->getPosition());
 }
 
 void Player::Init()
@@ -38,13 +39,11 @@ void Player::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	updateLevel();
-	m_health = MaxHealth;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(50, 50);
 	this->m_sprite->setScale(1.5);
 	this->sceneGame->addChild(this->m_sprite);
-	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize() / 2);
+	physicsBody = PhysicsBody::createBox(this->m_sprite->getContentSize() / 3);
 	//physicsBody->setDynamic(false);
 	physicsBody->setRotationEnable(false);
 	physicsBody->setCollisionBitmask(Model::BITMASK_PLAYER);
@@ -56,13 +55,15 @@ void Player::Init()
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
 	m_CurrentSkill = SKILL_DEFAULT;
+	updateLevel();
+	m_health = MaxHealth;
 
 	edgeNode = Node::create();
 	sceneGame->addChild(edgeNode);
 
 	particleMove = ParticleSystemQuad::create("Particles/move_fire.plist");
 	SetParticleMove();
-
+	ParticlePow();
 	dragon = new DragonSkill(sceneGame);
 
 }
@@ -73,8 +74,22 @@ void Player::Collision()
 
 void Player::updateLevel()
 {
-	if(Level==2) ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
-	if(Level==3) ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+	if (Level == 2) {
+		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
+		particleSystem->setPosition(m_sprite->getPosition());
+		particleSystem->setScale(0.7f);
+		sceneGame->addChild(particleSystem);
+		ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
+		//SetState(ACTION_ATTACK);
+	}
+	if(Level==3) {
+		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
+		particleSystem->setPosition(m_sprite->getPosition());
+		particleSystem->setScale(0.7f);
+		sceneGame->addChild(particleSystem);
+		ResourceManager::GetInstance()->Init("DataPlayerLv3.bin");
+		SetState(ACTION_ATTACK);
+	}
 	MaxExp += Level * 50;
 	AttackSpeed = 1.0f + (Level - 1) * 0.2;
 	MoveSpeed = 1.0f;
@@ -156,37 +171,46 @@ void Player::SetAttack(int state) {
 	case FACE_LEFT:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
+			if(onAngry) m_sprite->runAction(AttackRightAngry());
+			else m_sprite->runAction(AttackRight());
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
+			
+			if(onAngry) m_sprite->runAction(AttackRightAngry());
+			else m_sprite->runAction(AttackRight());
 		}
 		break;
 	case FACE_RIGHT:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackRight());
+			if (onAngry) m_sprite->runAction(AttackRightAngry());
+			else m_sprite->runAction(AttackRight());
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackRight());
+			if (onAngry) m_sprite->runAction(AttackRightAngry());
+			else m_sprite->runAction(AttackRight());
 		}
 		break;
 	case FACE_UP:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackUp());
+			if (onAngry) m_sprite->runAction(AttackUpAngry());
+			else m_sprite->runAction(AttackUp());
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackUp());
+			if (onAngry) m_sprite->runAction(AttackUpAngry());
+			else m_sprite->runAction(AttackUp());
 		}
 		break;
 	case FACE_DOWN:
 		if (state != m_CurrentState) {
 			m_sprite->stopAllActions();
-			m_sprite->runAction(AttackDown());
+			if (onAngry) m_sprite->runAction(AttackDownAngry());
+			else m_sprite->runAction(AttackDown());
 		}
 		else if (m_sprite->getNumberOfRunningActions() == 0) {
-			m_sprite->runAction(AttackDown());
+			if (onAngry) m_sprite->runAction(AttackDownAngry());
+			else m_sprite->runAction(AttackDown());
 		}
 		break;
 	}
@@ -235,6 +259,8 @@ void Player::SetSkill()
 		onShield = true;
 		Armor += Level * 30;
 		break;
+	case SKILL_FIRE_ICE:
+		SetSkillFireIce();
 	default:
 		SetSkillDefault();
 		break;
@@ -254,13 +280,22 @@ void Player::SetSkillFire()
 	particleSystem->setPosition(edgeNode->getPosition());
 	sceneGame->addChild(particleSystem);
 }
-void Player::SetSkillIce2()
+
+void Player::SetSkillFireIce()
 {
-	auto particleSystem = ParticleAttack("Particles/skill_fire.plist");
-	particleSystem->setPosition(m_sprite->getPosition());
-	particleSystem->setDuration(ParticleSystemQuad::DURATION_INFINITY);
+	if (edgeNode->getTag() != ATTACK_FIRE_ICE) {
+		auto edgeBody = PhysicsBody::createEdgeBox(Size(350, 350));
+		edgeBody->setContactTestBitmask(Model::BITMASK_PLAYER);
+		edgeBody->setCollisionBitmask(false);
+		edgeNode->setPhysicsBody(edgeBody);
+		edgeNode->setPosition(m_sprite->getPosition());
+		edgeNode->setTag(ATTACK_FIRE_ICE);
+	}
+	auto particleSystem = ParticleSystemQuad::create("Particles/skill_fire_ice.plist");
+	particleSystem->setPosition(edgeNode->getPosition());
 	sceneGame->addChild(particleSystem);
 }
+
 void Player::SetSkillIce()
 {
  	if (edgeNode->getTag() != ATTACK_ICE) {
@@ -305,11 +340,9 @@ void Player::SetSkillDefault()
 		edgeNode->setPhysicsBody(edgeBody);
 		edgeNode->setTag(NORMALSKILL);
 	}
-	if (Level >= 2) {
-		auto particleSystem = ParticleAttack("Particles/PlayerAttack.plist");
-		particleSystem->setPosition(edgeNode->getPosition());
-		sceneGame->addChild(particleSystem);
-	}
+	auto particleSystem = ParticleAttack("Particles/PlayerAttack.plist");
+	particleSystem->setPosition(edgeNode->getPosition());
+	sceneGame->addChild(particleSystem);
 }
 
 void Player::UseStone(int stone)
@@ -518,7 +551,7 @@ void Player::SetParticleMove() {
 		name = "Particles/move_ice.plist";
 		break;
 	case STONE_FIRE_ICE:
-		name = "Particles/move_fire_ice.plist";
+		name = "Particles/moveee.plist";
 		break;
 	default:
 		name = "Particles/move_fire.plist";
@@ -528,21 +561,27 @@ void Player::SetParticleMove() {
 	particleMove = ParticleSystemQuad::create(name);
 	particleMove->setScale(0.3f);
 	particleMove->setSpeed(100);
+	if(m_CurrentStone == STONE_FIRE_ICE) {
+		particleMove->setSpeed(0);
+		particleMove->setScale(0.2f);
+	}
 	particleMove->setAngle(90);
 	particleMove->setPosition(m_sprite->getPosition()-Vec2(0,20));
 	particleMove->setDuration(ParticleSystem::DURATION_INFINITY);
-	sceneGame->addChild(particleMove);
+	sceneGame->addChild(particleMove,-1);
 }
-
+int temp = 0;
 void Player::CheckShield(float deltaTime)
 {
 	if (onShield) {
-		timeShield += deltaTime * 2;
-		if ((int)timeShield % 2 == 0) {
+		timeShield += deltaTime*2;
+		if ((int)timeShield % 2 == 0 && (int)timeShield != temp) {
 			m_health += Level * 50;
-			auto particleSystem = ParticleAttack("Particles/up_heal.plist");
+			auto particleSystem = ParticleSystemQuad::create("Particles/up_heal.plist");
+			particleSystem->setScale(0.3f);
 			particleSystem->setPosition(m_sprite->getPosition());
 			sceneGame->addChild(particleSystem);
+			temp = (int)timeShield;
 		}
 		if (timeShield >= 10) {
 			timeShield = 0;
@@ -578,4 +617,13 @@ void Player::CheckAttackAndSkill(float deltaTime)
 	if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
 		edgeNode->setPosition(Vec2(1000, 1000));
 	}
+	if (timeAttack > 0.4 && m_CurrentSkill == SKILL_FIRE_ICE) {
+		edgeNode->setPosition(Vec2(1000, 1000));
+	}
+}
+void Player::ParticlePow() {
+	particlePow = ParticleSystemQuad::create("Particles/power.plist");
+	particlePow->setScale(0.3f);
+	particlePow->setVisible(false);
+	sceneGame->addChild(particlePow, -1);
 }

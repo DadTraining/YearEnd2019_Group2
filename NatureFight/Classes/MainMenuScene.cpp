@@ -31,7 +31,7 @@ bool MainMenuScene::init()
 	if (turn == true)
 	{
 		auto audio = SimpleAudioEngine::getInstance();
-		audio->playBackgroundMusic("sounds/melodyloops.mp3", true);
+		audio->playBackgroundMusic("Sounds/melodyloops.mp3", true);
 	}
 	auto titlelb = Label::createWithTTF("Nature Fight", "fonts/Polo Bubble.ttf", 80);
 	titlelb->setPosition(Vec2(visibleSize.width/2,visibleSize.height-visibleSize.height/4));
@@ -52,7 +52,7 @@ bool MainMenuScene::init()
 		{
 			auto audio = SimpleAudioEngine::getInstance();
 			//log("asd");
-			audio->playEffect("sounds/212.mp3", false);
+			audio->playEffect("Sounds/212.mp3", false);
 			log("2");
 		}
 		if (type == ui::Widget::TouchEventType::ENDED) {
@@ -73,7 +73,7 @@ bool MainMenuScene::init()
 		{
 			auto audio = SimpleAudioEngine::getInstance();
 			//log("asd");
-			audio->playEffect("sounds/212.mp3", false);
+			audio->playEffect("Sounds/212.mp3", false);
 			log("2");
 		}
 		if (type == ui::Widget::TouchEventType::ENDED) {

@@ -73,7 +73,8 @@ void BossLv3::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	m_health = 1000;
+	maxHealth = 300;
+	m_health = maxHealth;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man3/Ice_Dino/Idle/0_DinoIdle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
@@ -95,7 +96,7 @@ void BossLv3::Init()
 	//loaddinghealth
 	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
 	loadingbar->setScale(0.2);
-	loadingbar->setPercent(100);
+	loadingbar->setPercent(maxHealth);
 	this->sceneGame->addChild(loadingbar, 1);
 	load = ui::LoadingBar::create("progress.png");
 	load->setScale(0.21);
@@ -385,5 +386,5 @@ void BossLv3::bulletHasCollision()
 }
 float BossLv3::setHealth()
 {
-	return m_health;
+	return (m_health*100/maxHealth);
 }

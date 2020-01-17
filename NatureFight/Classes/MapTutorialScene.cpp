@@ -1,7 +1,6 @@
 #include "MapTutorialScene.h"
 
 using namespace std;
-float times = 0;
 int x = 1;//nhan
 
 
@@ -19,7 +18,7 @@ bool MapTutorialScene::init()
     {
         return false;
     }
-	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	gate = true;
 	CCLOG("LoadMapTutorial 1******************");
 	schedule(schedule_selector(MapTutorialScene::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -49,7 +48,7 @@ bool MapTutorialScene::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	CCLOG("LoadMapTutorial 5******************");
-	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
 	
 	// va cham npc
@@ -66,6 +65,8 @@ bool MapTutorialScene::init()
 	//boss = new BossLv1(this);
 	//boss->m_sprite->setPosition(mainPlayer->m_sprite->getPosition()-Vec2(100,100));
 	
+	createMoveScene();
+
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
 	CCLOG("LoadMapTutorial 8******************");
@@ -98,6 +99,15 @@ void MapTutorialScene::update(float deltaTime)
 		
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
+	if (isCreepDie() == true)
+	{
+		if (times >= 4) {
+			ai.clear();
+			createCreepScene();
+		}
+
+	}
+	
 
 }
 bool MapTutorialScene::onTouchBegan(Touch* touch, Event* event)
@@ -118,11 +128,13 @@ void MapTutorialScene::addMap()
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setPosition(Vec2(0, 0));
 	MapBackGround = TMXTiledMap::create("Map1/BackGround2.tmx");
+	MapBackGround->setScale(1.6);
+	MapBackGround->setAnchorPoint(Vec2(0.2,0.2));
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");
-	mPhysicsLayer = map->getLayer("item_3");
-	mPhysicsLayer->setVisible(true);
+	/*mPhysicsLayer = map->getLayer("item_3");
+	mPhysicsLayer->setVisible(true);*/
 	addChild(map,20);
 	addChild(MapBackGround);
 	
@@ -155,33 +167,39 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 			if (x == 3) {
 				menuLayer->setQuestSolo(2);
 				npcsolo->Collision();
+				mainPlayer->CountCreep = 0;
 				x += 1;
 			}
 			if (x == 4) {
 				if (mainPlayer->CountCreep >= 6) {
-					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
-					mainPlayer->CountCreep = 0;
-					menuLayer->getIcon_Ice()->setEnabled(true);
+					mainPlayer->haveIceStone = true;
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Stone/DaBang.png");
+					gate = true;
 				}
 			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
 		{
 			if (x == 1) {
+				mainPlayer->CountCreep = 0;
 				npcYolo->Collision1();
 				menuLayer->setQuestYolo(1);
-				mainPlayer->CountCreep = 0;
 				x += 1;
 			}
 			if (x == 2) {
 				if (mainPlayer->CountCreep >= 3) {
-					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition());
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Sword.png");
 					menuLayer->setD(4);
 					mainPlayer->CountCreep = 0;
+					mainPlayer->haveSword = true;
 					x += 1;
 				}
 			}
 
+		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
+		{
+			if(gate==true) Director::getInstance()->replaceScene(Map_2::createScene());
 		}
 		
 		
@@ -279,6 +297,7 @@ void MapTutorialScene::createPhysicMap()
 			CCLOG("LoadMapTutorial 316******************");
 			mainPlayer->m_sprite->setPosition(Vec2(posX, posY));
 			CCLOG("LoadMapTutorial 317******************");
+
 		}
 		if (type == 3)
 		{
@@ -336,6 +355,71 @@ void MapTutorialScene::UpdateDragon()
 				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
 				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
 			}
+		}
+	}
+}
+cocos2d::ParticleSystemQuad* MapTutorialScene::Particletele(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.6f);
+	//particleSystem->setDuration(10.0f);
+	return particleSystem;
+}
+
+bool MapTutorialScene::isCreepDie()
+{
+	for (int i = 0; i < ai.size(); i++)
+	{
+		if (ai[i]->m_sprite->isVisible() == true) return false;
+	}
+	return true;
+}
+
+void MapTutorialScene::createMoveScene()
+{
+	auto objects1 = mObjectGroup1->getObjects();
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		if (object1.asValueMap().at("type").asInt() == 5)
+		{
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+
+			auto physics = PhysicsBody::createBox(particleSystem->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 0));
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			particleSystem->setTag(GATEtag);
+			particleSystem->setPhysicsBody(physics);
+
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
+		}
+	}
+}
+void MapTutorialScene::createCreepScene()
+{
+	auto objects1 = mObjectGroup1->getObjects();
+	for (int i = 0; i < objects1.size(); i++)
+	{
+		auto object1 = objects1.at(i);
+		auto properties = object1.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		if (object1.asValueMap().at("type").asInt() == 1)
+		{
+				AiLv1* ailv = new AiLv1(this);
+				ailv->m_sprite->setTag(AILV1 + i);
+				ailv->m_sprite->setPosition(Vec2(posX, posY));
+				ai.push_back(ailv);
+			
 		}
 	}
 }

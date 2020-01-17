@@ -23,8 +23,10 @@ bool MenuLayer::init() {
 	}
 	createButtonLayer();
 	createUpLevelLayer();
+
 	createSkillFire();
 	createSkillIce();
+	createSkillFireIce();
 
 	createFlood();
 
@@ -43,12 +45,14 @@ bool MenuLayer::init() {
 	return true;
 }
 float timeCount = 0, timeSkillFire = 0, timeSkillFire2 = 0, timeSkillIce = 0, timeSkillIce2 = 0;
+float timePower = 10, before = 0;
 void MenuLayer::update(float deltaTime) {
 
 	timeSkillFire += deltaTime;
 	timeSkillFire2 += deltaTime;
 	timeSkillIce += deltaTime;
 	timeSkillIce2 += deltaTime;
+	timePower += deltaTime;
 
 	mainPlayer->physicsBody->setVelocity(leftJoystick->getVelocity() * 200);
 	mainPlayer->SetFace(leftJoystick->getVelocity());
@@ -59,6 +63,20 @@ void MenuLayer::update(float deltaTime) {
 
 	loadhelth->setPercent(mainPlayer->m_health*100 / mainPlayer->MaxHealth);
 	loaddame->setPercent(mainPlayer->Exp*100 / mainPlayer->MaxExp);
+
+	if (timePower >= 10 && mainPlayer->particlePow->isVisible()) {
+		item->icon_power_bt->stopAllActions();
+		mainPlayer->particlePow->setVisible(false);
+		mainPlayer->onAngry = false;
+		mainPlayer->AttackSpeed -= 0.3f;
+		mainPlayer->m_dame -= 10;
+	}
+	if (item->icon_power->getNumberOfRunningActions() < 1 && item->icon_power->getPercent() >= 100) item->icon_power_bt->setVisible(true);
+	else {
+		if(mainPlayer->m_health < before)
+		item->icon_power->setPercent((before - mainPlayer->m_health) + item->icon_power->getPercent());
+		before = mainPlayer->m_health;
+	}
 }
 
 cocos2d::Sprite* mPauseLayer;
@@ -84,23 +102,32 @@ void MenuLayer::createButtonLayer()
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_fire->setVisible(true);
 						icon_fire2->setVisible(true);
-						if (mainPlayer->haveSwordFire) icon_fire->setVisible(true);
-						if (mainPlayer->haveFirePet) icon_fire2->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
+						if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
 					}
-					icon_ice->setVisible(false);
-					icon_ice2->setVisible(false);
+					else {
+						icon_ice->setVisible(false);
+						icon_ice2->setVisible(false);
+					}
+					icon_fire_ice->setVisible(false);
 					mainPlayer->m_CurrentStone -= Player::STONE_ICE;
 				}
 				else {
 					mainPlayer->m_CurrentStone += Player::STONE_ICE;
 					icon_fire->setVisible(false);
 					icon_fire2->setVisible(false);
-					icon_ice->setVisible(true);
-					icon_ice2->setVisible(true);
-					if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
-					if (mainPlayer->haveIceShield) icon_ice2->setTouchEnabled(true);
-					mainPlayer->SetParticleMove();
+
+					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
+						icon_fire_ice->setVisible(true);
+					}
+					else {
+						icon_ice->setVisible(true);
+						icon_ice2->setVisible(true);
+						if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
+						if (mainPlayer->haveIceShield) icon_ice2->setTouchEnabled(true);
+					}
 				}
+				mainPlayer->SetParticleMove();
 			}
 			});
 
@@ -112,23 +139,32 @@ void MenuLayer::createButtonLayer()
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_ice->setVisible(true);
 						icon_ice2->setVisible(true);
-						if (mainPlayer->haveSwordFire) icon_ice->setVisible(true);
-						if (mainPlayer->haveFirePet) icon_ice2->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_ice->setTouchEnabled(true);
+						if (mainPlayer->haveFirePet) icon_ice2->setTouchEnabled(true);
 					}
-					icon_fire->setVisible(false);
-					icon_fire2->setVisible(false);
+					else {
+						icon_fire->setVisible(false);
+						icon_fire2->setVisible(false);
+					}
+					icon_fire_ice->setVisible(false);
 					mainPlayer->m_CurrentStone -= Player::STONE_FIRE;
 				}
 				else {
 					mainPlayer->m_CurrentStone += Player::STONE_FIRE;
 					icon_ice->setVisible(false);
 					icon_ice2->setVisible(false);
-					icon_fire->setVisible(true);
-					icon_fire2->setVisible(true);
-					if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
-					if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
-					mainPlayer->SetParticleMove();
+
+					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
+						icon_fire_ice->setVisible(true);
+					}
+					else {
+						icon_fire->setVisible(true);
+						icon_fire2->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
+						if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
+					}
 				}
+				mainPlayer->SetParticleMove();
 			}
 			});
 
@@ -136,11 +172,15 @@ void MenuLayer::createButtonLayer()
 			switch (type)
 			{
 			case ui::Widget::TouchEventType::BEGAN:
-				if (timeCount >= 10) {
-					mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
-					mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
-					timeCount = 0;
+				if (item->icon_power->getPercent()>=100) {
+					mainPlayer->onAngry = true;
+					mainPlayer->particlePow->setVisible(true);
+					mainPlayer->AttackSpeed += 0.3f;
+					mainPlayer->m_dame += 10;
+					item->icon_power->setPercent(0);
+					timePower = 0;
 				}
+			
 			}
 			});
 		//pause
@@ -343,13 +383,6 @@ void MenuLayer::createJoyStickLayer()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto particleSystem = ParticleSystemQuad::create("Particles/move2.plist");
-	particleSystem->setPosition(Vec2(origin.x + visibleSize.width / 2,
-		origin.y + visibleSize.height / 2 - 20));
-	particleSystem->setDuration(ParticleSystem::DURATION_INFINITY);
-	particleSystem->setScale(0.3f);
-	addChild(particleSystem, 10);
-
 	Rect joystickBaseDimensions;
 	joystickBaseDimensions = Rect(0, 0, 160.0f, 160.0f);
 	Point joystickBasePosition;
@@ -403,10 +436,9 @@ void MenuLayer::createSkillIce()
 	auto fin = FadeIn::create(3.0f);
 	icon_ice->setTouchEnabled(true);
 	icon_ice->runAction(fin);
-
-	icon_ice2 = ui::Button::create("Sprites/Item/skill_khienbang.png");
-	icon_ice2->setOpacity(-150);
-	icon_ice2->setRotation(-45);
+	
+	icon_ice2 = ui::Button::create("Sprites/Item/chua_skill_khienbang.png");
+	icon_ice2->setScale(2);
 	icon_ice2->setPosition(Vec2(800, 100));
 	this->addChild(icon_ice2);
 	icon_ice2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
@@ -464,9 +496,8 @@ void MenuLayer::createSkillFire() {
 	icon_fire->runAction(fin);
 	icon_fire->setTouchEnabled(true);
 
-	icon_fire2 = ui::Button::create("Sprites/Item/skill_pet.png");
-	icon_fire2->setOpacity(-150);
-	icon_fire2->setRotation(-25);
+	icon_fire2 = ui::Button::create("Sprites/Item/chua_skill_pet.png");
+	icon_fire2->setScale(2);
 	icon_fire2->setPosition(Vec2(870, 140));
 	this->addChild(icon_fire2);
 	icon_fire2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
@@ -493,6 +524,34 @@ void MenuLayer::createSkillFire() {
 
 	icon_fire->setTouchEnabled(false);
 //	icon_fire2->setTouchEnabled(false);
+}
+
+void MenuLayer::createSkillFireIce()
+{
+	icon_fire_ice = ui::Button::create("Sprites/Item/fire_ice.png");
+	icon_fire_ice->setScale(0.3);
+	icon_fire_ice->setPosition(Vec2(870, 140));
+	this->addChild(icon_fire_ice);
+	icon_fire_ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+		switch (type)
+		{
+		case ui::Widget::TouchEventType::BEGAN:
+		case ui::Widget::TouchEventType::MOVED:
+			if (timeSkillIce > 2.0f - mainPlayer->AttackSpeed) {
+				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE_ICE;
+				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
+				timeSkillIce = 0;
+			}
+			break;
+		case ui::Widget::TouchEventType::ENDED:
+			break;
+		default:
+			break;
+		}
+
+	});
+	icon_fire_ice->setVisible(false);
+	//	icon_ice2->setTouchEnabled(false);
 }
 /////////////////////////begin nhan
 
@@ -677,10 +736,12 @@ void MenuLayer::setC(int x)
 }
 
 //end nhan
-void MenuLayer::showItemSword(Vec2 a)
+
+void MenuLayer::showItemSword(Vec2 a, std::string name)
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	auto item_kiem = Sprite::create("Sprites/Item/Sword.png");
+
+	auto item_kiem = Sprite::create(name);
 	item_kiem->setPosition(a);
 	addChild(item_kiem, 80);
 	item_kiem->setScale(0.2); item_kiem->setRotation(45);

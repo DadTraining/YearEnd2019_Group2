@@ -53,6 +53,7 @@ bool Map_3::init()
 	menuLayer->getIcon_Fire()->setEnabled(true);
 	menuLayer->getIcon_Ice()->setEnabled(true);
 
+	createMoveScene();
 	return true;
 }
 
@@ -62,11 +63,10 @@ void Map_3::update(float deltaTime)
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
 	times3 += deltaTime;
-//	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
 	}
-	bosslv3->Collision(mainPlayer, deltaTime);
+	//bosslv3->Collision(mainPlayer, deltaTime);
 }
 bool Map_3::onTouchBegan(Touch* touch, Event* event)
 {
@@ -86,6 +86,8 @@ void Map_3::addMap()
 	map->setAnchorPoint(Vec2(0, 0));
 	map->setPosition(Vec2(0, 0));
 	MapBackGround = TMXTiledMap::create("map3/BackGroundMap3.tmx");
+	MapBackGround->setScale(1.6);
+	MapBackGround->setAnchorPoint(Vec2(0.2,0.2));
 	//physic map
 	mObjectGroup = map->getObjectGroup("colision");
 	mObjectGroup1 = map->getObjectGroup("event");
@@ -116,36 +118,33 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 	if (nodeA && nodeB)
 	{
-		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcSolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcSolotag)
+		if (nodeA->getTag() == playertag & nodeB->getTag() == NpcFireWilthtag || nodeB->getTag() == playertag & nodeA->getTag() == NpcFireWilthtag)
 		{
 			if (x3 == 3) {
 				menuLayer->setQuestSolo(2);
-				npcsolo->Collision();
+				npcJoe->CollisionJoe();
 				x3 += 1;
 			}
 			if (x3 == 4) {
-				if (mainPlayer->CountCreep >= 6) {
-					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
+				
 					mainPlayer->CountCreep = 0;
-				}
+					mainPlayer->haveSwordFire = true;
 			}
 		}
-		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcYolotag || nodeB->getTag() == playertag & nodeA->getTag() == NpcYolotag)
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcJoetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcJoetag)
 		{
 			if (x3 == 1) {
-				npcYolo->Collision1();
+				npcFireWilth->CollisionFireWilth();
 				menuLayer->setQuestYolo(1);
 				mainPlayer->CountCreep = 0;
 				x3 += 1;
 			}
 			if (x3 == 2) {
-				if (mainPlayer->CountCreep >= 3) {
-					menuLayer->showItemSword(npcYolo->m_sprite->getPosition());
-					menuLayer->setD(4);
-					mainPlayer->CountCreep = 0;
-					x3 += 1;
+				mainPlayer->haveIceShield = true;
+				mainPlayer->CountCreep = 0;
+				x3 += 1;
 					
-				}
+				
 			}
 
 		}
@@ -155,6 +154,10 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 			mainPlayer->SetState(Player::ACTION_HURT);
 			CCLOG("mau :%d", mainPlayer->m_health);
 			CCLOG(" ********* ");
+		}
+		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
+		{
+			Director::getInstance()->replaceScene(MapBossMan3Scene::createScene());
 		}
 	}
 	return true;
@@ -238,20 +241,21 @@ void Map_3::createPhysicMap()
 		if (type == 3)
 		{
 			//npc zolo
-			npcsolo = new Npclv1(this);
-			npcsolo->Init();
-			npcsolo->m_sprite->setTag(NpcSolotag);
-			npcsolo->m_sprite->runAction(npcsolo->Communication());
-			npcsolo->m_sprite->setPosition(Vec2(posx3, posY));
+			npcFireWilth = new Npclv1(this);
+			npcFireWilth->Init();
+			npcFireWilth->m_sprite->setTag(NpcFireWilthtag);
+			npcFireWilth->m_sprite->runAction(npcFireWilth->CommunicationNPCFireWilth());
+			npcFireWilth->m_sprite->setPosition(Vec2(posx3, posY));
 		}
 		if (type == 4)
 		{
 			//
-			npcYolo = new Npclv1(this);
-			npcYolo->Init();
-			npcYolo->m_sprite->setTag(NpcYolotag);
-			npcYolo->m_sprite->runAction(npcYolo->CommunicationNPCYolo());
-			npcYolo->m_sprite->setPosition(Vec2(posx3, posY));
+			npcJoe = new Npclv1(this);
+			npcJoe->Init();
+			npcJoe->m_sprite->setTag(NpcJoetag);
+			npcJoe->m_sprite->runAction(npcJoe->CommunicationNPCJoe());
+			npcJoe->m_sprite->setPosition(Vec2(posx3, posY));
+			ParticleRain("Particles/SnowRain.plist", Vec2(posx3-200, posY));
 		}
 		if (type == 1)
 		{
@@ -262,11 +266,62 @@ void Map_3::createPhysicMap()
 		}
 		if (type == 5)
 		{
-			bosslv3 = new BossLv3(this);
-			bosslv3->m_sprite->setPosition(Vec2(posx3, posY));
+			/*bosslv3 = new BossLv3(this);
+			bosslv3->m_sprite->setPosition(Vec2(posx3, posY));*/
 		}
 	}
 }
 
 
 //end nhan
+
+cocos2d::ParticleSystemQuad* Map_3::Particletele(std::string name)
+{
+	auto particleSystem = ParticleSystemQuad::create(name);
+	particleSystem->setScale(0.6f);
+	return particleSystem;
+}
+
+void Map_3::createMoveScene()
+{
+	auto objects = mObjectGroup->getObjects();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		auto object = objects.at(i);
+		auto properties = object.asValueMap();
+		float posX = properties.at("x").asFloat();
+		float posY = properties.at("y").asFloat();
+		int type = object.asValueMap().at("type").asInt();
+		if (object.asValueMap().at("type").asInt() == 5)
+		{
+			auto particleSystem = Particletele("Particles/partic.plist");
+			particleSystem->setPosition(Vec2(posX, posY));
+			this->addChild(particleSystem);
+
+			auto physics = PhysicsBody::createBox(particleSystem->getContentSize(), PhysicsMaterial(1.0f, 0.0f, 0));
+			physics->setDynamic(false);
+			physics->setCollisionBitmask(Model::BITMASK_GROUND);
+			physics->setContactTestBitmask(true);
+			particleSystem->setTag(GATEtag);
+			particleSystem->setPhysicsBody(physics);
+
+			auto emitter = ParticleGalaxy::create();
+			emitter->setPosition(Vec2(posX, posY));
+			emitter->setScale(0.7f);
+			this->addChild(emitter);
+		}
+	}
+}
+void Map_3::ParticleRain(std::string name,Vec2 pos)
+{
+
+	auto particleMove = ParticleSystemQuad::create(name);
+	particleMove->setScale(5.0f);
+	particleMove->setStartSize(5);
+	particleMove->setSpeed(-100);
+	particleMove->setAngle(90);
+	particleMove->setPosition(pos);
+	particleMove->setDuration(ParticleSystem::DURATION_INFINITY);
+	this->addChild(particleMove);
+
+}

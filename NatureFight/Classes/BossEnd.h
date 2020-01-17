@@ -38,7 +38,7 @@ public:
 	float AttackSpeed;
 	int radius;
 	bool stateAttackIce;
-	bool stateRain;
+	int stateRain;
 	int countSkill;
 	Bullet* mBullet;
 	Bullet* mBullets[MAX_BULLET];
@@ -90,6 +90,7 @@ public:
 	cocos2d::RepeatForever* DieDown();
 	cocos2d::ParticleSystemQuad* ParticleIce(std::string name);
 	void ParticleRain(std::string name);
+	void tonatoHasCollision(int bulletIndex);
 	~BossEnd();
 private:
 	cocos2d::Scene* sceneGame;

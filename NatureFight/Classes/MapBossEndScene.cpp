@@ -1,7 +1,6 @@
 #include "MapBossEndScene.h"
 
 using namespace std;
-float times4 = 0;
 
 
 Scene* MapBossEndScene::createScene()

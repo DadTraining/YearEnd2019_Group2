@@ -25,6 +25,8 @@ USING_NS_CC;
 #define ATTACKTAG 8
 class MapBossEndScene : public cocos2d::Scene
 {
+private:
+	float times4 = 0;
 public:
 	Player* mainPlayer;
 	Npclv1* npcsolo, *npcYolo;
@@ -36,7 +38,6 @@ public:
 
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
-
 	BossLv1* bosslv1;
 	int countCreepDie=0;
 	BossEnd* bossEnd;

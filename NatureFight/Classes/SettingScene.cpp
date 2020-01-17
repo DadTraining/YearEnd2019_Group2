@@ -36,7 +36,7 @@ bool SettingScene::init()
 	{
 		auto audio = SimpleAudioEngine::getInstance();
 		log("asd");
-		audio->playBackgroundMusic("melodyloops.mp3", true);
+		audio->playBackgroundMusic("Sounds/melodyloops.mp3", true);
 		log("2");
 	}
 
@@ -110,9 +110,9 @@ bool SettingScene::init()
 	addChild(volumlb, 2);
 
 	slvolume = ui::Slider::create();
-	slvolume->loadBarTexture("slider_bar_bg.png");
-	slvolume->loadSlidBallTextures("slider_ball_normal.png", "slider_ball_pressed.png", "slider_ball_disable.png");
-	slvolume->loadProgressBarTexture("slider_bar_pressed.png");
+	slvolume->loadBarTexture("settings/slider_bar_bg.png");
+	slvolume->loadSlidBallTextures("settings/slider_ball_normal.png", "settings/slider_ball_pressed.png", "settings/slider_ball_disable.png");
+	slvolume->loadProgressBarTexture("settings/slider_bar_pressed.png");
 	slvolume->setPercent(50);
 	slvolume->setColor(Color3B::ORANGE);
 	slvolume->setPosition(volumlb->getPosition() + Vec2(0, -30));
@@ -129,7 +129,7 @@ bool SettingScene::init()
 		slvolume->setEnabled(false);
 	}
 	addChild(slvolume, 2);
-	auto closebtn = ui::Button::create("close.png");
+	auto closebtn = ui::Button::create("settings/close.png");
 	closebtn->setPosition(bg->getPosition() + Vec2(200, 140));
 	closebtn->setScale(0.3);
 	addChild(closebtn, 3);

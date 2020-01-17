@@ -13,19 +13,21 @@
 #include<AiLv1.h>
 #include <BossLv3.h>
 #include <AiRange.h>
+#include <MapBossMan3Scene.h>
 USING_NS_CC;
 #define ATTACK 0
 #define RUN 1
 #define playertag 1000
-#define NpcSolotag 11
-#define NpcYolotag 12
+#define NpcFireWilthtag 511
+#define NpcJoetag 512
 #define AILV1 13
 #define ATTACKTAG 8
+#define GATEtag 400
 class Map_3 : public cocos2d::Scene
 {
 public:
 	Player* mainPlayer;
-	Npclv1* npcsolo, *npcYolo;
+	Npclv1* npcFireWilth , *npcJoe;
 	TMXTiledMap* map,*MapBackGround;
 	TMXLayer* mPhysicsLayer, *mPhysicsLayer1, *mPhysicsLayer2;
 	MenuLayer* menuLayer;
@@ -40,6 +42,7 @@ public:
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
+	void ParticleRain(std::string name,Vec2 pos);
     virtual bool init();
     void update(float deltaTime);
     CREATE_FUNC(Map_3);
@@ -52,5 +55,8 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
+
+	void createMoveScene();
+	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 };
 #endif // __Map2_SCENE_H__
