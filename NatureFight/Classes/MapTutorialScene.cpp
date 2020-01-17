@@ -18,7 +18,7 @@ bool MapTutorialScene::init()
     {
         return false;
     }
-	gate = false;
+	gate = true;
 	CCLOG("LoadMapTutorial 1******************");
 	schedule(schedule_selector(MapTutorialScene::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -199,7 +199,14 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			if(gate==true) Director::getInstance()->replaceScene(Map_2::createScene());
+			if (gate == true) {
+				auto def = UserDefault::sharedUserDefault();
+				def->setIntegerForKey("Level", mainPlayer->Level);
+				def->setIntegerForKey("Exp", mainPlayer->Exp);
+				def->setBoolForKey("haveSword", mainPlayer->haveSword);
+				def->setBoolForKey("haveIceStone", mainPlayer->haveIceStone);
+				Director::getInstance()->replaceScene(Map_2::createScene());
+			}
 		}
 		
 		

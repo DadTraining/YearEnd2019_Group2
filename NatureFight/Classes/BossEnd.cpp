@@ -107,14 +107,14 @@ void BossEnd::Update(float deltaTime)
 	}
 	if (m_health > 0 && m_health <= 150&&stateRain==0) {
 		stateRain = 1;
-		player->m_dame -= 5;
+		player->m_dame -= m_dame/2;
 		ParticleRain("Particles/Rain.plist");
 	}
 	if (stateRain == 1) {
 		timeHealRain += deltaTime;
 		if (timeHealRain > 4) {
 			timeHealRain = 0;
-			player->m_health -= 10;
+			player->m_health -= m_dame;
 		}
 	}
 
@@ -158,6 +158,7 @@ void BossEnd::Init()
 	contactListener->onContactBegin = CC_CALLBACK_1(BossEnd::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 	countSkill = 0;
+	m_dame = 50;
 }
 
 
@@ -178,7 +179,7 @@ void BossEnd::Collision(Player* player, float deltaTime)
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) <= radius * 6.4) {
 		//colistion here
-		player->m_health -= 20;
+		player->m_health -= m_dame;
 		player->m_sprite->setColor(ccc3(0, 0, 230));
 		CCLOG("%d", m_health);
 		this->setStateAttackIce(false);
@@ -410,13 +411,13 @@ bool BossEnd::onContactBegin(const PhysicsContact& contact)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
-			this->player->m_health -= 5;
+			this->player->m_health -= m_dame/2;
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
-			this->player->m_health -= 5;
+			this->player->m_health -= m_dame/2;
 		}
 	}
 	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_TONATO && nodeB->getTag() == playertag) ||
@@ -424,13 +425,13 @@ bool BossEnd::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_TONATO)
 		{
 			this->player->m_sprite->setColor(ccc3(0, 238, 238));
-			this->player->m_health -= 15;
+			this->player->m_health -= m_dame+10;
 			this->tonatoHasCollision(nodeA->getPhysicsBody()->getGroup());
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_TONATO)
 		{
 			this->player->m_sprite->setColor(ccc3(0, 238, 238));
-			this->player->m_health -= 15;
+			this->player->m_health -= m_dame+10;
 			this->tonatoHasCollision(nodeB->getPhysicsBody()->getGroup());
 		}
 	}

@@ -86,6 +86,7 @@ void AiRange::Init()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(AiRange::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
+	m_dame = 20;
 }
 
 
@@ -192,7 +193,7 @@ void AiRange::SetHurt(int state)
 void AiRange::SetHurtAi(int state, int skill) {
 	if (state != m_CurrentState) {
 		m_sprite->stopAllActions();
-		m_health -= 10;
+		m_health -= player->m_dame;
 		if (skill == NORMALSKILL) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
@@ -322,7 +323,7 @@ bool AiRange::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL)
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
-		m_health -= 10;
+		m_health -= player->m_dame;
 		if (player->edgeNode->getTag() == NORMALSKILL)	SetState(ACTION_HURT);
 		else if (player->edgeNode->getTag() == ATTACK_ICE) SetState(ACTION_HURT_ICE);
 		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetState(ACTION_HURT_FIRE);
@@ -379,7 +380,7 @@ void AiRange::bulletHasCollision()
 {
 	mBullet->setAlive(false);
 	player->m_sprite->setColor(ccc3(255, 69, 0));
- 	player->m_health -= 10;
+ 	player->m_health -= m_dame;
 }
 
 cocos2d::ParticleSystemQuad* AiRange::ParticleHeal(std::string name)

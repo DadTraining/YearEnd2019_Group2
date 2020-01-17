@@ -73,7 +73,8 @@ void BossLv3::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	m_health = 1000;
+	maxHealth = 300;
+	m_health = maxHealth;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man3/Ice_Dino/Idle/0_DinoIdle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
@@ -95,7 +96,7 @@ void BossLv3::Init()
 	//loaddinghealth
 	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
 	loadingbar->setScale(0.2);
-	loadingbar->setPercent(100);
+	loadingbar->setPercent(maxHealth);
 	this->sceneGame->addChild(loadingbar, 1);
 	load = ui::LoadingBar::create("progress.png");
 	load->setScale(0.21);
@@ -106,6 +107,7 @@ void BossLv3::Init()
 	contactListener->onContactBegin = CC_CALLBACK_1(BossLv3::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 	countSkill = 0;
+	m_dame = 45;
 }
 
 float timeBoss3 = 0;
@@ -126,7 +128,7 @@ void BossLv3::Collision(Player* player, float deltaTime)
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) <= radius*6.4) {
 		//colistion here
-		player->m_health-=20;
+		player->m_health-=m_dame;
 		player->m_sprite->setColor(ccc3(0, 0, 230));
 		CCLOG("%d", m_health);
 		this->setStateAttackIce(false);
@@ -357,13 +359,13 @@ bool BossLv3::onContactBegin(const PhysicsContact& contact)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
-			this->player->m_health -= 15;
+			this->player->m_health -= m_dame;
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
-			this->player->m_health -= 15;
+			this->player->m_health -= m_dame;
 		}
 	}
 	return true;
@@ -385,5 +387,5 @@ void BossLv3::bulletHasCollision()
 }
 float BossLv3::setHealth()
 {
-	return m_health;
+	return (m_health*100/maxHealth);
 }

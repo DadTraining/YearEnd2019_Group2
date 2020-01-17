@@ -15,13 +15,13 @@ void ItemLayer::Init()
 	table->setOpacity(-100);
 	this->addChild(table);
 
-	Ice = ui::CheckBox::create("Sprites/Item/Stone/DaBang.png", "Sprites/Item/Stone/DaVanNang.png");
-	Ice->setScale(0.3f);
+	Ice = ui::CheckBox::create("Sprites/Item/Stone/DaBang.png", "Sprites/Item/Stone/DaBang.png");
+	Ice->setScale(0.7f);
 	Ice->setPosition(table->getPosition() + Vec2(30, -(table->getContentSize().height / 4)));
 	this->addChild(Ice, 1);
 
-	fire = ui::CheckBox::create("Sprites/Item/Stone/DaLua.png", "Sprites/Item/Stone/DaVanNang.png");
-	fire->setScale(0.3f);
+	fire = ui::CheckBox::create("Sprites/Item/Stone/DaLua.png", "Sprites/Item/Stone/DaLua.png");
+	fire->setScale(0.7f);
 	fire->setPosition(Ice->getPosition() + Vec2(70, 0));
 	this->addChild(fire, 1);
 
@@ -51,8 +51,16 @@ void ItemLayer::Init()
 	icon_power_bt->setPosition(loadingBarGB->getPosition());
 	AnimatePow();
 	icon_power_bt->setVisible(false);
-	this->addChild(icon_power_bt, -1);
+	this->addChild(icon_power_bt, 5);
 
+	auto emitter = ParticleSun::create();
+	emitter->setPosition(fire->getPosition());
+	addChild(emitter);
+
+	auto emitter2 = ParticleGalaxy::create();
+	emitter2->setPosition(Ice->getPosition());
+	emitter2->setScale(0.5f);
+	addChild(emitter2);
 }
 void ItemLayer::showIconSword()
 {
@@ -116,10 +124,6 @@ void ItemLayer::getpercentBlood(int x)
 void ItemLayer::showIce()
 {
 	auto rotateBy = RotateBy::create(10, 360);
-	auto emitter = ParticleGalaxy::create();
-	emitter->setPosition(Ice->getPosition());
-	emitter->setScale(0.5f);
-	addChild(emitter);
 	Ice->runAction(RepeatForever::create(rotateBy));;
 
 }
@@ -127,9 +131,6 @@ void ItemLayer::showIce()
 void ItemLayer::showFire()
 {
 	auto rotateBy = RotateBy::create(15, 360);
-	auto emitter = ParticleSun::create();
-	emitter->setPosition(fire->getPosition());
-	addChild(emitter);
 	fire->runAction(RepeatForever::create(rotateBy));;
 }
 

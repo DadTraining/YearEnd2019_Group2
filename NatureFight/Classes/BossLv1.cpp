@@ -33,7 +33,7 @@ void BossLv1::Update(float deltaTime)
 			m_sprite->setPosition(-100, -100);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
-			edgeNode->setPosition(Vec2(1000, 1000));
+			edgeNode->setVisible(false);
 			physicsBodyChar->setEnabled(true);
 		}
 	}
@@ -46,18 +46,30 @@ void BossLv1::Update(float deltaTime)
 			checkAttackBoss = false;
 		}
 		if (timeAttackBoss > deltaTime) {
-			edgeNode->setPosition(Vec2(1000, 1000));
+			edgeNode->setPosition(Vec2(3000, 3000));
 		}
 		SetFace();
 	}
-	if (!(m_sprite->getColor() == ccc3(255, 255, 255))) {
+	if (!(m_sprite->getColor() == ccc3(255, 255, 255)) && !(m_sprite->getColor() == ccc3(0, 0, 255))) {
 		timeColorBoss += deltaTime;
 		if (timeColorBoss >= 1) {
 			m_sprite->setColor(ccc3(255, 255, 255));
 			timeColorBoss = 0;
 		}
 	}
-	if (m_health > 0 && m_health <= 60) {
+	else if (m_sprite->getColor() == ccc3(0, 0, 255)) {
+		timeColorBoss += deltaTime;
+		if (timeColorBoss >= 2.5) {
+			m_sprite->setColor(ccc3(255, 255, 255));
+			timeColorBoss = 0;
+			resetStateIce();
+		}
+	}
+	if (stateIce) {
+		AttackSpeed = ATTACKSPEED - 0.5;
+		speedAtt = ATTACKSPEED + 2;//time delay Attack
+	}
+	if (m_health > 0 && m_health <= 100) {
 		timeDelayHeal += deltaTime;
 		if (timeDelayHeal > 3) {
 			setSkillHeal(true);
@@ -66,7 +78,7 @@ void BossLv1::Update(float deltaTime)
 			stateHeal = false;
 		}
 	}
-	if(m_health<=50){
+	if(m_health<=150){
 		stateAngry = true;
 	}
 	else
@@ -78,6 +90,9 @@ void BossLv1::Update(float deltaTime)
 
 void BossLv1::Init()
 {
+	speedAtt = 2.0;
+	//m_health = 30;
+	stateIce = false;
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	stateHeal = false;
@@ -97,11 +112,11 @@ void BossLv1::Init()
 	m_CurrentFace = FACE_DEFAULT;
 	stateAngry = false;
 	AttackSpeed = 1;
-	auto edgeBody = PhysicsBody::createEdgeBox(Size(40, 40));
+	auto edgeBody = PhysicsBody::createEdgeBox(Size(40, 80));
 	edgeBody->setContactTestBitmask(Model::BITMASK_MONSTER);
 	edgeBody->setCollisionBitmask(false);
 	edgeNode = Node::create();
-	edgeNode->setPosition(m_sprite->getPosition());
+	edgeNode->setPosition(Vec2(3000,3000));
 	sceneGame->addChild(edgeNode);
 	edgeNode->setPhysicsBody(edgeBody);
 	edgeNode->setTag(BOSSATTACK);
@@ -119,6 +134,7 @@ void BossLv1::Init()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(BossLv1::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
+	m_dame = 40;
 }
 
 float timeBoss = 0;
@@ -130,7 +146,7 @@ void BossLv1::Collision(Player* player, float deltaTime)
 	timeBoss += deltaTime;
 	if (stateAngry) {
 		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 200) {
-			if (timeBoss > 2.0f) {
+			if (timeBoss > speedAtt) {
 				SetState(BossLv1::ACTION_ATTACK);
 				if (countBoom == 3) {
 					countBoom = 0;
@@ -157,7 +173,7 @@ void BossLv1::Collision(Player* player, float deltaTime)
 			}
 		}
 		if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) < 300 && (Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) > 200) {
-			this->physicsBodyChar->setVelocity(player->m_sprite->getPosition() - this->m_sprite->getPosition());
+			this->physicsBodyChar->setVelocity((player->m_sprite->getPosition() - this->m_sprite->getPosition())*AttackSpeed);
 
 		}
 		else {
@@ -166,7 +182,7 @@ void BossLv1::Collision(Player* player, float deltaTime)
 	}
 	else {
 		if ((Distance(this->m_sprite->getPosition(), player->m_sprite->getPosition())) <= 70) {
-			if (timeBoss > 2.0f) {
+			if (timeBoss > speedAtt) {
 				SetState(BossLv1::ACTION_ATTACK);
 				timeBoss = 0;
 			}
@@ -269,45 +285,37 @@ void BossLv1::SetAttack(int state) {
 			if (state != m_CurrentState) {
 				m_sprite->stopAllActions();
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
 			}
 			else if (m_sprite->getNumberOfRunningActions() == 0) {
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(-30, 0));
 			}
 			break;
 		case FACE_RIGHT:
 			if (state != m_CurrentState) {
 				m_sprite->stopAllActions();
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
 
 			}
 			else if (m_sprite->getNumberOfRunningActions() == 0) {
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(30, 0));
 			}
 			break;
 		case FACE_UP:
 			if (state != m_CurrentState) {
 				m_sprite->stopAllActions();
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 			}
 			else if (m_sprite->getNumberOfRunningActions() == 0) {
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, 20));
 			}
 			break;
 		case FACE_DOWN:
 			if (state != m_CurrentState) {
 				m_sprite->stopAllActions();
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 			}
 			else if (m_sprite->getNumberOfRunningActions() == 0) {
 				m_sprite->runAction(AttackRightAngry());
-				edgeNode->setPosition(m_sprite->getPosition() + Vec2(0, -20));
 			}
 			break;
 		}
@@ -320,14 +328,15 @@ void BossLv1::SetHurt(int state)
 void BossLv1::SetHurtAi(int state, int skill) {
 	if (state != m_CurrentState) {
 		m_sprite->stopAllActions();
-		m_health -= 10;
+
 		if (skill == NORMALSKILL) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
-		else if (skill == SKILLICE) {
+		else if (skill == ATTACK_ICE) {
 			m_sprite->setColor(ccc3(0, 0, 255));
+			stateIce = true;
 		}
-		else if (skill == SKILLFIRE) {
+		else if (skill == ATTACK_FIRE) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
 	}
@@ -402,43 +411,25 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACKTAG)
+		if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
+		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			this->SetState(BossLv1::ACTION_HURT);
-		}
-		else
-		{
-			this->SetState(BossLv1::ACTION_HURT);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_ICE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			this->SetState(BossLv1::ACTION_HURT_ICE);
-		}
-		else
-		{
-			this->SetState(BossLv1::ACTION_HURT_ICE);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_FIRE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			this->SetState(BossLv1::ACTION_HURT_FIRE);
-		}
-		else
-		{
-			this->SetState(BossLv1::ACTION_HURT_FIRE);
+		m_health -= player->m_dame;
+		if (player->edgeNode->getTag() == NORMALSKILL)	SetHurtAi(ACTION_HURT, NORMALSKILL);
+		else if (player->edgeNode->getTag() == ATTACK_ICE) SetHurtAi(ACTION_HURT_ICE, ATTACK_ICE);
+		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetHurtAi(ACTION_HURT_FIRE, ATTACK_FIRE);
+		if (m_health == 0) {
+			m_sprite->runAction(DieRight());
+			physicsBodyChar->setEnabled(false);
+			player->Exp += 20;
+			player->CountCreep += 1;
+			CCLOG("exp: %d", player->Exp);
 		}
 	}
 	if (nodeA->getTag() == playertag & nodeB->getTag() == BoomEx || nodeB->getTag() == playertag & nodeA->getTag() == BoomEx)
 	{
 		this->player->m_sprite->setColor(ccc3(255, 0, 0));
-		this->player->m_health -= 25;
+		this->player->m_health -= m_dame;
 		//mainPlayer->SetState(Player::ACTION_HURT);
 	}
 	//creepCollistionSkill(nodeA, nodeB);
@@ -447,13 +438,13 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->bulletHasCollision(nodeA->getPhysicsBody()->getGroup());
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
 		}
 	}
@@ -462,13 +453,13 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->fireBallHasCollision();
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->fireBallHasCollision();
 		}
 		
@@ -476,7 +467,7 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == playertag & nodeB->getTag() == BOSSATTACK || nodeB->getTag() == playertag & nodeA->getTag() == BOSSATTACK)
 	{
 		this->player->m_sprite->setColor(ccc3(255, 64, 64));
-		this->player->m_health -= 10;
+		this->player->m_health -= m_dame;
 		//mainPlayer->SetState(Player::ACTION_HURT);
 	}
 	return true;
@@ -554,5 +545,10 @@ cocos2d::ParticleSystemQuad* BossLv1::ParticleHeal(std::string name)
 }
 float BossLv1::setHealth()
 {
-	return m_health;
+	return (m_health*100/maxHealth);
+}
+void BossLv1::resetStateIce() {
+	stateIce = false;
+	AttackSpeed = ATTACKSPEED;
+	speedAtt = ATTACKSPEED;//time delay Attack
 }

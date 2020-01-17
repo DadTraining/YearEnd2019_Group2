@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>frames</key>
+		<dict>
+			<key>0_Citizen_Idle Blinking_000.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{88,183},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_001.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{88,122},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_002.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{88,61},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_003.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{88,0},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_004.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{44,185},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_005.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{44,124},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_006.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{44,62},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_007.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{44,0},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_008.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,186},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_009.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,124},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_010.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,62},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_011.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{0,0},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_012.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{132,122},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_013.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{308,0},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_014.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{264,186},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_015.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{264,124},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_016.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{264,62},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_017.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{264,0},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_018.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{220,186},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_019.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{220,124},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_020.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{220,62},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_021.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{220,0},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_022.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{176,185},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_023.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{176,123},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_024.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{176,61},{44,62}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,0},{44,62}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_025.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{176,0},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_026.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{132,184},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_027.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{308,62},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_028.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{132,61},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+			<key>0_Citizen_Idle Blinking_029.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{132,0},{44,61}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false/>
+				<key>sourceColorRect</key>
+				<string>{{10,1},{44,61}}</string>
+				<key>sourceSize</key>
+				<string>{64,64}</string>
+			</dict>
+
+		</dict>
+
+		<key>metadata</key>
+		<dict>
+			<key>format</key>
+			<integer>2</integer>
+			<key>size</key>
+			<string>{512,256}</string>
+			<key>textureFileName</key>
+			<string>Idle Blinking.png</string>
+			</dict>
+		</dict>
+</plist>
