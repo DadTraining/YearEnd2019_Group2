@@ -71,6 +71,7 @@ void MapBossMan2Scene::update(float deltaTime)
 	{
 		menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Stone/DaLua.png");
 		alreadyItem = true;
+		menuLayer->item->fire->setVisible(true);
 		mainPlayer->haveFireStone = true;
 		gate = true;
 	}

@@ -108,7 +108,7 @@ void MenuLayer::createButtonLayer()
 		item->showIconSword();
 		//item->showItemBlood();
 		this->addChild(item);
-
+		if (mainPlayer->haveIceStone) item->Ice->setVisible(true);
 		item->Ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 			if (type == ui::Widget::TouchEventType::ENDED) {
 				if (item->Ice->isSelected()) {
@@ -145,7 +145,7 @@ void MenuLayer::createButtonLayer()
 				mainPlayer->SetParticleMove();
 			}
 		});
-
+		if (mainPlayer->haveFireStone) item->fire->setVisible(true);
 		item->fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 			if (type == ui::Widget::TouchEventType::ENDED) {
 				if (item->fire->isSelected()) {
@@ -540,12 +540,12 @@ void MenuLayer::Quest()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 
 	quest = Sprite::create("frames/paused3.png");
-	quest->setPosition(visibleSize-Size(350,50));
+	quest->setPosition(visibleSize - Size(350, 50));
 	quest->setScale(0.2);
 	quest->setAnchorPoint(Point(0.0f, 1.0f));
 	addChild(quest, 80);
 	quest->setOpacity(0);
-	
+
 	//Quest 1 of Yolo
 	for (int i = 0; i < 4; i++)
 	{
@@ -575,7 +575,7 @@ void MenuLayer::Quest()
 	//Quest 3 of man 2 
 	for (int i = 0; i <= 15; i++)
 	{
-		label3 = Label::createWithSystemFont("con quai Goblin (" + std::to_string(i) + " / 15)", "Arial", 16);
+		label3 = Label::createWithSystemFont("con quai  (" + std::to_string(i) + " / 15)", "Arial", 16);
 		label3->setAnchorPoint(Vec2(0, 1));
 		label3->setPositionX(quest->getPositionX() + 20);
 		label3->setPositionY(label1->getPositionY() - 20);
@@ -586,9 +586,9 @@ void MenuLayer::Quest()
 	}
 
 	auto buttonQuest = ui::Button::create("Button/buttons/normal/records.png", "Button/buttons/click/records.png", "Button/buttons/hover/records.png");
-	
+
 	buttonQuest->setAnchorPoint(Vec2(1, 1));
-	buttonQuest->setPosition(Vec2(visibleSize)-Size(0,100));
+	buttonQuest->setPosition(Vec2(visibleSize) - Size(0, 100));
 	buttonQuest->setScale(0.06);
 	buttonQuest->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
 		switch (type)
@@ -610,17 +610,17 @@ void MenuLayer::Quest()
 					{
 						if (d == i)
 						{
-							if(i==0) vlabel1[i]->setVisible(true);
+							if (i == 0) vlabel1[i]->setVisible(true);
 							else {
 								if (i <= 3) {
 									vlabel1[i - 1]->setVisible(false);
 									vlabel1[i]->setVisible(true);
 								}
-								
-								
+
+
 							}
 						}
-						
+
 					}
 
 
@@ -636,7 +636,7 @@ void MenuLayer::Quest()
 									vlabel2[i - 1]->setVisible(false);
 									vlabel2[i]->setVisible(true);
 								}
-								
+
 							}
 						}
 					}
@@ -686,7 +686,7 @@ void MenuLayer::Quest()
 			break;
 		}
 	});
-	addChild(buttonQuest,2);
+	addChild(buttonQuest, 2);
 
 }
 

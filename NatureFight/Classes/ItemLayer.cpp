@@ -17,11 +17,13 @@ void ItemLayer::Init()
 
 	Ice = ui::CheckBox::create("Sprites/Item/Stone/DaBang.png", "Sprites/Item/Stone/DaBang.png");
 	Ice->setScale(0.7f);
+	Ice->setVisible(false);
 	Ice->setPosition(table->getPosition() + Vec2(30, -(table->getContentSize().height / 4)));
 	this->addChild(Ice, 1);
 
 	fire = ui::CheckBox::create("Sprites/Item/Stone/DaLua.png", "Sprites/Item/Stone/DaLua.png");
 	fire->setScale(0.7f);
+	fire->setVisible(false);
 	fire->setPosition(Ice->getPosition() + Vec2(70, 0));
 	this->addChild(fire, 1);
 

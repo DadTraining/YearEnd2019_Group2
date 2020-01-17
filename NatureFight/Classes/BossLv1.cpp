@@ -134,6 +134,7 @@ void BossLv1::Init()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(BossLv1::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
+	m_dame = 40;
 }
 
 float timeBoss = 0;
@@ -379,10 +380,10 @@ void BossLv1::SetState(int state)
 			SetDie(state);
 			break;
 		case ACTION_HURT_ICE:
-			SetHurtAi(state, SKILLICE);
+			SetHurtAi(state, ATTACK_ICE);
 			break;
 		case ACTION_HURT_FIRE:
-			SetHurtAi(state, SKILLFIRE);
+			SetHurtAi(state, ATTACK_FIRE);
 			break;
 		}
 
@@ -413,10 +414,11 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
-		m_health -= 10;
+		m_health -= player->m_dame;
 		if (player->edgeNode->getTag() == NORMALSKILL)	SetHurtAi(ACTION_HURT, NORMALSKILL);
 		else if (player->edgeNode->getTag() == ATTACK_ICE) SetHurtAi(ACTION_HURT_ICE, ATTACK_ICE);
 		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetHurtAi(ACTION_HURT_FIRE, ATTACK_FIRE);
+		if (m_health < 0) m_health = 0;
 		if (m_health == 0) {
 			m_sprite->runAction(DieRight());
 			physicsBodyChar->setEnabled(false);
@@ -428,7 +430,7 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == playertag & nodeB->getTag() == BoomEx || nodeB->getTag() == playertag & nodeA->getTag() == BoomEx)
 	{
 		this->player->m_sprite->setColor(ccc3(255, 0, 0));
-		this->player->m_health -= 25;
+		this->player->m_health -= m_dame;
 		//mainPlayer->SetState(Player::ACTION_HURT);
 	}
 	//creepCollistionSkill(nodeA, nodeB);
@@ -437,13 +439,13 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->bulletHasCollision(nodeA->getPhysicsBody()->getGroup());
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->bulletHasCollision(nodeB->getPhysicsBody()->getGroup());
 		}
 	}
@@ -452,13 +454,13 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 		if (nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->fireBallHasCollision();
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET_FIREBALL)
 		{
 			this->player->m_sprite->setColor(ccc3(255, 64, 64));
-			this->player->m_health -= 20;
+			this->player->m_health -= m_dame;
 			this->fireBallHasCollision();
 		}
 		
@@ -466,7 +468,7 @@ bool BossLv1::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == playertag & nodeB->getTag() == BOSSATTACK || nodeB->getTag() == playertag & nodeA->getTag() == BOSSATTACK)
 	{
 		this->player->m_sprite->setColor(ccc3(255, 64, 64));
-		this->player->m_health -= 10;
+		this->player->m_health -= m_dame;
 		//mainPlayer->SetState(Player::ACTION_HURT);
 	}
 	return true;

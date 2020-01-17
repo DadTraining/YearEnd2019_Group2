@@ -25,6 +25,8 @@ USING_NS_CC;
 #define GATEtag 400
 class Map_3 : public cocos2d::Scene
 {
+private: bool gate = false;
+	   float times = 0;
 public:
 	Player* mainPlayer;
 	Npclv1* npcFireWilth , *npcJoe;
@@ -33,15 +35,16 @@ public:
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
+	AiLv1* isAI;
 
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
 
-	BossLv3* bosslv3;
 	int countCreepDie=0;
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
+	void UpdateDragon();
 	void ParticleRain(std::string name,Vec2 pos);
     virtual bool init();
     void update(float deltaTime);
@@ -55,8 +58,9 @@ public:
 	bool onContactBegin(const PhysicsContact& contact);
 	bool onContactPreSolve(const PhysicsContact& contact);
 	bool onContactSeparate(const PhysicsContact& contact);
-
+	void createCreepScene();
 	void createMoveScene();
+	bool isCreepDie();
 	cocos2d::ParticleSystemQuad* Particletele(std::string name);
 };
 #endif // __Map2_SCENE_H__

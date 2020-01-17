@@ -28,7 +28,7 @@ void AiRange::Update(float deltaTime)
 			m_sprite->setPosition(-100, -100);
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
-			physicsBodyChar->setEnabled(true);
+			physicsBodyChar->setEnabled(false);
 		}
 	}
 	else {
@@ -86,6 +86,7 @@ void AiRange::Init()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(AiRange::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
+	m_dame = 20;
 }
 
 
@@ -192,14 +193,13 @@ void AiRange::SetHurt(int state)
 void AiRange::SetHurtAi(int state, int skill) {
 	if (state != m_CurrentState) {
 		m_sprite->stopAllActions();
-		m_health -= 10;
 		if (skill == NORMALSKILL) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
-		else if (skill == SKILLICE) {
+		else if (skill == ATTACK_ICE) {
 			m_sprite->setColor(ccc3(0, 0, 255));
 		}
-		else if (skill == SKILLFIRE) {
+		else if (skill == ATTACK_FIRE) {
 			m_sprite->setColor(ccc3(255, 0, 0));
 		}
 	}
@@ -243,10 +243,10 @@ void AiRange::SetState(int state)
 			SetDie(state);
 			break;
 		case ACTION_HURT_ICE:
-			SetHurtAi(state, SKILLICE);
+			SetHurtAi(state, ATTACK_ICE);
 			break;
 		case ACTION_HURT_FIRE:
-			SetHurtAi(state, SKILLFIRE);
+			SetHurtAi(state, ATTACK_FIRE);
 			break;
 		}
 
@@ -274,39 +274,6 @@ bool AiRange::onContactBegin(const PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACKTAG || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACKTAG)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			this->SetState(AiRange::ACTION_HURT);
-		}
-		else
-		{
-			this->SetState(AiRange::ACTION_HURT);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_ICE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_ICE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			this->SetState(AiRange::ACTION_HURT_ICE);
-		}
-		else
-		{
-			this->SetState(AiRange::ACTION_HURT_ICE);
-		}
-	}
-	if (nodeA->getTag() == BOSSLV1 & nodeB->getTag() == ATTACK_FIRE || nodeB->getTag() == BOSSLV1 & nodeA->getTag() == ATTACK_FIRE)
-	{
-		if (nodeA->getTag() == BOSSLV1)
-		{
-			this->SetState(AiRange::ACTION_HURT_FIRE);
-		}
-		else
-		{
-			this->SetState(AiRange::ACTION_HURT_FIRE);
-		}
-	}
 	//creepCollistionSkill(nodeA, nodeB);
 	if ((nodeA->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET && nodeB->getTag() == playertag) ||
 		(nodeA->getTag() == playertag && nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)) {
@@ -322,10 +289,11 @@ bool AiRange::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL)
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
-		m_health -= 10;
-		if (player->edgeNode->getTag() == NORMALSKILL)	SetState(ACTION_HURT);
-		else if (player->edgeNode->getTag() == ATTACK_ICE) SetState(ACTION_HURT_ICE);
-		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetState(ACTION_HURT_FIRE);
+		m_health -= player->m_dame;
+		if (player->edgeNode->getTag() == NORMALSKILL)	SetHurtAi(ACTION_HURT, NORMALSKILL);
+		else if (player->edgeNode->getTag() == ATTACK_ICE) SetHurtAi(ACTION_HURT_ICE, ATTACK_ICE);
+		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetHurtAi(ACTION_HURT_FIRE, ATTACK_FIRE);
+		if (m_health < 0) m_health = 0;
 		if (m_health == 0) {
 			m_sprite->runAction(DieRight());
 			physicsBodyChar->setEnabled(false);
@@ -379,7 +347,7 @@ void AiRange::bulletHasCollision()
 {
 	mBullet->setAlive(false);
 	player->m_sprite->setColor(ccc3(255, 69, 0));
- 	player->m_health -= 10;
+ 	player->m_health -= m_dame;
 }
 
 cocos2d::ParticleSystemQuad* AiRange::ParticleHeal(std::string name)

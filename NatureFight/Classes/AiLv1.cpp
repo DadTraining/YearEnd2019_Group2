@@ -331,7 +331,7 @@ bool AiLv1::onContactBegin(const PhysicsContact& contact)
 		if (player->edgeNode->getTag() == NORMALSKILL)	SetHurtAi(ACTION_HURT, NORMALSKILL);
 		else if (player->edgeNode->getTag() == ATTACK_ICE) SetHurtAi(ACTION_HURT_ICE, ATTACK_ICE);
 		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetHurtAi(ACTION_HURT_FIRE, ATTACK_FIRE);
-		if (m_health == 0) {
+		if (m_health <= 0) {
 			m_sprite->runAction(DieRight());
 			physicsBodyChar->setEnabled(false);
 			player->Exp += 20;

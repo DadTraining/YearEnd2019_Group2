@@ -48,7 +48,7 @@ void Player::Init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	auto def = UserDefault::sharedUserDefault();
-	Level = def->getIntegerForKey("Level");
+	Level = def->getIntegerForKey("Level",1);
 
 	edgeNode = Node::create();
 	sceneGame->addChild(edgeNode);
@@ -70,7 +70,6 @@ void Player::Init()
 	m_CurrentState = ACTION_IDLE;
 	m_CurrentFace = FACE_DEFAULT;
 	m_CurrentSkill = SKILL_DEFAULT;
-	Level = 1;
 	updateLevel();
 	m_health = MaxHealth;
 
@@ -88,7 +87,7 @@ void Player::Collision()
 
 void Player::updateLevel()
 {
-	if (Level == 2) {
+	if (Level == 3) {
 		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
 		particleSystem->setPosition(m_sprite->getPosition());
 		particleSystem->setScale(0.7f);
@@ -96,7 +95,7 @@ void Player::updateLevel()
 		ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
 		SetState(ACTION_ATTACK);
 	}
-	if(Level==3) {
+	if(Level>=5) {
 		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
 		particleSystem->setPosition(m_sprite->getPosition());
 		particleSystem->setScale(0.7f);
@@ -105,10 +104,10 @@ void Player::updateLevel()
 		SetState(ACTION_ATTACK);
 	}
 	MaxExp += Level * 50;
-	AttackSpeed = 1.0f + (Level - 1) * 0.2;
+	AttackSpeed = 1.0f + (Level - 1) * 0.05;
 	MoveSpeed = 1.0f;
 	MaxHealth = Level * 300;
-	m_dame = Level * 100;
+	m_dame = Level * 30;
 	Armor = Level * 5;
 }
 void Player::SetIdle(int state) {
@@ -623,16 +622,16 @@ void Player::CheckAttackAndSkill(float deltaTime)
 		checkAttack = false;
 	}
 	if (timeAttack > deltaTime&& m_CurrentSkill == SKILL_DEFAULT) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 	if (timeAttack > 0.15 && m_CurrentSkill == SKILL_FIRE) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 	if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 	if (timeAttack > 0.4 && m_CurrentSkill == SKILL_FIRE_ICE) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 }
 void Player::ParticlePow() {

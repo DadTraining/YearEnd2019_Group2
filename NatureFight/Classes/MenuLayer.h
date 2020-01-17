@@ -37,6 +37,7 @@ public:
 	void showItemSword(Vec2, std::string);
 	ui::Button* getIcon_Ice();
 	ui::Button* getIcon_Fire();
+	ItemLayer* item;
 protected:
 private:
     Player* mainPlayer;
@@ -65,7 +66,6 @@ private:
     cocos2d::Label* _messageLabel;
 
 	ui::Button* ButtonUpLevel;
-	ItemLayer* item;
 
 	Sprite*  mPauseLayer1;
 

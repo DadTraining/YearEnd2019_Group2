@@ -13,12 +13,8 @@
 #define CREEPATTACK 111
 #define CREEPTAG 11
 #define BOSSATTACK 112
-#define SKILLICE 1
-#define SKILLFIRE 2
-#define NORMALSKILL 0
 #define AILV1 13
 #define BOSSLV1 14
-#define ATTACKTAG 8
 #define AIRANGE 200
 USING_NS_CC;
 class AiRange :

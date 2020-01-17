@@ -12,7 +12,7 @@ void DragonSkill::Update(float deltaTime)
 	DragonAttacked += deltaTime;
 	if (countTimeExis > 30) {
 		m_dragon->stopAllActions();
-		m_dragon->runAction(MoveBy::create(2.0f, Vec2(0, 200)));
+		m_dragon->runAction(MoveBy::create(2.0f, Vec2(0, 20000)));
 		physicsBody->setEnabled(false);
 		countTimeExis = 0;
 	}
@@ -22,7 +22,7 @@ void DragonSkill::Update(float deltaTime)
 void DragonSkill::Init()
 {
 	this->m_dragon = cocos2d::Sprite::create("Sprites/pet/Fire_Dragon_1.png");
-	this->m_dragon->setPosition(Vec2(2000, 2000));
+	this->m_dragon->setPosition(Vec2(-10000, -10000));
 	sceneGame->addChild(this->m_dragon,5);
 	physicsBody = PhysicsBody::createEdgeBox(this->m_dragon->getContentSize() / 3);
 	physicsBody->setContactTestBitmask(Model::BITMASK_PLAYER);

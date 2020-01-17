@@ -12,7 +12,7 @@
 #define CREEPATTACK 111
 #define CREEPTAG 11
 #define CREEPATTACK 111
-#define AILV2 300
+#define AILV2 3000
 #define ATTACKSPEED 1
 USING_NS_CC;
 class AiLv2 :

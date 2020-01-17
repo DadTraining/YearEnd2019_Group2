@@ -22,7 +22,7 @@ void AiLv2::Update(float deltaTime)
 			m_CurrentState = ACTION_DEFAULT;
 			m_CurrentFace = FACE_DEFAULT;
 			edgeNode->setVisible(false);
-			physicsBodyChar->setEnabled(true);
+			physicsBodyChar->setEnabled(false);
 			this->m_sprite->setVisible(false);
 			loadingbar->setVisible(false);
 		}
@@ -106,6 +106,7 @@ void AiLv2::Init()
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(AiLv2::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
+	m_dame = 30;
 }
 
 
@@ -320,10 +321,11 @@ bool AiLv2::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
-		m_health -= 10;
+		m_health -= player->m_dame;
 		if (player->edgeNode->getTag() == NORMALSKILL)	SetState(ACTION_HURT);
 		else if (player->edgeNode->getTag() == ATTACK_ICE) SetState(ACTION_HURT_ICE);
 		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetState(ACTION_HURT_FIRE);
+		if (m_health < 0) m_health = 0;
 		if (m_health == 0) {
 			m_sprite->runAction(DieRight());
 			physicsBodyChar->setEnabled(false);
@@ -345,7 +347,7 @@ bool AiLv2::onContactBegin(const PhysicsContact& contact)
 			float s = Distance(Vec2(x, y), Vec2(0, 0));
 			if ((int)temp.x <= 10 && (int)temp.y <= 10) {
 				SetState(ACTION_HURT_FIRE);
-				m_health -= 10;
+				m_health -= player->m_dame;
 				player->dragon->m_dragon->runAction(MoveBy::create(s / 70, Vec2(x, y)));
 				player->onDragonAttack = false;
 				player->dragon->SetFace(Vec2(x, y) + player->dragon->m_dragon->getPosition());
@@ -362,7 +364,7 @@ bool AiLv2::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == CREEPATTACK)
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == CREEPATTACK))
 	{
-		player->m_health -= 10;
+		player->m_health -= m_dame;
 		player->m_sprite->setColor(ccc3(255, 0, 0));
 	}
 
