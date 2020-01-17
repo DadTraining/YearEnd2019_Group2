@@ -81,17 +81,7 @@ void MapTutorialScene::update(float deltaTime)
 	times += deltaTime;
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime); 
-		if (mainPlayer->onDragon) {
-			if (mainPlayer->onDragon)
-				if (Distance(mainPlayer->dragon->m_dragon->getPosition(), ai[i]->m_sprite->getPosition()) < 300 && mainPlayer->dragon->DragonAttacked >= 5)
-				{
-					mainPlayer->onDragonAttack = true;
-					mainPlayer->dragon->DragonAttacked = 0;
-					isAI = ai[i];
-				}
-		}
 	}
-	UpdateDragon();
 	if (x == 2) {
 		menuLayer->setD(mainPlayer->CountCreep);
 	}
@@ -174,6 +164,7 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 				if (mainPlayer->CountCreep >= 6) {
 					mainPlayer->haveIceStone = true;
 					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Stone/DaBang.png");
+					menuLayer->item->Ice->setVisible(true);
 					gate = true;
 				}
 			}
@@ -184,7 +175,6 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 				mainPlayer->CountCreep = 0;
 				npcYolo->Collision1();
 				menuLayer->setQuestYolo(1);
-				gate = true;
 				x += 1;
 			}
 			if (x == 2) {
@@ -200,12 +190,14 @@ bool MapTutorialScene::onContactBegin(const PhysicsContact& contact)
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			CCLOG("LoadMap2 1 ******************");
 			if (gate == true) {
-				Director::getInstance()->replaceScene(Map_2::createScene()); 
-			CCLOG("LoadMap2 2 ******************");
+				auto def = UserDefault::sharedUserDefault();
+				def->setIntegerForKey("Level", mainPlayer->Level);
+				def->setIntegerForKey("Exp", mainPlayer->Exp);
+				def->setBoolForKey("haveSword", mainPlayer->haveSword);
+				def->setBoolForKey("haveIceStone", mainPlayer->haveIceStone);
+				Director::getInstance()->replaceScene(Map_2::createScene());
 			}
-		
 		}
 		
 		
@@ -345,25 +337,6 @@ void MapTutorialScene::createPhysicMap()
 
 //end nhan
 
-void MapTutorialScene::UpdateDragon()
-{
-	if (mainPlayer->onDragon) {
-		if (mainPlayer->onDragonAttack) {
-			float s = Distance(isAI->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
-			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
-				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / (200 * 10), (isAI->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition()) / 7));
-				mainPlayer->dragon->SetFace(isAI->m_sprite->getPosition());
-			}
-		}
-		else if (mainPlayer->dragon->DragonAttacked >= 6) {
-			float s = Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
-			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
-				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
-				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
-			}
-		}
-	}
-}
 cocos2d::ParticleSystemQuad* MapTutorialScene::Particletele(std::string name)
 {
 	auto particleSystem = ParticleSystemQuad::create(name);

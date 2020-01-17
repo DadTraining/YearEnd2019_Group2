@@ -1,6 +1,9 @@
 #include "BossLv3.h"
 #include <vector> 
 #include <ResourceManager.h>
+#include <GameSetting.h>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 BossLv3::BossLv3(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -73,7 +76,8 @@ void BossLv3::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	m_health = 1000;
+	maxHealth = 300;
+	m_health = maxHealth;
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Man3/Ice_Dino/Idle/0_DinoIdle_000.png");
 	this->m_sprite->setPosition(Point(visibleSize.width / 1.2, visibleSize.height / 1.2));
 	this->m_sprite->setScale(1.5);
@@ -95,7 +99,7 @@ void BossLv3::Init()
 	//loaddinghealth
 	loadingbar = ui::LoadingBar::create("loadingbar_bg.png");
 	loadingbar->setScale(0.2);
-	loadingbar->setPercent(100);
+	loadingbar->setPercent(maxHealth);
 	this->sceneGame->addChild(loadingbar, 1);
 	load = ui::LoadingBar::create("progress.png");
 	load->setScale(0.21);
@@ -106,6 +110,7 @@ void BossLv3::Init()
 	contactListener->onContactBegin = CC_CALLBACK_1(BossLv3::onContactBegin, this);
 	sceneGame->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, sceneGame);
 	countSkill = 0;
+	m_dame = 45;
 }
 
 float timeBoss3 = 0;
@@ -126,7 +131,7 @@ void BossLv3::Collision(Player* player, float deltaTime)
 	else this->physicsBodyChar->setVelocity(Vec2(0, 0));
 	if (Distance(player->m_sprite->getPosition(), this->m_sprite->getPosition()) <= radius*6.4) {
 		//colistion here
-		player->m_health-=20;
+		player->m_health-=m_dame;
 		player->m_sprite->setColor(ccc3(0, 0, 230));
 		CCLOG("%d", m_health);
 		this->setStateAttackIce(false);
@@ -165,6 +170,12 @@ void BossLv3::SetDie(int state)
 	physicsBodyChar->setEnabled(false);
 }
 void BossLv3::SetAttack(int state) {
+	auto turn = GameSetting::getInstance()->isSound();
+	if (turn == true)
+	{
+		auto audio = SimpleAudioEngine::getInstance();
+		audio->playEffect("Sounds/chem.wav", false);
+	}
 	switch (m_CurrentFace)
 	{
 	case FACE_LEFT:
@@ -328,6 +339,7 @@ bool BossLv3::onContactBegin(const PhysicsContact& contact)
 	if (nodeA->getTag() == m_sprite->getTag() & (nodeB->getTag() == ATTACK_ICE | nodeB->getTag() == ATTACK_FIRE | nodeB->getTag() == NORMALSKILL) 
 		|| nodeB->getTag() == m_sprite->getTag() & (nodeA->getTag() == ATTACK_ICE | nodeA->getTag() == ATTACK_FIRE | nodeA->getTag() == NORMALSKILL))
 	{
+		m_health -= player->m_dame;
 		if (player->edgeNode->getTag() == NORMALSKILL)	SetHurtAi(ACTION_HURT, NORMALSKILL);
 		else if (player->edgeNode->getTag() == ATTACK_ICE) SetHurtAi(ACTION_HURT_ICE, ATTACK_ICE);
 		else if (player->edgeNode->getTag() == ATTACK_FIRE) SetHurtAi(ACTION_HURT_FIRE, ATTACK_FIRE);
@@ -335,7 +347,6 @@ bool BossLv3::onContactBegin(const PhysicsContact& contact)
 			m_sprite->runAction(DieRight());
 			physicsBodyChar->setEnabled(false);
 			player->Exp += 20;
-			player->CountCreep += 1;
 			CCLOG("exp: %d", player->Exp);
 		}
 	}
@@ -357,13 +368,13 @@ bool BossLv3::onContactBegin(const PhysicsContact& contact)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
-			this->player->m_health -= 15;
+			this->player->m_health -= m_dame;
 		}
 		if (nodeB->getPhysicsBody()->getCollisionBitmask() == Model::BITMASK_MONSTER_BULLET)
 		{
 			this->bulletHasCollision();
 			this->player->m_sprite->setColor(ccc3(132, 112, 255));
-			this->player->m_health -= 15;
+			this->player->m_health -= m_dame;
 		}
 	}
 	return true;
@@ -385,5 +396,5 @@ void BossLv3::bulletHasCollision()
 }
 float BossLv3::setHealth()
 {
-	return m_health;
+	return (m_health*100/maxHealth);
 }

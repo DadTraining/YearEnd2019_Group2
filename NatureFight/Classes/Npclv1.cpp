@@ -158,7 +158,7 @@ void Npclv1::CollisionIce()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh \n 15 con quai  \n trong map  ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh \n 10 con goblin  \n de nhan skill ice  ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -193,7 +193,7 @@ void Npclv1::CollisionWilch()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n tat ca con goblin \n de qua man tiep theo", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Den cong de qua\nman", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -228,7 +228,7 @@ void Npclv1::CollisionFireWilth()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh  \n 6 con creep \n va quay lai \n nhan phan thuong ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("ban hay danh  \n 6 con quai ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);
@@ -263,7 +263,7 @@ void Npclv1::CollisionJoe()
 	label1->setTextColor(Color4B::BLACK);
 	this->sceneGame->addChild(label1);
 	//
-	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n 3 con creep \n co trong map ", "Arial", 16);
+	auto label2 = Label::createWithSystemFont("Ban hay danh bai \n 6 con quai \n co trong map ", "Arial", 16);
 	label2->setAnchorPoint(Vec2(0, 0));
 	label2->setPositionX(mess->getPositionX() + 10);
 	label2->setPositionY(mess->getPositionY() + 10);

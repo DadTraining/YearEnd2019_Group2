@@ -63,6 +63,15 @@ void MapBossEndScene::update(float deltaTime)
 
 	//bosslv1->Collision(mainPlayer, deltaTime);
 	bossEnd->Collision(mainPlayer, deltaTime);
+	if (mainPlayer->onDragon) {
+		if (mainPlayer->onDragon)
+			if (Distance(mainPlayer->dragon->m_dragon->getPosition(), bossEnd->m_sprite->getPosition()) < 300 && mainPlayer->dragon->DragonAttacked >= 5)
+			{
+				mainPlayer->onDragonAttack = true;
+				mainPlayer->dragon->DragonAttacked = 0;
+			}
+	}
+	UpdateDragon();
 }
 bool MapBossEndScene::onTouchBegan(Touch* touch, Event* event)
 {
@@ -198,5 +207,23 @@ void MapBossEndScene::createPhysicMap()
 
 }
 
-
+void MapBossEndScene::UpdateDragon()
+{
+	if (mainPlayer->onDragon) {
+		if (mainPlayer->onDragonAttack) {
+			float s = Distance(isAI->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / (200 * 10), (isAI->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition()) / 7));
+				mainPlayer->dragon->SetFace(isAI->m_sprite->getPosition());
+			}
+		}
+		else if (mainPlayer->dragon->DragonAttacked >= 6) {
+			float s = Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
+				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
+			}
+		}
+	}
+}
 //end nhan

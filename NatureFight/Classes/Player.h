@@ -38,22 +38,20 @@ public:
 	Node* edgeNode;
 	int m_CurrentSkill;
 	int Armor;
-	int CountCreep = 0;
+	static int CountCreep;
 	static int Level;
 	static int Exp;
 	static int MaxExp;
 
-	bool haveSword = false;
-	bool haveSwordFire = true;
-	bool haveSwordIce = true;
+	static 	bool haveSword;
+	static bool haveSwordFire;
+	static bool haveSwordIce;
 
-	bool haveHeatBalanceStone = false;
-	bool haveFireStone = false;
-	bool haveIceStone = false;
+	static 	bool haveFireStone;
+	static bool haveIceStone;
 
-	bool haveMask = false;
-	bool haveFirePet = false;
-	bool haveIceShield = false;
+	static bool haveFirePet;
+	static bool haveIceShield;
 
 public:
 	cocos2d::Scene* sceneGame;

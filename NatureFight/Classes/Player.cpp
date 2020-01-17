@@ -5,6 +5,14 @@ int Player::Level = 1;
 int Player::Exp = 0;
 int Player::MaxExp;
 int Player::m_CurrentStone;
+bool Player::haveSword = false;
+bool Player::haveSwordFire = false;
+bool Player::haveSwordIce = false;
+bool Player::haveFireStone = false;
+bool Player::haveIceStone = false;
+bool Player::haveFirePet = false;
+bool Player::haveIceShield = false;
+int Player::CountCreep = 0;
 Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -39,6 +47,13 @@ void Player::Init()
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+	auto def = UserDefault::sharedUserDefault();
+	Level = def->getIntegerForKey("Level",1);
+
+	edgeNode = Node::create();
+	sceneGame->addChild(edgeNode);
+	m_CurrentStone = 0;
+
 	this->m_sprite = cocos2d::Sprite::create("Sprites/Main/Warrior_animations/Right_Side/PNG_Sequences/Warrior_clothes_empty/Idle_Blinking/0_Warrior_Idle_000.png");
 	this->m_sprite->setPosition(50, 50);
 	this->m_sprite->setScale(1.5);
@@ -58,8 +73,6 @@ void Player::Init()
 	updateLevel();
 	m_health = MaxHealth;
 
-	edgeNode = Node::create();
-	sceneGame->addChild(edgeNode);
 
 	particleMove = ParticleSystemQuad::create("Particles/move_fire.plist");
 	SetParticleMove();
@@ -74,27 +87,27 @@ void Player::Collision()
 
 void Player::updateLevel()
 {
-	if (Level == 2) {
+	if (Level == 3) {
 		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
 		particleSystem->setPosition(m_sprite->getPosition());
 		particleSystem->setScale(0.7f);
 		sceneGame->addChild(particleSystem);
 		ResourceManager::GetInstance()->Init("DataPlayerLv2.bin");
-		//SetState(ACTION_ATTACK);
+		SetState(ACTION_ATTACK);
 	}
-	if(Level==3) {
+	if(Level>=5) {
 		auto particleSystem = ParticleSystemQuad::create("Particles/uplevel.plist");
 		particleSystem->setPosition(m_sprite->getPosition());
 		particleSystem->setScale(0.7f);
 		sceneGame->addChild(particleSystem);
 		ResourceManager::GetInstance()->Init("DataPlayerLv3.bin");
-		//SetState(ACTION_ATTACK);
+		SetState(ACTION_ATTACK);
 	}
 	MaxExp += Level * 50;
-	AttackSpeed = 1.0f + (Level - 1) * 0.2;
+	AttackSpeed = 1.0f + (Level - 1) * 0.05;
 	MoveSpeed = 1.0f;
 	MaxHealth = Level * 300;
-	m_dame = Level * 10;
+	m_dame = Level * 30;
 	Armor = Level * 5;
 }
 void Player::SetIdle(int state) {
@@ -594,7 +607,7 @@ void Player::CheckDragon(float deltaTime)
 {
 	if (onDragon) {
 		dragon->Update(deltaTime);
-		if (dragon->countTimeExis > 30) onDragon = false;
+		if (dragon->countTimeExis > 20) onDragon = false;
 	}
 
 }
@@ -609,16 +622,16 @@ void Player::CheckAttackAndSkill(float deltaTime)
 		checkAttack = false;
 	}
 	if (timeAttack > deltaTime&& m_CurrentSkill == SKILL_DEFAULT) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 	if (timeAttack > 0.15 && m_CurrentSkill == SKILL_FIRE) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 	if (timeAttack > 0.4 && m_CurrentSkill == SKILL_ICE) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 	if (timeAttack > 0.4 && m_CurrentSkill == SKILL_FIRE_ICE) {
-		edgeNode->setPosition(Vec2(1000, 1000));
+		edgeNode->setPosition(Vec2(10000, 10000));
 	}
 }
 void Player::ParticlePow() {

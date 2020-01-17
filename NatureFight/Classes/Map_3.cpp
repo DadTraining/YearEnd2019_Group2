@@ -23,7 +23,7 @@ bool Map_3::init()
 	addMap();
 	//create Physics 
 	createPhysicMap();
-	
+	gate = false;
 	
 
 	auto listener = EventListenerTouchOneByOne::create();
@@ -65,6 +65,15 @@ void Map_3::update(float deltaTime)
 	times3 += deltaTime;
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
+		if (mainPlayer->onDragon) {
+			if (mainPlayer->onDragon)
+				if (Distance(mainPlayer->dragon->m_dragon->getPosition(), ai[i]->m_sprite->getPosition()) < 300 && mainPlayer->dragon->DragonAttacked >= 5)
+				{
+					mainPlayer->onDragonAttack = true;
+					mainPlayer->dragon->DragonAttacked = 0;
+					isAI = ai[i];
+				}
+		}
 	}
 	if (x3 == 2) {
 		menuLayer->setD(mainPlayer->CountCreep);
@@ -73,12 +82,18 @@ void Map_3::update(float deltaTime)
 
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
-	if (isCreepDie()) {
-		if (times3 >= 4) {
+	if (isCreepDie() == true)
+	{
+		times += deltaTime;
+		if (times >= 4) {
 			ai.clear();
 			createCreepScene();
 		}
+
 	}
+
+	UpdateDragon();
+	//bosslv3->Collision(mainPlayer, deltaTime);
 }
 bool Map_3::onTouchBegan(Touch* touch, Event* event)
 {
@@ -142,8 +157,8 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 				if (mainPlayer->CountCreep >= 6) {
 					mainPlayer->CountCreep = 0;
 					mainPlayer->haveSwordFire = true;
-					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(),"Sprites/Item/KiemBang.png");
-					gate = true; 
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/KiemLua.png");
+					gate = true;
 				}
 			}
 		}
@@ -157,25 +172,26 @@ bool Map_3::onContactBegin(const PhysicsContact& contact)
 			}
 			if (x3 == 2) {
 				if (mainPlayer->CountCreep >= 3) {
-					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/Lua.png");
-					mainPlayer->haveIceShield = true;
+					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/pet/Fire_Dragon_1.png");
+					mainPlayer->haveFirePet = true;
 					mainPlayer->CountCreep = 0;
 					x3 += 1;
 				}
-				
+
 			}
 
 		}
-		else if (nodeA->getTag() == CREEPATTACK & nodeB->getTag() == playertag || nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK)
-		{
-			mainPlayer->m_sprite->setColor(ccc3(200, 0, 0));
-			mainPlayer->SetState(Player::ACTION_HURT);
-			CCLOG("mau :%d", mainPlayer->m_health);
-			CCLOG(" ********* ");
-		}
+
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			if(gate == true) Director::getInstance()->replaceScene(MapBossMan3Scene::createScene());
+			if (gate == true) {
+				auto def = UserDefault::sharedUserDefault();
+				def->setIntegerForKey("Level", mainPlayer->Level);
+				def->setIntegerForKey("Exp", mainPlayer->Exp);
+				def->setBoolForKey("haveSwordFire", mainPlayer->haveSwordFire);
+				def->setBoolForKey("haveFirePet", mainPlayer->haveFirePet);
+				Director::getInstance()->replaceScene(MapBossMan3Scene::createScene());
+			}
 		}
 	}
 	return true;
@@ -273,6 +289,7 @@ void Map_3::createPhysicMap()
 			npcJoe->m_sprite->setTag(NpcJoetag);
 			npcJoe->m_sprite->runAction(npcJoe->CommunicationNPCJoe());
 			npcJoe->m_sprite->setPosition(Vec2(posx3, posY));
+			ParticleRain("Particles/SnowRain.plist", Vec2(posx3-200, posY));
 		}
 		if (type == 1)
 		{
@@ -329,13 +346,38 @@ void Map_3::createMoveScene()
 		}
 	}
 }
-bool Map_3::isCreepDie()
+void Map_3::ParticleRain(std::string name,Vec2 pos)
 {
-	for (int i = 0; i < ai.size(); i++)
-	{
-		if (ai[i]->m_sprite->isVisible() == true) return false;
+
+	auto particleMove = ParticleSystemQuad::create(name);
+	particleMove->setScale(5.0f);
+	particleMove->setStartSize(5);
+	particleMove->setSpeed(-100);
+	particleMove->setAngle(90);
+	particleMove->setPosition(pos);
+	particleMove->setDuration(ParticleSystem::DURATION_INFINITY);
+	this->addChild(particleMove);
+
+}
+
+void Map_3::UpdateDragon()
+{
+	if (mainPlayer->onDragon) {
+		if (mainPlayer->onDragonAttack) {
+			float s = Distance(isAI->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / (200 * 10), (isAI->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition()) / 7));
+				mainPlayer->dragon->SetFace(isAI->m_sprite->getPosition());
+			}
+		}
+		else if (mainPlayer->dragon->DragonAttacked >= 6) {
+			float s = Distance(mainPlayer->m_sprite->getPosition(), mainPlayer->dragon->m_dragon->getPosition());
+			if (mainPlayer->dragon->m_dragon->getNumberOfRunningActions() <= 1) {
+				mainPlayer->dragon->m_dragon->runAction(MoveBy::create(s / 230, mainPlayer->m_sprite->getPosition() - mainPlayer->dragon->m_dragon->getPosition() + Vec2(-20, 40)));
+				mainPlayer->dragon->SetFace(mainPlayer->m_sprite->getPosition());
+			}
+		}
 	}
-	return true;
 }
 void Map_3::createCreepScene()
 {
@@ -344,16 +386,23 @@ void Map_3::createCreepScene()
 	{
 		auto object1 = objects1.at(i);
 		auto properties = object1.asValueMap();
-		float posx3 = properties.at("x").asFloat();
+		float posX = properties.at("x").asFloat();
 		float posY = properties.at("y").asFloat();
-		int type = object1.asValueMap().at("type").asInt();
-		if (type == 1)
+		if (object1.asValueMap().at("type").asInt() == 1)
 		{
 			AiLv1* ailv = new AiLv1(this);
 			ailv->m_sprite->setTag(AILV1 + i);
-			ailv->m_sprite->setPosition(Vec2(posx3, posY));
+			ailv->m_sprite->setPosition(Vec2(posX, posY));
 			ai.push_back(ailv);
-		}
 
+		}
 	}
+}
+bool Map_3::isCreepDie()
+{
+	for (int i = 0; i < ai.size(); i++)
+	{
+		if (ai[i]->m_sprite->isVisible() == true) return false;
+	}
+	return true;
 }

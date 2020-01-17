@@ -35,6 +35,7 @@ public:
 	MenuLayer* menuLayer;
 	TMXObjectGroup* mObjectGroup , *mObjectGroup1;
 	std::vector<AiLv1*> ai;
+	AiLv1* isAI;
 
 	ui::Button* ButtonAttack;
 	SneakyJoystick* leftJoystick;
@@ -44,6 +45,7 @@ public:
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
+	void UpdateDragon();
     virtual bool init();
     void update(float deltaTime);
     CREATE_FUNC(MapBossEndScene);

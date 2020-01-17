@@ -18,16 +18,13 @@ bool Map_2::init()
         return false;
     }
 	gate = false;
-	CCLOG("LoadMap2 1******************");
 	schedule(schedule_selector(Map_2::update));
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	//create map
 	addMap();
-	CCLOG("LoadMap2 2******************");
 	//create Physics 
 	createPhysicMap();
-	CCLOG("LoadMap2 3******************");
 	
 	
 
@@ -37,14 +34,14 @@ bool Map_2::init()
 	listener->onTouchEnded = CC_CALLBACK_2(Map_2::onTouchEnded, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	
-	CCLOG("LoadMap2 4******************");
+
 	auto listenerKey = EventListenerKeyboard::create();
 	listenerKey->onKeyPressed = CC_CALLBACK_2(Map_2::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listenerKey, this);
 
 	//this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	this->getPhysicsWorld()->setSubsteps(7);
-	CCLOG("LoadMap2 5******************");
+	
 	// va cham npc
 	auto contactListener = EventListenerPhysicsContact::create();
 	contactListener->onContactBegin = CC_CALLBACK_1(Map_2::onContactBegin, this);
@@ -52,14 +49,14 @@ bool Map_2::init()
 	contactListener->onContactSeparate = CC_CALLBACK_1(Map_2::onContactSeparate, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 	//end va cham npc
-	CCLOG("LoadMap2 6******************");
+	
 	menuLayer = new MenuLayer(this->mainPlayer);
 	this->addChild(menuLayer, 2);
 	menuLayer->getIcon_Ice()->setEnabled(true);
-	CCLOG("LoadMap2 7******************");
+	
 	//gate -> MapBossMan2
 	createMoveScene();
-	CCLOG("LoadMap2 end******************");
+
 	return true;
 }
 
@@ -68,7 +65,6 @@ void Map_2::update(float deltaTime)
 	mainPlayer->Update(deltaTime);
 	menuLayer->update(deltaTime);
 	this->getDefaultCamera()->setPosition(mainPlayer->m_sprite->getPosition());
-	times2 += deltaTime;
 //	boss->Collision(mainPlayer, deltaTime);
 	for (int i = 0; i < ai.size(); i++) {
 		ai[i]->Collision(mainPlayer, deltaTime);
@@ -80,10 +76,12 @@ void Map_2::update(float deltaTime)
 		menuLayer->setC(mainPlayer->CountCreep);
 	}
 	if (isCreepDie()) {
+		times += deltaTime;
 		if (times >= 4) {
 			ai.clear();
 			aiRange.clear();
 			createCreepScene();
+			times = 0;
 		}
 	}
 }
@@ -141,11 +139,9 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 		{
 			if (x2 == 1) {
 				npcFroz->CollisionFroz();
+				
 				mainPlayer->haveSwordIce = true;
 				x2 += 1;
-				gate = true;
-				mainPlayer->CountCreep = 0;
-			
 			}
 		}
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == NpcIcetag || nodeB->getTag() == playertag & nodeA->getTag() == NpcIcetag)
@@ -160,7 +156,6 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 				if (mainPlayer->CountCreep >= 15)
 				{
 					menuLayer->showItemSword(mainPlayer->m_sprite->getPosition(), "Sprites/Item/KiemBang.png");
-					mainPlayer->haveFireStone = true;
 					x2 += 1;
 					mainPlayer->CountCreep = 0;
 				}
@@ -170,23 +165,22 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 		{
 			if (x2 == 4) {
 				npcWilch->CollisionWilch();
-				mainPlayer->haveFirePet = true;
+				mainPlayer->haveIceShield = true;
 				gate = true;
-				mainPlayer->CountCreep = 0;
 				x2 += 1;
 			}
 		}
-		else if (nodeA->getTag() == CREEPATTACK & nodeB->getTag() == playertag || nodeA->getTag() == playertag & nodeB->getTag() == CREEPATTACK)
-		{
-			mainPlayer->m_sprite->setColor(ccc3(200, 0, 0));
-			mainPlayer->SetState(Player::ACTION_HURT);
-			CCLOG("mau :%d", mainPlayer->m_health);
-			CCLOG(" ********* ");
-		}
-
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			if(gate == true ) Director::getInstance()->replaceScene(MapBossMan2Scene::createScene());
+			if (gate == true) {
+				auto def = UserDefault::sharedUserDefault();
+				def->setIntegerForKey("Level", mainPlayer->Level);
+				def->setIntegerForKey("Exp", mainPlayer->Exp);
+				def->setBoolForKey("haveSwordIce", mainPlayer->haveSwordIce);
+				def->setBoolForKey("haveIceShield", mainPlayer->haveIceShield);
+
+				Director::getInstance()->replaceScene(MapBossMan2Scene::createScene());
+			}
 		}
 	}
 	return true;
