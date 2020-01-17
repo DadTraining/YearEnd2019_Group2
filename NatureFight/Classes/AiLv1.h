@@ -15,6 +15,7 @@ using namespace CocosDenshion;
 #define CREEPTAG 11
 #define CREEPATTACK 111
 #define AILV1 13
+#define ATTACKSPEED 1
 USING_NS_CC;
 class AiLv1 :
 	public ObjectParent
@@ -26,8 +27,11 @@ public:
 private:
 	int tagAI;
 	float timeAttackAI = 0, timeDieAI = 0, timeColor = 0, timem = 0;
+	float speedAtt;
+	bool stateIce;
 	bool checkAttackAI = false;
 public:
+
 	PhysicsBody* physicsBodyChar;
 	int m_health = 100;
 	Node* edgeNode;
@@ -36,6 +40,7 @@ public:
 	float AttackSpeed;
 
 public:
+	void resetStateIce();
 	AiLv1(cocos2d::Scene* scene);
 	void Update(float deltaTime);
 	void Init();

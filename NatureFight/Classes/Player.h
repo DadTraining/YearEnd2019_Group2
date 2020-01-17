@@ -38,7 +38,7 @@ public:
 	Node* edgeNode;
 	int m_CurrentSkill;
 	int Armor;
-	int CountCreep = 0;
+	static int CountCreep;
 	static int Level;
 	static int Exp;
 	static int MaxExp;

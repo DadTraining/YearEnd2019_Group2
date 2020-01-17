@@ -42,6 +42,7 @@ public:
 public:
     static cocos2d::Scene* createScene();
 	void addMap();
+	void ParticleRain(std::string name,Vec2 pos);
     virtual bool init();
     void update(float deltaTime);
     CREATE_FUNC(Map_3);

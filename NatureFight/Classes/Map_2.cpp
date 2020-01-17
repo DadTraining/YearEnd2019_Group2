@@ -179,7 +179,15 @@ bool Map_2::onContactBegin(const PhysicsContact& contact)
 
 		else if (nodeA->getTag() == playertag & nodeB->getTag() == GATEtag || nodeB->getTag() == playertag & nodeA->getTag() == GATEtag)
 		{
-			if(gate == true ) Director::getInstance()->replaceScene(MapBossMan2Scene::createScene());
+			if (gate == true) {
+				auto def = UserDefault::sharedUserDefault();
+				def->setIntegerForKey("Level", mainPlayer->Level);
+				def->setIntegerForKey("Exp", mainPlayer->Exp);
+				def->setBoolForKey("haveSwordIce", mainPlayer->haveSwordIce);
+				def->setBoolForKey("haveIceShield", mainPlayer->haveIceShield);
+
+				Director::getInstance()->replaceScene(MapBossMan2Scene::createScene());
+			}
 		}
 	}
 	return true;

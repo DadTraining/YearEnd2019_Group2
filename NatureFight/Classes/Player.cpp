@@ -12,6 +12,7 @@ bool Player::haveFireStone = false;
 bool Player::haveIceStone = false;
 bool Player::haveFirePet = false;
 bool Player::haveIceShield = false;
+int Player::CountCreep = 0;
 Player::Player(cocos2d::Scene* scene)
 {
 	sceneGame = scene;
@@ -45,6 +46,9 @@ void Player::Init()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+	auto def = UserDefault::sharedUserDefault();
+	Level = def->getIntegerForKey("Level");
 
 	edgeNode = Node::create();
 	sceneGame->addChild(edgeNode);
@@ -104,7 +108,7 @@ void Player::updateLevel()
 	AttackSpeed = 1.0f + (Level - 1) * 0.2;
 	MoveSpeed = 1.0f;
 	MaxHealth = Level * 300;
-	m_dame = Level * 10;
+	m_dame = Level * 100;
 	Armor = Level * 5;
 }
 void Player::SetIdle(int state) {

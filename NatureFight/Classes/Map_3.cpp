@@ -255,6 +255,7 @@ void Map_3::createPhysicMap()
 			npcJoe->m_sprite->setTag(NpcJoetag);
 			npcJoe->m_sprite->runAction(npcJoe->CommunicationNPCJoe());
 			npcJoe->m_sprite->setPosition(Vec2(posx3, posY));
+			ParticleRain("Particles/SnowRain.plist", Vec2(posx3-200, posY));
 		}
 		if (type == 1)
 		{
@@ -310,4 +311,17 @@ void Map_3::createMoveScene()
 			this->addChild(emitter);
 		}
 	}
+}
+void Map_3::ParticleRain(std::string name,Vec2 pos)
+{
+
+	auto particleMove = ParticleSystemQuad::create(name);
+	particleMove->setScale(5.0f);
+	particleMove->setStartSize(5);
+	particleMove->setSpeed(-100);
+	particleMove->setAngle(90);
+	particleMove->setPosition(pos);
+	particleMove->setDuration(ParticleSystem::DURATION_INFINITY);
+	this->addChild(particleMove);
+
 }
