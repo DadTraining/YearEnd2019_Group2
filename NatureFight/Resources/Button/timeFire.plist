@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>pic3(0).png</key>
+            <key>pic3_0_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -19,22 +19,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(1).png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{64,64}</string>
-                <key>spriteSourceSize</key>
-                <string>{64,64}</string>
-                <key>textureRect</key>
-                <string>{{64,0},{64,64}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>pic3(10).png</key>
+            <key>pic3_10_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -49,7 +34,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(11).png</key>
+            <key>pic3_11_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -64,7 +49,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(12).png</key>
+            <key>pic3_12_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -79,7 +64,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(13).png</key>
+            <key>pic3_13_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -94,7 +79,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(14).png</key>
+            <key>pic3_14_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -109,7 +94,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(15).png</key>
+            <key>pic3_15_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -124,7 +109,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(16).png</key>
+            <key>pic3_16_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -139,7 +124,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(17).png</key>
+            <key>pic3_17_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -154,7 +139,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(18).png</key>
+            <key>pic3_18_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -169,7 +154,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(19).png</key>
+            <key>pic3_19_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -184,7 +169,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(2).png</key>
+            <key>pic3_1_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -195,11 +180,11 @@
                 <key>spriteSourceSize</key>
                 <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{128,0},{64,64}}</string>
+                <string>{{64,0},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(20).png</key>
+            <key>pic3_20_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -214,7 +199,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(21).png</key>
+            <key>pic3_21_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -229,7 +214,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(22).png</key>
+            <key>pic3_22_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -244,7 +229,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(23).png</key>
+            <key>pic3_23_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -259,7 +244,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(24).png</key>
+            <key>pic3_24_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -274,7 +259,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(25).png</key>
+            <key>pic3_25_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -289,7 +274,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(26).png</key>
+            <key>pic3_26_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -304,7 +289,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(27).png</key>
+            <key>pic3_27_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -319,7 +304,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(28).png</key>
+            <key>pic3_28_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -334,7 +319,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(29).png</key>
+            <key>pic3_29_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -349,7 +334,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(3).png</key>
+            <key>pic3_2_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -360,11 +345,11 @@
                 <key>spriteSourceSize</key>
                 <string>{64,64}</string>
                 <key>textureRect</key>
-                <string>{{192,0},{64,64}}</string>
+                <string>{{128,0},{64,64}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(30).png</key>
+            <key>pic3_30_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -379,7 +364,22 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(4).png</key>
+            <key>pic3_3_-removebg-preview.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{64,64}</string>
+                <key>spriteSourceSize</key>
+                <string>{64,64}</string>
+                <key>textureRect</key>
+                <string>{{192,0},{64,64}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>pic3_4_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -394,7 +394,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(5).png</key>
+            <key>pic3_5_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -409,7 +409,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(6).png</key>
+            <key>pic3_6_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -424,7 +424,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(7).png</key>
+            <key>pic3_7_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -439,7 +439,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(8).png</key>
+            <key>pic3_8_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -454,7 +454,7 @@
                 <key>textureRotated</key>
                 <false/>
             </dict>
-            <key>pic3(9).png</key>
+            <key>pic3_9_-removebg-preview.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
@@ -483,7 +483,7 @@
             <key>size</key>
             <string>{384,384}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:d3f946f8c6c0e8db811e3dccafb12ff8:df80b01ccfb95b8d5282ca814d8b9f48:45570876fb5668dd01105a3d5543582b$</string>
+            <string>$TexturePacker:SmartUpdate:7d5a6b94008a71924d5c82f28c8cbcf3:f579cc23efeb77509e402ea3a1ea1274:45570876fb5668dd01105a3d5543582b$</string>
             <key>textureFileName</key>
             <string>timeFire.png</string>
         </dict>

@@ -65,7 +65,6 @@ void MenuLayer::update(float deltaTime) {
 	loaddame->setPercent(mainPlayer->Exp*100 / mainPlayer->MaxExp);
 
 	if (timePower >= 10 && mainPlayer->particlePow->isVisible()) {
-		item->icon_power_bt->stopAllActions();
 		mainPlayer->particlePow->setVisible(false);
 		mainPlayer->onAngry = false;
 		mainPlayer->AttackSpeed -= 0.3f;
@@ -76,13 +75,24 @@ void MenuLayer::update(float deltaTime) {
 		if(mainPlayer->m_health < before)
 		item->icon_power->setPercent((before - mainPlayer->m_health) + item->icon_power->getPercent());
 		before = mainPlayer->m_health;
+		item->icon_power_bt->setVisible(false);
 	}
 	
-	if (timeSkillIce2 > 20) {
-		timeIconIce->setVisible(false);
+	if (timeSkillIce2 <= 20 && mainPlayer->m_CurrentStone == Player::STONE_ICE) {
+		timeIconIce->setVisible(true);
+		icon_ice2->setTouchEnabled(false);
 	}
-	if (timeSkillFire > 30) {
+	else{
+		timeIconIce->setVisible(false);
+		if(mainPlayer->haveIceShield) icon_ice2->setTouchEnabled(true);
+	}
+	if (timeSkillFire2 <= 30 && mainPlayer->m_CurrentStone == Player::STONE_FIRE) {
+		timeIconFire->setVisible(true);
+		icon_fire2->setTouchEnabled(false);
+	}
+	else {
 		timeIconFire->setVisible(false);
+		if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
 	}
 }
 
@@ -96,43 +106,36 @@ void MenuLayer::createButtonLayer()
 		item->showToxic();
 		item->showWood();
 		item->showIconSword();
-		item->showIce();
-		item->showFire();
 		//item->showItemBlood();
 		this->addChild(item);
-		
+
 		item->Ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-			switch (type)
-			{
-			case ui::Widget::TouchEventType::BEGAN:
+			if (type == ui::Widget::TouchEventType::ENDED) {
 				if (item->Ice->isSelected()) {
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_fire->setVisible(true);
 						icon_fire2->setVisible(true);
 						if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
 						if (mainPlayer->haveFirePet) icon_fire2->setTouchEnabled(true);
-						icon_fire_ice->setVisible(false);
-						if (timeSkillFire2 < 30) timeIconFire->setVisible(true);
 					}
 					else {
-						icon_fire_ice->setVisible(false);
 						icon_ice->setVisible(false);
 						icon_ice2->setVisible(false);
 					}
-					timeIconIce->setVisible(false);
+					icon_fire_ice->setVisible(false);
 					mainPlayer->m_CurrentStone -= Player::STONE_ICE;
+					item->Ice->stopAllActions();
 				}
 				else {
 					mainPlayer->m_CurrentStone += Player::STONE_ICE;
 					icon_fire->setVisible(false);
 					icon_fire2->setVisible(false);
+					item->showIce();
 
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_fire_ice->setVisible(true);
-						timeIconFire->setVisible(false);
 					}
 					else {
-						if(timeSkillIce2<20) timeIconIce->setVisible(true);
 						icon_ice->setVisible(true);
 						icon_ice2->setVisible(true);
 						if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
@@ -141,40 +144,35 @@ void MenuLayer::createButtonLayer()
 				}
 				mainPlayer->SetParticleMove();
 			}
-			});
+		});
 
 		item->fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-			switch (type)
-			{
-			case ui::Widget::TouchEventType::BEGAN:
+			if (type == ui::Widget::TouchEventType::ENDED) {
 				if (item->fire->isSelected()) {
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_ice->setVisible(true);
 						icon_ice2->setVisible(true);
-						if (mainPlayer->haveSwordIce) icon_ice->setTouchEnabled(true);
-						if (mainPlayer->haveIceShield) icon_ice2->setTouchEnabled(true);
-						timeIconFire->setVisible(false);
-						if (timeSkillIce2 < 20) timeIconIce->setVisible(true);
+						if (mainPlayer->haveSwordFire) icon_ice->setTouchEnabled(true);
+						if (mainPlayer->haveFirePet) icon_ice2->setTouchEnabled(true);
 					}
 					else {
-						timeIconFire->setVisible(false);
 						icon_fire->setVisible(false);
 						icon_fire2->setVisible(false);
 					}
 					icon_fire_ice->setVisible(false);
 					mainPlayer->m_CurrentStone -= Player::STONE_FIRE;
+					item->fire->stopAllActions();
 				}
 				else {
 					mainPlayer->m_CurrentStone += Player::STONE_FIRE;
+					item->showFire();
 					icon_ice->setVisible(false);
 					icon_ice2->setVisible(false);
 
 					if (mainPlayer->m_CurrentStone == Player::STONE_FIRE_ICE) {
 						icon_fire_ice->setVisible(true);
-						timeIconIce->setVisible(false);
 					}
 					else {
-						if(timeSkillFire2<30) timeIconFire->setVisible(true);
 						icon_fire->setVisible(true);
 						icon_fire2->setVisible(true);
 						if (mainPlayer->haveSwordFire) icon_fire->setTouchEnabled(true);
@@ -183,13 +181,11 @@ void MenuLayer::createButtonLayer()
 				}
 				mainPlayer->SetParticleMove();
 			}
-			});
+		});
 
 		item->icon_power->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-			switch (type)
-			{
-			case ui::Widget::TouchEventType::BEGAN:
-				if (item->icon_power->getPercent()>=100) {
+			if (type == ui::Widget::TouchEventType::ENDED) {
+				if (item->icon_power->getPercent() >= 100) {
 					mainPlayer->onAngry = true;
 					mainPlayer->particlePow->setVisible(true);
 					mainPlayer->AttackSpeed += 0.3f;
@@ -197,9 +193,8 @@ void MenuLayer::createButtonLayer()
 					item->icon_power->setPercent(0);
 					timePower = 0;
 				}
-			
 			}
-			});
+		});
 		//pause
 		//pause
 		auto btnPause = ui::Button::create("settings/pause.png");
@@ -294,22 +289,12 @@ void MenuLayer::createButtonLayer()
 			auto audio = SimpleAudioEngine::getInstance();
 			audio->playEffect("sounds/dam.wav", false);
 		}
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
-		case ui::Widget::TouchEventType::MOVED:
+		if (type == ui::Widget::TouchEventType::ENDED)
 			if (timeCount > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_DEFAULT;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeCount = 0;
 			}
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
-		}
-
 	});
 	ButtonAttack->removeFromParent();
 	addChild(ButtonAttack, 1);
@@ -323,19 +308,11 @@ void MenuLayer::createUpLevelLayer()
 	ButtonUpLevel->setAnchorPoint(Vec2(1, 0));
 	ButtonUpLevel->setScale(0.3f);
 	ButtonUpLevel->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
+		if (type == ui::Widget::TouchEventType::ENDED) {
 			mainPlayer->Level++;
 			mainPlayer->updateLevel();
 			ButtonUpLevel->setVisible(false);
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
 		}
-
 	});
 	ButtonUpLevel->removeFromParent();
 	addChild(ButtonUpLevel, 1);
@@ -427,42 +404,24 @@ void MenuLayer::createSkillIce()
 {
 	icon_ice = ui::Button::create("Sprites/Item/icon-bang.png");
 	icon_ice->setScale(0.3);
-	icon_ice->setOpacity(-150);
 	icon_ice->setRotation(-25);
-	icon_ice->setTouchEnabled(false);
 	icon_ice->setPosition(Vec2(870, 140));
 	this->addChild(icon_ice);
 	icon_ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
-		case ui::Widget::TouchEventType::MOVED:
+		if (type == ui::Widget::TouchEventType::ENDED)
 			if (timeSkillIce > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeSkillIce = 0;
 			}
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
-		}
-
-		});
-	auto fin = FadeIn::create(3.0f);
-	icon_ice->setTouchEnabled(true);
-	icon_ice->runAction(fin);
+	});
 	
-	icon_ice2 = ui::Button::create("Sprites/Item/chua_skill_khienbang.png");
-	icon_ice2->setScale(2);
+	icon_ice2 = ui::Button::create("Button/pic1-removebg-preview.png");
+	icon_ice2->setScale(1.5f);
 	icon_ice2->setPosition(Vec2(800, 100));
 	this->addChild(icon_ice2);
 	icon_ice2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
-		case ui::Widget::TouchEventType::MOVED:
+		if (type == ui::Widget::TouchEventType::ENDED)
 			if (timeSkillIce2 > 20.0f) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_ICE_2;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
@@ -470,14 +429,7 @@ void MenuLayer::createSkillIce()
 				timeIconIce->setVisible(true);
 				AnimationIconIce();
 			}
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
-		}
-
-		});
+	});
 
 	icon_ice->setVisible(false);
 	icon_ice2->setVisible(false);
@@ -485,64 +437,39 @@ void MenuLayer::createSkillIce()
 	icon_ice->setTouchEnabled(false);
 	icon_ice2->setTouchEnabled(false);
 
-	timeIconIce = Sprite::create("Button/pic3(30).png");
+	timeIconIce = Sprite::create("Button/pic1_20_-removebg-preview.png");
 	timeIconIce->setPosition(icon_ice2->getPosition());
+	timeIconIce->setScale(1.5f);
 	timeIconIce->setVisible(false);
 	this->addChild(timeIconIce, 5);
 }
 void MenuLayer::createSkillFire() {
 	icon_fire = ui::Button::create("Sprites/Item/icon-lua.png");
 	icon_fire->setScale(0.3);
-	icon_fire->setOpacity(-150);
-	icon_fire->setTouchEnabled(false);
-	icon_fire->setRotation(-45);
 	icon_fire->setPosition(Vec2(800, 100));
 	this->addChild(icon_fire);
 	icon_fire->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
-		case ui::Widget::TouchEventType::MOVED:
+		if (type == ui::Widget::TouchEventType::ENDED)
 			if (timeSkillFire > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeSkillFire = 0;
 			}
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
-		}
+	});
 
-		});
-	auto fin = FadeIn::create(3.0f);
-	icon_fire->runAction(fin);
-	icon_fire->setTouchEnabled(true);
-
-	icon_fire2 = ui::Button::create("Sprites/Item/chua_skill_pet.png");
+	icon_fire2 = ui::Button::create("Button/pic3-removebg-preview.png");
 	icon_fire2->setScale(2);
 	icon_fire2->setPosition(Vec2(870, 140));
-	this->addChild(icon_fire2,5);
+	this->addChild(icon_fire2);
 	icon_fire2->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
-		case ui::Widget::TouchEventType::MOVED:
- 			if (timeSkillFire2 > 30.0f) {
+		if (type == ui::Widget::TouchEventType::ENDED)
+			if (timeSkillFire2 > 30.0f) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE_2;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeSkillFire2 = 0;
 				timeIconFire->setVisible(true);
 				AnimationIconFire();
 			}
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
-		}
-
 		});
 
 	icon_fire->setVisible(false);
@@ -560,26 +487,16 @@ void MenuLayer::createSkillFire() {
 void MenuLayer::createSkillFireIce()
 {
 	icon_fire_ice = ui::Button::create("Sprites/Item/fire_ice.png");
-	icon_fire_ice->setScale(0.3);
 	icon_fire_ice->setPosition(Vec2(870, 140));
 	this->addChild(icon_fire_ice);
 	icon_fire_ice->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
-		switch (type)
-		{
-		case ui::Widget::TouchEventType::BEGAN:
-		case ui::Widget::TouchEventType::MOVED:
+		if (type == ui::Widget::TouchEventType::ENDED) {
 			if (timeSkillIce > 2.0f - mainPlayer->AttackSpeed) {
 				mainPlayer->m_CurrentSkill = mainPlayer->SKILL_FIRE_ICE;
 				mainPlayer->SetState(mainPlayer->ACTION_ATTACK);
 				timeSkillIce = 0;
 			}
-			break;
-		case ui::Widget::TouchEventType::ENDED:
-			break;
-		default:
-			break;
 		}
-
 	});
 	icon_fire_ice->setVisible(false);
 	//	icon_ice2->setTouchEnabled(false);
@@ -591,7 +508,7 @@ void MenuLayer::AnimationIconFire() {
 	int i = 30;
 	std::string link;
 	while (true) {
-		link = "pic3(" + std::to_string(i) + ").png";
+		link = "pic3_" + std::to_string(i) + "_-removebg-preview.png";
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
 		if (i==0) break;
 		i--;
@@ -607,7 +524,7 @@ void MenuLayer::AnimationIconIce() {
 	int i = 20;
 	std::string link;
 	while (true) {
-		link = "pic1(" + std::to_string(i) + ").png";
+		link = "pic1_" + std::to_string(i) + "_-removebg-preview.png";
 		exFrames.pushBack(spriteCache->getSpriteFrameByName(link));
 		if (i == 0) break;
 		i--;

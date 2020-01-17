@@ -43,17 +43,15 @@ public:
 	static int Exp;
 	static int MaxExp;
 
-	bool haveSword = false;
-	bool haveSwordFire = true;
-	bool haveSwordIce = true;
+	static 	bool haveSword;
+	static bool haveSwordFire;
+	static bool haveSwordIce;
 
-	bool haveHeatBalanceStone = false;
-	bool haveFireStone = false;
-	bool haveIceStone = false;
+	static 	bool haveFireStone;
+	static bool haveIceStone;
 
-	bool haveMask = false;
-	bool haveFirePet = true;
-	bool haveIceShield = true;
+	static bool haveFirePet;
+	static bool haveIceShield;
 
 public:
 	cocos2d::Scene* sceneGame;
